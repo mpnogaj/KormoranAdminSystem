@@ -27,11 +27,10 @@ class Login extends React.Component<IProps, IState>{
 			return;
 		}
 		try{
-			const response = await axios.post("http://localhost/api/administrate.php", {
+			const response = await axios.post("http://localhost:5000/api/Administrate", {
 				username: this.state.username,
 				password: this.state.password
 			});
-			//const response = await axios.post("http://localhost/api/ping.php");
 			console.log(response);
 		}
 		catch(error){

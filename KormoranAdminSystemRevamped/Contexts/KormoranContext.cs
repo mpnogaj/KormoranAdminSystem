@@ -13,5 +13,6 @@ namespace KormoranAdminSystemRevamped.Contexts
 		}
 
 		public virtual DbSet<User> Users { get; set; }
+		public virtual DbSet<Tournament> Tournaments { get; set; }
 	}
 }
