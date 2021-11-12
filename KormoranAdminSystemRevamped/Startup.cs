@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.IO;
+using KormoranAdminSystemRevamped.Contexts;
 using Microsoft.Extensions.Configuration;
 //using KormoranAdminSystemRevamped.Data;
 using Microsoft.EntityFrameworkCore;
@@ -22,10 +23,10 @@ namespace KormoranAdminSystemRevamped
 
         public void ConfigureServices(IServiceCollection services)
         {
-	        /*services.AddDbContext<MyDbContext>(options =>
+	        services.AddDbContext<KormoranContext>(options =>
 	        {
 		        options.UseMySQL(Configuration.GetConnectionString("DefaultConnection"));
-	        });*/
+	        });
             services.AddControllersWithViews();
             services.AddCors(options =>
             {
