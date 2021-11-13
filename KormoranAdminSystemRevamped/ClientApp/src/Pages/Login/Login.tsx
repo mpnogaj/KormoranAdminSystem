@@ -9,6 +9,8 @@ interface IProps {
 interface IState {
 	username: string,
 	password: string,
+	buttonEnabled: boolean,
+	errorText: string
 }
 
 class Login extends React.Component<IProps, IState>{
@@ -17,10 +19,13 @@ class Login extends React.Component<IProps, IState>{
 		this.state = {
 			username: "",
 			password: "",
+			buttonEnabled: true,
+			errorText: ""
 		};
 	}
 
 	loginClick = async (e: React.FormEvent) => {
+		this.setState({buttonEnabled: false});
 		e.preventDefault();
 		if (this.state.password === "" || this.state.username === "") {
 			alert("Podaj login i hasło!");
@@ -31,16 +36,31 @@ class Login extends React.Component<IProps, IState>{
 				username: this.state.username,
 				password: this.state.password
 			});
-			console.log(response);
+			if (response.status === 200) {
+				localStorage.setItem('username', this.state.username);
+				localStorage.setItem('password', this.state.password);
+				return;
+			}
 		}
-		catch (error) {
-			alert(error);
+		catch(error: any){
+			if (error.response) {
+				// Odpowiedź przyszła, status inny niż 200
+				this.setState({errorText: "Nieprawdiłowa nazwa użytkownika lub hasło"});
+			  } else if (error.request) {
+				// Odpowiedź nie przyszła (404)
+				this.setState({errorText: "Nie można połączyć się z serwerem. Powiadom administratora"});
+			  } else {
+				// Nie wiadomo co to
+				this.setState({errorText: "Wystąpił inny błąd. Otwórz konsolę przeglądarki (ctrl + shift + i -> 'Console') i wyślij zdjęcie administratorowi"});
+				console.log('Error', error.message);
+			  }
 		}
+		this.setState({buttonEnabled: true});
 	};
 
 	render() {
 		return (
-			<div className="container-sm mt-3">
+			<div className="container mt-3">
 				<div className="logo-container">
 					<p>Kormoran Admin System</p>
 				</div>
@@ -54,7 +74,7 @@ class Login extends React.Component<IProps, IState>{
 						/>
 						<label htmlFor="floatingInput">Nazwa użytkownika</label>
 					</div>
-					<div className="form-floating mb-3">
+					<div className="form-floating">
 						<input type="password" className="form-control" id="floatingPassword"
 							placeholder="Hasło" required={true}
 							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +83,17 @@ class Login extends React.Component<IProps, IState>{
 						/>
 						<label htmlFor="floatingPassword">Hasło</label>
 					</div>
-					<button type="submit" className="btn btn-primary">ZALOGUJ SIĘ</button>
+					<div className="row">
+						<p className={this.state.errorText === "" ? "errorText-hidden" : "errorText mt-3"}>{this.state.errorText}</p>
+					</div>
+					<div className="row">
+						<div className="col d-grid">
+							<button className="btn btn-primary p-3" type="submit" disabled={!this.state.buttonEnabled}>ZALOGUJ SIĘ</button>
+						</div>
+						<div className="col d-grid">
+							<a className="btn btn-primary p-3" href="/Guest">GOŚĆ</a>
+						</div>
+					</div>
 				</form>
 			</div>
 		);

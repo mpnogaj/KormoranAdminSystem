@@ -2,3 +2,13 @@
     text-align: center;
     font-size: xx-large;
 }
+
+.errorText{
+    color: red;
+    text-align: center;
+    font-size: large;
+}
+
+.errorText-hidden{
+    visibility: collapse;
+}

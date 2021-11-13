@@ -6,8 +6,8 @@ import {
 } from 'react-router-dom'
 import './index.css';
 import App from './App';
-import Guest from './Sites/Guest/Guest';
-import Login from './Sites/Login/Login';
+import Guest from './Pages/Guest/Guest';
+import Login from './Pages/Login/Login';
 
 render(
 	<BrowserRouter>
