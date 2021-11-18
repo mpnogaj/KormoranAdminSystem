@@ -1,13 +1,13 @@
-import {render} from 'react-dom';
+import {render} from "react-dom";
 import {
 	BrowserRouter,
 	Routes,
-	Route
-} from 'react-router-dom'
-import './index.css';
-import App from './App';
-import Guest from './Pages/Guest/Guest';
-import Login from './Pages/Login/Login';
+	Route,
+} from "react-router-dom"
+import "./index.css";
+import App from "./App";
+import Guest from "./Pages/Guest/Guest";
+import Login from "./Pages/Login/Login";
 
 render(
 	<BrowserRouter>
@@ -17,5 +17,5 @@ render(
 			<Route path="Guest" element={<Guest/>}/>
 		</Routes>
 	</BrowserRouter>,
-	document.getElementById('root')
+	document.getElementById("root")
 );

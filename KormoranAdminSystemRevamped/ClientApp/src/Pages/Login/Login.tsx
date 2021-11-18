@@ -10,7 +10,13 @@ interface IState {
 	username: string,
 	password: string,
 	buttonEnabled: boolean,
-	errorText: string
+	errorText: string;
+}
+
+interface IAdministrateResponse {
+	isError: boolean,
+	message: string,
+	sessionId: string;
 }
 
 class Login extends React.Component<IProps, IState>{
@@ -25,37 +31,38 @@ class Login extends React.Component<IProps, IState>{
 	}
 
 	loginClick = async (e: React.FormEvent) => {
-		this.setState({buttonEnabled: false});
+		this.setState<"buttonEnabled">({buttonEnabled: false});
 		e.preventDefault();
 		if (this.state.password === "" || this.state.username === "") {
 			alert("Podaj login i hasło!");
 			return;
 		}
 		try {
-			const response = await axios.post("http://localhost:5000/api/Administrate", {
-				username: this.state.username,
-				password: this.state.password
-			});
+			const response = await axios.post<IAdministrateResponse>("api/Session/Login",
+				{
+					Username: this.state.username,
+					Password: this.state.password
+				});
 			if (response.status === 200) {
-				localStorage.setItem('username', this.state.username);
-				localStorage.setItem('password', this.state.password);
-				return;
+				const data = response.data;
+				if (data.isError) {
+					this.setState<"errorText">({errorText: data.message});
+				} else {
+					localStorage.setItem("sessionId", data.sessionId);
+				}
+				this.setState<"buttonEnabled">({buttonEnabled: true});
 			}
+		} catch (error) {
+			if (error instanceof Error) {
+				this.setState<"errorText">({
+					errorText:
+						"Wystąpił inny błąd. Otwórz konsolę przeglądarki (Ctrl + Shift + I -> 'Console') i wyślij zdjęcie administratorowi"
+				});
+				console.log("Error", error.message);
+			}
+			else console.log("Error", error);
 		}
-		catch(error: any){
-			if (error.response) {
-				// Odpowiedź przyszła, status inny niż 200
-				this.setState({errorText: "Nieprawdiłowa nazwa użytkownika lub hasło"});
-			  } else if (error.request) {
-				// Odpowiedź nie przyszła (404)
-				this.setState({errorText: "Nie można połączyć się z serwerem. Powiadom administratora"});
-			  } else {
-				// Nie wiadomo co to
-				this.setState({errorText: "Wystąpił inny błąd. Otwórz konsolę przeglądarki (ctrl + shift + i -> 'Console') i wyślij zdjęcie administratorowi"});
-				console.log('Error', error.message);
-			  }
-		}
-		this.setState({buttonEnabled: true});
+		this.setState<"buttonEnabled">({buttonEnabled: true});
 	};
 
 	render() {

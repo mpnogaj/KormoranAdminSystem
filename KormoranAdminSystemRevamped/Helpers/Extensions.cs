@@ -14,7 +14,7 @@ namespace KormoranAdminSystemRevamped.Helpers
 				Encoding enc = Encoding.UTF8;
 				byte[] result = hash.ComputeHash(enc.GetBytes(s));
 
-				foreach (byte b in result)
+				foreach (var b in result)
 					sb.Append(b.ToString("x2"));
 			}
 
