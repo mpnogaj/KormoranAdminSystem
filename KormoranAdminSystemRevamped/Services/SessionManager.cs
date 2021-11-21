@@ -6,17 +6,52 @@ namespace KormoranAdminSystemRevamped.Services
 {
 	public interface ISessionManager
 	{
+		/// <summary>
+		/// Gets username connected with given session id
+		/// </summary>
+		/// <param name="sessionId">Session id</param>
+		/// <returns>Username when session is active or null when it isn't</returns>
 		public string? GetUsernameFromSession(string sessionId);
+
+		/// <summary>
+		/// Creates new, or gets existing session from username
+		/// </summary>
+		/// <param name="username">Username</param>
+		/// <returns>Session Guid</returns>
 		public string CreateSession(string username);
+
+		/// <summary>
+		/// Extends session lifetime for 1h
+		/// </summary>
+		/// <param name="sessionId">Session id</param>
+		/// <returns>false if session has already expired, true if operation was successful</returns>
 		public bool ExtendSession(string sessionId);
+
+		/// <summary>
+		/// Makes session expired
+		/// </summary>
+		/// <param name="sessionId">Session id</param>
+		/// <returns>false if session has already expired, true if operation was successful</returns>
 		public bool ExpireSession(string sessionId);
+
+		/// <summary>
+		/// Gets session object from given session id
+		/// </summary>
+		/// <param name="sessionId">Session id</param>
+		/// <returns>Session object</returns>
 		public Session? GetSession(string sessionId);
 	}
 
 	public class SessionManager : ISessionManager
 	{
+		/// <summary>
+		/// Stores valid session ids
+		/// </summary>
 		private readonly HashSet<Session> _sessions = new();
 
+		/// <summary>
+		/// Looks for expired ids and removes them from hash set
+		/// </summary>
 		private void CheckForExpired()
 		{
 			var data = DateTime.Now;
