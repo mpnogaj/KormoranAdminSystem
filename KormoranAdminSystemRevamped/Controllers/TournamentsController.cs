@@ -69,7 +69,8 @@ namespace KormoranAdminSystemRevamped.Controllers
 					response.Message = "Turniej nie istnieje";
 				}
 			}
-			return new JsonResult()
+
+			return new JsonResult(response);
 		}
 	}
 
