@@ -1,4 +1,5 @@
-﻿using KormoranAdminSystemRevamped.Contexts;
+﻿using System.Linq;
+using KormoranAdminSystemRevamped.Contexts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using KormoranAdminSystemRevamped.Models;
@@ -22,9 +23,14 @@ namespace KormoranAdminSystemRevamped.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> Tournaments()
+		public async Task<IActionResult> Tournaments([FromQuery]TournamentRequestModel model)
 		{
 			var tournamentList = await _db.Tournaments.ToListAsync();
+			if (!string.IsNullOrWhiteSpace(model.State))
+			{
+				tournamentList = tournamentList.Where(x => x.State == model.State).ToList();
+			}
+			
 			return Ok(JsonConvert.SerializeObject(tournamentList));
 		}
 
@@ -61,7 +67,12 @@ namespace KormoranAdminSystemRevamped.Controllers
 				if (toReplace != null)
 				{
 					tournament.Id = model.Id;
-					toReplace = tournament;
+					toReplace.Game = tournament.Game;
+					toReplace.Name = tournament.Name;
+					toReplace.State = tournament.State;
+					toReplace.TournamentType = tournament.TournamentType;
+					toReplace.TournamentTypeShort = tournament.TournamentTypeShort;
+					await _db.SaveChangesAsync();
 				}
 				else
 				{
@@ -72,6 +83,12 @@ namespace KormoranAdminSystemRevamped.Controllers
 
 			return new JsonResult(response);
 		}
+	}
+	
+	public record TournamentRequestModel
+	{
+		[FromQuery(Name = "State")]
+		public string? State { get; set; }
 	}
 
 	public record AddEditRequestModel
