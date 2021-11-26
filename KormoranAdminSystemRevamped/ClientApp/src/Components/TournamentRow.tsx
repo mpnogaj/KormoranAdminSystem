@@ -7,16 +7,7 @@ interface IProps{
     discipline: string
 }
 
-interface IState{
-    
-}
-
-class TournamentRow extends React.Component<IProps, IState>{
-    
-    constructor(props: any) {
-        super(props);
-    }
-    
+class TournamentRow extends React.Component<IProps, any>{
     render() {
         return (
             <tr>

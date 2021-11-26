@@ -1,8 +1,9 @@
 interface ITournamentRow{
     name: string,
     state: string,
-    type: string,
-    discipline: string
+    tournamentType: string,
+    game: string,
+    id: number;
 }
 
 export default ITournamentRow;

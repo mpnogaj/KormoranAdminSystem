@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.IO;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 
 namespace KormoranAdminSystemRevamped
 {
@@ -28,7 +30,10 @@ namespace KormoranAdminSystemRevamped
 				options.UseMySQL(Configuration.GetConnectionString("DefaultConnection"));
 			});
 			services.Add(new ServiceDescriptor(typeof(ISessionManager), new SessionManager()));
-			services.AddControllersWithViews();
+			services.AddControllersWithViews().AddJsonOptions(options =>
+			{
+				options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
+			});
 			services.AddCors(options =>
 			{
 				options.AddPolicy(PolicyName, builder =>

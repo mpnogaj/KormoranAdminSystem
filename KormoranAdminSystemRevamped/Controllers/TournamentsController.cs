@@ -4,10 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using KormoranAdminSystemRevamped.Models;
 
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 using KormoranAdminSystemRevamped.Services;
-using Newtonsoft.Json.Linq;
 
 namespace KormoranAdminSystemRevamped.Controllers
 {
@@ -24,18 +22,18 @@ namespace KormoranAdminSystemRevamped.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> Tournaments([FromQuery]TournamentRequestModel model)
+		public async Task<JsonResult> Tournaments([FromQuery]TournamentRequestModel model)
 		{
 			var tournamentList = await _db.Tournaments.ToListAsync();
 			if (!string.IsNullOrWhiteSpace(model.State))
 			{
 				tournamentList = tournamentList.Where(x => x.State == model.State).ToList();
 			}
-			
-			return Ok(JObject.FromObject(new
+
+			return new JsonResult(new
 			{
 				tournaments = tournamentList
-			}).ToString());
+			});
 		}
 
 		[HttpPost]

@@ -16,6 +16,8 @@ class Guest extends React.Component<any, IState>{
 			tournaments: []
 		};
 		this.timerID = 0;
+		this.loadTournaments = this.loadTournaments.bind(this);
+		this.loadTournaments().catch(ex => console.log(ex));
 	}
 	
 	componentWillUnmount() {
@@ -23,17 +25,16 @@ class Guest extends React.Component<any, IState>{
 	}
 
 	componentDidMount() {
-		this.timerID = window.setInterval( async () => {
-			const response = await axios.get<ITournamentsResponse>("api/Tournaments", {
-				params: []
-			});
-			console.log(response);
-			if(response.status === 200){
-				console.log("ustawiam");
-				console.log(response.data.tournaments);
-				this.setState<"tournaments">({tournaments: response.data.tournaments});
-			}
-		}, 5000);
+		this.timerID = window.setInterval(this.loadTournaments,5000);
+	}
+	
+	async loadTournaments(){
+		const response = await axios.get<ITournamentsResponse>("api/Tournaments", {
+			params: []
+		});
+		if(response.status === 200){
+			this.setState<"tournaments">({tournaments: response.data.tournaments});
+		}
 	}
 
 	render(){
@@ -57,9 +58,10 @@ class Guest extends React.Component<any, IState>{
 						this.state.tournaments.length > 0
 							? 
 							this.state.tournaments.map((val) => {
+								console.log(val.game);
 								return (
-									<TournamentRow name={val.name} state={val.state} type={val.type} 
-												   discipline={val.discipline}/>
+									<TournamentRow key={val.id} name={val.name} state={val.state} type={val.tournamentType} 
+												   discipline={val.game}/>
 								);
 							}) 
 							:
