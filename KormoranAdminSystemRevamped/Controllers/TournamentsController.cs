@@ -7,6 +7,7 @@ using KormoranAdminSystemRevamped.Models;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 using KormoranAdminSystemRevamped.Services;
+using Newtonsoft.Json.Linq;
 
 namespace KormoranAdminSystemRevamped.Controllers
 {
@@ -31,7 +32,10 @@ namespace KormoranAdminSystemRevamped.Controllers
 				tournamentList = tournamentList.Where(x => x.State == model.State).ToList();
 			}
 			
-			return Ok(JsonConvert.SerializeObject(tournamentList));
+			return Ok(JObject.FromObject(new
+			{
+				tournaments = tournamentList
+			}).ToString());
 		}
 
 		[HttpPost]
