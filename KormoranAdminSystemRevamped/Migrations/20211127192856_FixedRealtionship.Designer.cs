@@ -3,14 +3,16 @@ using System;
 using KormoranAdminSystemRevamped.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KormoranAdminSystemRevamped.Migrations
 {
     [DbContext(typeof(KormoranContext))]
-    partial class KormoranContextModelSnapshot : ModelSnapshot
+    [Migration("20211127192856_FixedRealtionship")]
+    partial class FixedRealtionship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

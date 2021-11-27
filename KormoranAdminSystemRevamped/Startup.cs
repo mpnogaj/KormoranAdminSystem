@@ -1,3 +1,4 @@
+using System;
 using KormoranAdminSystemRevamped.Contexts;
 using KormoranAdminSystemRevamped.Services;
 using Microsoft.AspNetCore.Builder;
@@ -27,7 +28,9 @@ namespace KormoranAdminSystemRevamped
 		{
 			services.AddDbContext<KormoranContext>(options =>
 			{
-				options.UseMySQL(Configuration.GetConnectionString("DefaultConnection"));
+				options.UseMySql(
+					Configuration.GetConnectionString("DefaultConnection"), 
+					new MySqlServerVersion(new Version(8, 0, 27)));
 			});
 			services.Add(new ServiceDescriptor(typeof(ISessionManager), new SessionManager()));
 			services.AddControllersWithViews().AddJsonOptions(options =>

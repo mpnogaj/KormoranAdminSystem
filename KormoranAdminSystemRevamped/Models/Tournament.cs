@@ -13,18 +13,23 @@ namespace KormoranAdminSystemRevamped.Models
 		public int Id { get; set; }
 
 		[Column("name")]
+		[Required]
 		public string Name { get; set; }
-
-		[Column("game")]
-		public string Game { get; set; }
-
+		
+		[Column("discipline")]
+		[Required]
+		public Discipline Discipline { get; set; }
+		
 		[Column("state")]
-		public string State { get; set; }
+		[Required]
+		public State State { get; set; }
 
 		[Column("tournament_type")]
+		[Required]
 		public string TournamentType { get; set; }
 
 		[Column("tournament_type_short")]
-		public string TournamentTypeShort { get; set; }
+		[Required]
+		public string TournamentTypeShort { get; set; } = "";
 	}
 }

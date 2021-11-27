@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using KormoranAdminSystemRevamped.Contexts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,15 +25,18 @@ namespace KormoranAdminSystemRevamped.Controllers
 		[HttpGet]
 		public async Task<JsonResult> Tournaments([FromQuery]TournamentRequestModel model)
 		{
-			var tournamentList = await _db.Tournaments.ToListAsync();
-			if (!string.IsNullOrWhiteSpace(model.State))
+			var tournamentList = await _db.Tournaments
+				.Include(x => x.State)
+				.Include(x => x.Discipline)
+				.ToListAsync();
+			if (model.StateId != null)
 			{
-				tournamentList = tournamentList.Where(x => x.State == model.State).ToList();
+				tournamentList = tournamentList.Where(x => x.State.Id == model.StateId).ToList();
 			}
 
-			return new JsonResult(new
+			return new JsonResult(new TournamentResponseModel()
 			{
-				tournaments = tournamentList
+				Tournaments = tournamentList
 			});
 		}
 
@@ -51,9 +55,9 @@ namespace KormoranAdminSystemRevamped.Controllers
 			response.Message = "Operacja zakończona sukcesem";
 			var tournament = new Tournament
 			{
-				Game = model.Game,
 				Name = model.Name,
-				State = model.State,
+				Discipline = _db.Disciplines.FirstOrDefault(x => x.Id == model.DisciplineId),
+				State = _db.States.FirstOrDefault(x => x.Id == model.StateId),
 				TournamentType = model.TournamentType,
 				TournamentTypeShort = model.TournamentTypeShort
 			};
@@ -69,7 +73,7 @@ namespace KormoranAdminSystemRevamped.Controllers
 				if (toReplace != null)
 				{
 					tournament.Id = model.Id;
-					toReplace.Game = tournament.Game;
+					toReplace.Discipline = tournament.Discipline;
 					toReplace.Name = tournament.Name;
 					toReplace.State = tournament.State;
 					toReplace.TournamentType = tournament.TournamentType;
@@ -90,15 +94,20 @@ namespace KormoranAdminSystemRevamped.Controllers
 	public record TournamentRequestModel
 	{
 		[FromQuery(Name = "State")]
-		public string? State { get; set; }
+		public int? StateId { get; set; }
+	}
+
+	public record TournamentResponseModel
+	{
+		public List<Tournament> Tournaments { get; set; }
 	}
 
 	public record AddEditRequestModel
 	{
 		public string SessionId { get; set; }
 		public int Id { get; set; }
-		public string State { get; set; }
-		public string Game { get; set; }
+		public int StateId { get; set; }
+		public int DisciplineId { get; set; }
 		public string Name { get; set; }
 		public string TournamentType { get; set; }
 		public string TournamentTypeShort { get; set; }
