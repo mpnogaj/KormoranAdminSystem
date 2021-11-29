@@ -9,7 +9,7 @@ namespace KormoranAdminSystemRevamped.Models
 	public class User
 	{
 		[Key]
-		[Column("id", TypeName = "int(11)")]
+		[Column("user_id", TypeName = "int(11)")]
 		public int Id { get; set; }
 		[Required]
 		[Column("user")]

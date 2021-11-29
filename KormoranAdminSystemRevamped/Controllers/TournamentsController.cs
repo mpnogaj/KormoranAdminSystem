@@ -28,6 +28,7 @@ namespace KormoranAdminSystemRevamped.Controllers
 			var tournamentList = await _db.Tournaments
 				.Include(x => x.State)
 				.Include(x => x.Discipline)
+				.Include(x => x.Teams)
 				.ToListAsync();
 			if (model.StateId != null)
 			{

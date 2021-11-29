@@ -1,5 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 #nullable disable
 
@@ -9,27 +11,33 @@ namespace KormoranAdminSystemRevamped.Models
 	public class Tournament
 	{
 		[Key]
-		[Column("id", TypeName = "int(11)")]
+		[Column("tournament_id", TypeName = "int(11)")]
 		public int Id { get; set; }
 
 		[Column("name")]
 		[Required]
 		public string Name { get; set; }
 		
-		[Column("discipline")]
-		[Required]
+		[JsonIgnore]
+		[Column("discipline_id")]
+		[ForeignKey("Discipline")]
+		public int DisciplineId { get; set; }
 		public Discipline Discipline { get; set; }
 		
-		[Column("state")]
-		[Required]
+		[JsonIgnore]
+		[Column("state_id")]
+		[ForeignKey("State")]
+		public int StateId { get; set; }
 		public State State { get; set; }
+		
+		public ICollection<Team> Teams { get; set; }
 
-		[Column("tournament_type")]
 		[Required]
+		[Column("tournament_type")]
 		public string TournamentType { get; set; }
 
-		[Column("tournament_type_short")]
 		[Required]
+		[Column("tournament_type_short")]
 		public string TournamentTypeShort { get; set; } = "";
 	}
 }
