@@ -10,7 +10,7 @@ using KormoranAdminSystemRevamped.Services;
 
 namespace KormoranAdminSystemRevamped.Controllers
 {
-	[Route("api/[controller]")]
+	[Route(@"api/[controller]/[action]")]
 	[ApiController]
 	public class TournamentsController : ControllerBase
 	{
@@ -23,12 +23,13 @@ namespace KormoranAdminSystemRevamped.Controllers
 		}
 
 		[HttpGet]
-		public async Task<JsonResult> Tournaments([FromQuery]TournamentRequestModel model)
+		public async Task<JsonResult> GetTournaments([FromQuery]TournamentRequestModel model)
 		{
 			var tournamentList = await _db.Tournaments
 				.Include(x => x.State)
 				.Include(x => x.Discipline)
 				.Include(x => x.Teams)
+				.Include(x => x.Matches)
 				.ToListAsync();
 			if (model.StateId != null)
 			{
@@ -38,6 +39,32 @@ namespace KormoranAdminSystemRevamped.Controllers
 			return new JsonResult(new TournamentResponseModel()
 			{
 				Tournaments = tournamentList
+			});
+		}
+
+		[HttpGet]
+		public async Task<JsonResult> GetMatches([FromQuery] int id)
+		{
+			var tournament = await _db.Tournaments
+				.Include(x => x.Discipline)
+				.Include(x => x.State)
+				.Include(x => x.Teams)
+				.Include(x => x.Matches)
+				.FirstAsync(x => x.Id == id);
+			
+			if (tournament == null)
+			{
+				return new JsonResult(new GetMatchesResponseModel
+				{
+					IsError = true,
+					Matches = null
+				});
+			}
+
+			return new JsonResult(new GetMatchesResponseModel
+			{
+				IsError = false,
+				Matches = tournament.Matches.ToList()
 			});
 		}
 
@@ -118,5 +145,11 @@ namespace KormoranAdminSystemRevamped.Controllers
 	{
 		public bool IsError { get; set; }
 		public string Message { get; set; }
+	}
+
+	public record GetMatchesResponseModel
+	{
+		public bool IsError { get; set; }
+		public List<Match>? Matches { get; set; }
 	}
 }

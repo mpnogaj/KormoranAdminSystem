@@ -22,15 +22,15 @@ namespace KormoranAdminSystemRevamped.Models
 		[Column("discipline_id")]
 		[ForeignKey("Discipline")]
 		public int DisciplineId { get; set; }
-		public Discipline Discipline { get; set; }
+		public virtual Discipline Discipline { get; set; }
 		
 		[JsonIgnore]
 		[Column("state_id")]
 		[ForeignKey("State")]
 		public int StateId { get; set; }
-		public State State { get; set; }
-		
-		public ICollection<Team> Teams { get; set; }
+		public virtual State State { get; set; }
+		public virtual ICollection<Match> Matches { get; set; }
+		public virtual ICollection<Team> Teams { get; set; }
 
 		[Required]
 		[Column("tournament_type")]

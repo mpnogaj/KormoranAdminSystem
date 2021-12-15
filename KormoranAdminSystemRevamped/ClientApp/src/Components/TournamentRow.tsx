@@ -1,10 +1,13 @@
 import React from "react";
+import {Badge, Button} from "react-bootstrap";
 
 interface IProps{
+	id: number
 	name: string,
 	state: string,
 	type: string,
-	discipline: string
+	discipline: string,
+	showModalCallback: Function;
 }
 
 class TournamentRow extends React.Component<IProps, any>{
@@ -13,12 +16,12 @@ class TournamentRow extends React.Component<IProps, any>{
 			<tr>
 				<td>{this.props.name}</td>
 				<td>
-					<span className="badge bg-success">{this.props.state}</span>
+					<Badge bg="success">{this.props.state}</Badge>
 				</td>
 				<td>{this.props.discipline}</td>
 				<td>{this.props.type}</td>
 				<td>
-					<a href="#" className="btn btn-success">Podgląd</a>
+					<Button variant="success" onClick={() => this.props.showModalCallback(this.props.id)}>Podgląd</Button>
 				</td>
 			</tr>
 		);

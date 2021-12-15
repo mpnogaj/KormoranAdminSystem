@@ -1,12 +1,12 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import "./css/bootstrap_dark.min.css";
+import "./css/bootstrap.min.css";
 import "./css/main.css";
 import "./App.css";
 
 class App extends React.Component {
 	render() {
-		const logged = localStorage.getItem("sessionId") != null;
+		const logged = sessionStorage.getItem("sessionId") != null;
 		
 		if(!logged){
 			return <Navigate to="/Login"/>;

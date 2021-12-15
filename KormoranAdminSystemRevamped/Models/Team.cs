@@ -23,6 +23,6 @@ namespace KormoranAdminSystemRevamped.Models
 		[Column("tournament_id")]
 		public int TournamentId { get; set; }
 		[JsonIgnore]
-		public Tournament Tournament { get; set; }
+		public virtual Tournament Tournament { get; set; }
 	}
 }

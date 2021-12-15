@@ -1,4 +1,4 @@
-import ITournamentRow from "../ITournamentRow";
+import ITournamentRow from "../ITournament";
 
 interface ITournamentsResponse{
 	tournaments: Array<ITournamentRow>

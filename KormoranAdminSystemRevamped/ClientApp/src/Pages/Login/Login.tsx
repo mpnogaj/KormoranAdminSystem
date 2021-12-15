@@ -1,4 +1,5 @@
 import React from "react";
+import {Button, Container, Row} from 'react-bootstrap'
 import axios from "axios";
 import './Login.css';
 
@@ -67,42 +68,47 @@ class Login extends React.Component<IProps, IState>{
 
 	render() {
 		return (
-			<div className="container mt-3">
+			<Container> 
 				<div className="logo-container">
 					<p>Kormoran Admin System</p>
 				</div>
-				<form onSubmit={this.loginClick}>
-					<div className="form-floating mb-3">
-						<input type="text" className="form-control" id="floatingInput"
-							placeholder="Nazwa użytkownika" required={true}
-							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-								this.setState<"username">({ username: e.target.value });
-							}}
-						/>
-						<label htmlFor="floatingInput">Nazwa użytkownika</label>
-					</div>
-					<div className="form-floating">
-						<input type="password" className="form-control" id="floatingPassword"
-							placeholder="Hasło" required={true}
-							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-								this.setState<"password">({ password: e.target.value });
-							}}
-						/>
-						<label htmlFor="floatingPassword">Hasło</label>
-					</div>
-					<div className="row">
-						<p className={this.state.errorText === "" ? "errorText-hidden" : "errorText mt-3"}>{this.state.errorText}</p>
-					</div>
-					<div className="row">
-						<div className="col d-grid">
-							<button className="btn btn-primary p-3" type="submit" disabled={!this.state.buttonEnabled}>ZALOGUJ SIĘ</button>
+				<Row className="justify-content-sm-center">
+					<form onSubmit={this.loginClick}>
+						<div className="form-floating mb-3">
+							<input type="text" className="form-control" id="floatingInput"
+							       placeholder="Nazwa użytkownika" required={true}
+							       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+								       this.setState<"username">({ username: e.target.value });
+							       }}
+							/>
+							<label htmlFor="floatingInput">Nazwa użytkownika</label>
 						</div>
-						<div className="col d-grid">
-							<a className="btn btn-primary p-3" href="/Guest">GOŚĆ</a>
+						<div className="form-floating">
+							<input type="password" className="form-control" id="floatingPassword"
+							       placeholder="Hasło" required={true}
+							       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+								       this.setState<"password">({ password: e.target.value });
+							       }}
+							/>
+							<label htmlFor="floatingPassword">Hasło</label>
 						</div>
-					</div>
-				</form>
-			</div>
+						<div className="row">
+							<p className={this.state.errorText === "" ? "errorText-hidden" : "errorText mt-3"}>{this.state.errorText}</p>
+						</div>
+						<Row>
+							<div className="col d-grid">
+								<button className="btn btn-primary p-3" type="submit" disabled={!this.state.buttonEnabled}>ZALOGUJ SIĘ</button>
+							</div>
+
+							<div className="col d-grid">
+								<Button variant={"primary"} className="p-3" href="/Guest">
+									GOŚĆ
+								</Button>
+							</div>
+						</Row>
+					</form>
+				</Row>
+			</Container>
 		);
 	}
 }
