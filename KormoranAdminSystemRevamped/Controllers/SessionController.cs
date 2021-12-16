@@ -35,7 +35,7 @@ namespace KormoranAdminSystemRevamped.Controllers
 				if (user != null)
 				{
 					string thisPasswordHash = model.Password.Sha256().ToUpper();
-					if (user.PasswordHash != thisPasswordHash)
+					if (user.PasswordHash.ToUpper() != thisPasswordHash)
 					{
 						response.Error = true;
 						response.Message = "Niepoprawne hasło";

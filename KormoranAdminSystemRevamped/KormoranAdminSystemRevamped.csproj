@@ -27,6 +27,7 @@
     <TypeScriptCompile Include="ClientApp\src\Models\IState.ts" />
     <TypeScriptCompile Include="ClientApp\src\Models\ITeam.ts" />
     <TypeScriptCompile Include="ClientApp\src\Models\ITournament.ts" />
+    <TypeScriptCompile Include="ClientApp\src\Models\Responses\ILoginResponse.ts" />
     <TypeScriptCompile Include="ClientApp\src\Models\Responses\IMatchesResponse.ts" />
     <TypeScriptCompile Include="ClientApp\src\Models\Responses\ITournamentsResponse.ts" />
   </ItemGroup>

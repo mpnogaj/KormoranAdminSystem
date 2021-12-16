@@ -56,14 +56,14 @@ namespace KormoranAdminSystemRevamped.Controllers
 			{
 				return new JsonResult(new GetMatchesResponseModel
 				{
-					IsError = true,
+					Error = true,
 					Matches = null
 				});
 			}
 
 			return new JsonResult(new GetMatchesResponseModel
 			{
-				IsError = false,
+				Error = false,
 				Matches = tournament.Matches.ToList()
 			});
 		}
@@ -74,12 +74,12 @@ namespace KormoranAdminSystemRevamped.Controllers
 			var response = new AddEditResponseModel();
 			if (_sessionManager.GetSession(model.SessionId) == null)
 			{
-				response.IsError = true;
+				response.Error = true;
 				response.Message = "Sesja wygasła. Zaloguj się ponownie";
 				return new JsonResult(response);
 			}
 
-			response.IsError = false;
+			response.Error = false;
 			response.Message = "Operacja zakończona sukcesem";
 			var tournament = new Tournament
 			{
@@ -110,7 +110,7 @@ namespace KormoranAdminSystemRevamped.Controllers
 				}
 				else
 				{
-					response.IsError = true;
+					response.Error = true;
 					response.Message = "Turniej nie istnieje";
 				}
 			}
@@ -143,13 +143,13 @@ namespace KormoranAdminSystemRevamped.Controllers
 
 	public record AddEditResponseModel
 	{
-		public bool IsError { get; set; }
+		public bool Error { get; set; }
 		public string Message { get; set; }
 	}
 
 	public record GetMatchesResponseModel
 	{
-		public bool IsError { get; set; }
+		public bool Error { get; set; }
 		public List<Match>? Matches { get; set; }
 	}
 }

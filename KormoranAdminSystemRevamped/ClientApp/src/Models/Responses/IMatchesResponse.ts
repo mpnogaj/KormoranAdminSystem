@@ -1,7 +1,7 @@
 import IMatch from "../IMatch";
 
 interface IMatchesResponse{
-	isError: boolean,
+	error: boolean,
 	matches: Array<IMatch>;
 }
 
