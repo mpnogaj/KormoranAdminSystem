@@ -1,4 +1,5 @@
 ﻿using KormoranAdminSystemRevamped.Models;
+using KormoranAdminSystemRevamped.Services;
 using Microsoft.EntityFrameworkCore;
 
 #nullable disable
@@ -16,6 +17,7 @@ namespace KormoranAdminSystemRevamped.Contexts
 		public virtual DbSet<Tournament> Tournaments { get; set; }
 		public virtual DbSet<Match> Matches { get; set; }
 		public virtual DbSet<Team> Teams { get; set; }
+		public virtual DbSet<LogEntry> Logs { get; set; }
 		public virtual DbSet<Discipline> Disciplines { get; set; }
 		public virtual DbSet<State> States { get; set; }
 	}

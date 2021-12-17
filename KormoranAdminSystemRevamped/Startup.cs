@@ -32,7 +32,8 @@ namespace KormoranAdminSystemRevamped
 					Configuration.GetConnectionString("DefaultConnection"), 
 					new MySqlServerVersion(new Version(8, 0, 27)));
 			});
-			services.Add(new ServiceDescriptor(typeof(ISessionManager), new SessionManager()));
+			services.AddSingleton<ISessionManager, SessionManager>();
+			services.AddScoped<ILogger, Logger>();
 			services.AddControllersWithViews().AddJsonOptions(options =>
 			{
 				options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);

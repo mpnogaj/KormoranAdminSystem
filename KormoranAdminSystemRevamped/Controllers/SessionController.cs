@@ -1,4 +1,5 @@
-﻿using KormoranAdminSystemRevamped.Contexts;
+﻿using System;
+using KormoranAdminSystemRevamped.Contexts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
@@ -24,36 +25,45 @@ namespace KormoranAdminSystemRevamped.Controllers
 		public async Task<JsonResult> Login(LoginRequestModel model)
 		{
 			var response = new LoginResponseModel();
-			if (string.IsNullOrEmpty(model.Username) && string.IsNullOrEmpty(model.Password))
+			try
 			{
-				response.Error = true;
-				response.Message = "Niewystarczające dane";
-			}
-			else
-			{
-				var user = await _db.Users.FirstOrDefaultAsync(x => x.Login == model.Username);
-				if (user != null)
+				if (string.IsNullOrEmpty(model.Username) && string.IsNullOrEmpty(model.Password))
 				{
-					string thisPasswordHash = model.Password.Sha256().ToUpper();
-					if (user.PasswordHash.ToUpper() != thisPasswordHash)
-					{
-						response.Error = true;
-						response.Message = "Niepoprawne hasło";
-					}
-					else
-					{
-						var sessionGuid = _sessionManager.CreateSession(model.Username);
-						response.Error = false;
-						response.Message = "Zalogowano pomyślnie";
-						response.SessionId = sessionGuid;
-					}
+					response.Error = true;
+					response.Message = "Niewystarczające dane";
 				}
 				else
 				{
-					response.Error = true;
-					response.Message = "Niepoprawna nazwa użytkownika";
+					var user = await _db.Users.FirstOrDefaultAsync(x => x.Login == model.Username);
+					if (user != null)
+					{
+						string thisPasswordHash = model.Password.Sha256().ToUpper();
+						if (user.PasswordHash.ToUpper() != thisPasswordHash)
+						{
+							response.Error = true;
+							response.Message = "Niepoprawne hasło";
+						}
+						else
+						{
+							var sessionGuid = _sessionManager.CreateSession(model.Username);
+							response.Error = false;
+							response.Message = "Zalogowano pomyślnie";
+							response.SessionId = sessionGuid;
+						}
+					}
+					else
+					{
+						response.Error = true;
+						response.Message = "Niepoprawna nazwa użytkownika";
+					}
 				}
 			}
+			catch (Exception e)
+			{
+				response.Error = true;
+				response.Message = e.Message;
+			}
+
 			return new JsonResult(response);
 		}
 
