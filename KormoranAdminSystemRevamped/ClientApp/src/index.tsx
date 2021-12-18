@@ -17,8 +17,8 @@ render(
 			<Route path="/" element={<App/>}/>
 			<Route path="Login" element={<Login/>}/>
 			<Route path="Guest" element={<Guest/>}/>
-			<Route path="/Panel" element={<ProtectedRoute/>}>
-				<Route path="/Panel" element={<Panel/>}/>
+			<Route path="Panel" element={<ProtectedRoute/>}>
+				<Route path="" element={<Panel/>}/>
 			</Route>
 		</Routes>
 	</BrowserRouter>,
