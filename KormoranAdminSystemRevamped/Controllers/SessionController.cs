@@ -80,12 +80,12 @@ namespace KormoranAdminSystemRevamped.Controllers
 			var response = new ValidateResponseModel();
 			if (_sessionManager.GetSession(sessionId) != null)
 			{
-				response.IsValid = true;
+				response.Valid = true;
 				response.Message = "Sesja jest ważna";
 			}
 			else
 			{
-				response.IsValid = false;
+				response.Valid = false;
 				response.Message = "Sesja wygasła. Zaloguj się ponownie";
 			}
 
@@ -108,7 +108,7 @@ namespace KormoranAdminSystemRevamped.Controllers
 
 	public record ValidateResponseModel
 	{
-		public bool IsValid { get; set; }
+		public bool Valid { get; set; }
 		public string Message { get; set; } = "";
 	}
 }
