@@ -3,8 +3,7 @@ import {Button, Col, Container, FormControl, FormFloating, Row} from 'react-boot
 import axios from "axios";
 import './Login.css';
 import ILoginResponse from "../../Models/Responses/ILoginResponse";
-
-interface IProps {}
+import {useNavigate} from "react-router";
 
 interface IState {
 	username: string,
@@ -13,7 +12,8 @@ interface IState {
 	errorText: string;
 }
 
-class Login extends React.Component<IProps, IState>{
+class Login extends React.Component<any, IState>{
+	
 	constructor(props: any) {
 		super(props);
 		this.state = {
@@ -24,7 +24,15 @@ class Login extends React.Component<IProps, IState>{
 		};
 	}
 
-	loginClick = async (e: React.FormEvent) => {
+	loginClick = (e: React.FormEvent) => {
+		this.loginHandler(e).then(correct => {
+			if(correct){
+				this.props.navigation("/Panel");
+			}
+		})
+	}
+	
+	loginHandler = async (e: React.FormEvent) => {
 		this.setState<"buttonEnabled">({buttonEnabled: false});
 		e.preventDefault();
 		if (this.state.password === "" || this.state.username === "") {
@@ -45,6 +53,7 @@ class Login extends React.Component<IProps, IState>{
 					this.setState<"errorText">({errorText: data.message});
 				} else {
 					sessionStorage.setItem("sessionId", data.sessionId);
+					return true;
 				}
 				this.setState<"buttonEnabled">({buttonEnabled: true});
 			}
@@ -59,6 +68,7 @@ class Login extends React.Component<IProps, IState>{
 			else console.log("Error", error);
 		}
 		this.setState<"buttonEnabled">({buttonEnabled: true});
+		return false;
 	};
 
 	render() {
@@ -104,4 +114,7 @@ class Login extends React.Component<IProps, IState>{
 	}
 }
 
-export default Login;
+export default function (props: any) {
+	const navigation = useNavigate();
+	return <Login {...props} navigation={navigation}/>
+}

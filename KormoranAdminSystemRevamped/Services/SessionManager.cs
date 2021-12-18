@@ -54,8 +54,8 @@ namespace KormoranAdminSystemRevamped.Services
 		/// </summary>
 		private void CheckForExpired()
 		{
-			var data = DateTime.Now;
-			_sessions.RemoveWhere(session => !session.IsValid(data));
+			var date = DateTime.Now;
+			_sessions.RemoveWhere(session => !session.IsValid(date));
 		}
 		
 		/// <summary>
@@ -93,8 +93,7 @@ namespace KormoranAdminSystemRevamped.Services
 		{
 			CheckForExpired();
 			var session = _sessions.FirstOrDefault(x => x.GuidString == sessionId);
-			if (session == null) return false;
-			return _sessions.Remove(session);
+			return session != null && _sessions.Remove(session);
 		}
 
 		/// <summary>
@@ -126,6 +125,8 @@ namespace KormoranAdminSystemRevamped.Services
 
 	public class Session
 	{
+		private readonly TimeSpan _validTime = TimeSpan.FromHours(1);
+		
 		public DateTime ExpirationDate { get; private set; }
 		public string Username { get; }
 		public Guid Guid { get; }
@@ -133,7 +134,7 @@ namespace KormoranAdminSystemRevamped.Services
 
 		public Session(string username)
 		{
-			ExpirationDate = DateTime.Now + TimeSpan.FromHours(1);
+			ExpirationDate = DateTime.Now + _validTime;
 			Username = username;
 			Guid = Guid.NewGuid();
 			GuidString = Guid.ToString();
@@ -146,7 +147,7 @@ namespace KormoranAdminSystemRevamped.Services
 
 		public void ExtendSession()
 		{
-			ExpirationDate = DateTime.Now + TimeSpan.FromHours(1);
+			ExpirationDate = DateTime.Now + _validTime;
 		}
 
 		public override bool Equals(object? obj)

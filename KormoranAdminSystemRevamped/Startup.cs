@@ -69,10 +69,12 @@ namespace KormoranAdminSystemRevamped
 					"{controller}/{action=Index}");
 			});
 
+			Console.WriteLine(Path.Join(env.ContentRootPath, "ClientApp"));
+			
 			app.UseSpa(spa =>
 			{
 				spa.Options.SourcePath = Path.Join(env.ContentRootPath, "ClientApp");
-
+				spa.Options.StartupTimeout = TimeSpan.FromSeconds(50);
 				if (env.IsDevelopment())
 				{
 					spa.UseReactDevelopmentServer("start");

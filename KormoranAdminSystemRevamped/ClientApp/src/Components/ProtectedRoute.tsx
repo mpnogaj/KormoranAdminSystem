@@ -3,16 +3,24 @@ import {Navigate, Outlet} from "react-router-dom";
 import { validateSessionId } from "../Helpers/Authenticator";
 
 function ProtectedRoute() {
-	const sessionId = localStorage.getItem("sessionId");
-	const isAuthenticated = typeof(sessionId) == "string" ? validateSessionId(sessionId) : false;
-	console.log("this", isAuthenticated);
-	console.log(sessionId, typeof(sessionId));
-	return (
-		isAuthenticated ? 
-			<Outlet/>
-			:
-			<Navigate to="/Login"/>
-	);
+	const sessionId = sessionStorage.sessionId;
+	if(typeof (sessionId) != "string"){
+		console.log("nie ma nic");
+		return <Outlet/>
+	}
+	else {
+		const isAuth = validateSessionId(sessionId);
+		console.log(isAuth);
+		if(!isAuth){
+			alert("Nieautoryzowany dostęp (sesja mogła wygasnąć). Nastąpi przekierowanie do formularza logowania");
+		}
+		return (
+			isAuth ?
+				<Outlet/>
+				:
+				<Navigate to="/Login"/>
+		);
+	}
 }
 
 export default ProtectedRoute;
