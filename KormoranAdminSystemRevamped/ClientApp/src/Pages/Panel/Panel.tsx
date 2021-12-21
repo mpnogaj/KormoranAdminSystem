@@ -7,7 +7,7 @@ import {ReactComponent as Avatar} from "../../Icons/DefaultAvatar.svg";
 class Panel extends React.Component<any, any>{
 	render() {
 		return (
-			<div>
+			<div id="panelRoot">
 				<nav className="navbar sticky-top navbar-expand-xl navbar-light bg-light">
 					<Container id="navBar">
 						<a className="navbar-brand" href="https://tools.webdevpuneet.com/">
