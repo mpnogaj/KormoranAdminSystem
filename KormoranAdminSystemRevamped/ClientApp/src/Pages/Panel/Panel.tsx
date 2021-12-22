@@ -3,6 +3,7 @@ import "./Panel.css";
 import {Col, Container, Row} from "react-bootstrap";
 import {ReactComponent as Logo} from "../../Icons/LogoNoText.svg";
 import {ReactComponent as Avatar} from "../../Icons/DefaultAvatar.svg";
+import {Speedometer2} from "react-bootstrap-icons";
 
 class Panel extends React.Component<any, any>{
 	render() {
@@ -13,7 +14,7 @@ class Panel extends React.Component<any, any>{
 						<a className="navbar-brand" href="https://tools.webdevpuneet.com/">
 							<div className="d-inline">
 								<Logo height={52} width={100}/>
-								<span className="h5">Kormoran Admin System</span>
+								<span className="h5 align-middle">Kormoran Admin System</span>
 							</div>
 						</a>
 						<button className="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
@@ -25,7 +26,7 @@ class Panel extends React.Component<any, any>{
 							<ul className="navbar-nav me-auto mb-2 mb-lg-0">
 								<hr className="fatHr"/>
 								<li className="nav-item">
-									<div className="navbar-nav dropdown me-auto mb-2 mb-lg-0">
+									<div className="dropdown me-auto mb-2 mb-lg-0">
 										<a className="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 											<div className="d-inline">
 												<Avatar height={50} width={50}/>
@@ -33,7 +34,15 @@ class Panel extends React.Component<any, any>{
 											</div>
 										</a>
 										<ul className="dropdown-menu" aria-labelledby="userDropdown">
-											<li><a className="dropdown-item" href="#">Twoje konto</a></li>
+											<li>
+												<a className="dropdown-item" href="#">
+													<div className="d-inline">
+														<Speedometer2/>
+														Dupa 321
+														Twoje konto
+													</div>
+												</a>
+											</li>
 											<li><a className="dropdown-item" href="#">Ustawienia</a></li>
 											<li><hr className="dropdown-divider"/></li>
 											<li><a className="dropdown-item" href="#">Wyloguj</a></li>
