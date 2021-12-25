@@ -3,7 +3,7 @@ import IValidateResponse from "../Models/Responses/IValidateResponse";
 
 export async function validateSessionId(sessionId: string){
 	try{
-		const response = await axios.get<IValidateResponse>('api/Session/Validate', {
+		const response = await axios.get<IValidateResponse>('/api/Session/Validate', {
 			params: {
 				sessionId: sessionId
 			}

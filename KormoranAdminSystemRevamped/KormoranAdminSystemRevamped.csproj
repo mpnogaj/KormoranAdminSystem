@@ -18,12 +18,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\Components\MatchesRow.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\Components\LogRow.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\Components\LogsTable.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\Components\MatchRow.tsx" />
     <TypeScriptCompile Include="ClientApp\src\Components\MatchesTable.tsx" />
     <TypeScriptCompile Include="ClientApp\src\Components\ProtectedRoute.tsx" />
     <TypeScriptCompile Include="ClientApp\src\Components\TournamentRow.tsx" />
     <TypeScriptCompile Include="ClientApp\src\Components\TournamentsTable.tsx" />
     <TypeScriptCompile Include="ClientApp\src\Helpers\Authenticator.ts" />
+    <TypeScriptCompile Include="ClientApp\src\Helpers\Essentials.ts" />
     <TypeScriptCompile Include="ClientApp\src\Models\IDiscipline.ts" />
     <TypeScriptCompile Include="ClientApp\src\Models\IMatch.ts" />
     <TypeScriptCompile Include="ClientApp\src\Models\IState.ts" />
@@ -33,7 +36,11 @@
     <TypeScriptCompile Include="ClientApp\src\Models\Responses\IMatchesResponse.ts" />
     <TypeScriptCompile Include="ClientApp\src\Models\Responses\ITournamentsResponse.ts" />
     <TypeScriptCompile Include="ClientApp\src\Models\Responses\IValidateResponse.ts" />
+    <TypeScriptCompile Include="ClientApp\src\Pages\Panel\Logs\Logs.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\Pages\Panel\Overview\Overview.tsx" />
     <TypeScriptCompile Include="ClientApp\src\Pages\Panel\Panel.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\Pages\Panel\Tournaments\Tournaments.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\Pages\Panel\Users\Users.tsx" />
   </ItemGroup>
 
 </Project>

@@ -1,19 +1,40 @@
 import React from "react";
 import "./Panel.css";
-import {Col, Container, Row} from "react-bootstrap";
+import {Container} from "react-bootstrap";
 import {ReactComponent as Logo} from "../../Icons/LogoNoText.svg";
 import {ReactComponent as Avatar} from "../../Icons/DefaultAvatar.svg";
-import {Speedometer2} from "react-bootstrap-icons";
+import {Speedometer2, JournalText, PersonCheck, Tv, Gear} from "react-bootstrap-icons";
+import axios from "axios";
 
-class Panel extends React.Component<any, any>{
+interface IState{
+	currentUrl: string,
+	isLoading: boolean;
+}
+
+class Panel extends React.Component<any, IState>{
+	
+	constructor(props: any) {
+		super(props);
+		this.state = {
+			currentUrl: "/Panel/Overview",
+			isLoading: true
+		}
+	}
+	
+	changeUrl = (newUrl: string) => {
+		if(newUrl != this.state.currentUrl){
+			this.setState({currentUrl: newUrl, isLoading: true})
+		}
+	};
+	
 	render() {
 		return (
-			<div id="panelRoot">
+			<div>
 				<nav className="navbar sticky-top navbar-expand-xl navbar-light bg-light">
 					<Container id="navBar">
 						<a className="navbar-brand" href="https://tools.webdevpuneet.com/">
 							<div className="d-inline">
-								<Logo height={52} width={100}/>
+								<Logo height={52} width={94}/>
 								<span className="h5 align-middle">Kormoran Admin System</span>
 							</div>
 						</a>
@@ -34,51 +55,69 @@ class Panel extends React.Component<any, any>{
 											</div>
 										</a>
 										<ul className="dropdown-menu" aria-labelledby="userDropdown">
-											<li>
-												<a className="dropdown-item" href="#">
-													<div className="d-inline">
-														<Speedometer2/>
-														Dupa 321
-														Twoje konto
-													</div>
-												</a>
+											<li><a className="dropdown-item" href="#">Twoje konto</a>
 											</li>
 											<li><a className="dropdown-item" href="#">Ustawienia</a></li>
 											<li><hr className="dropdown-divider"/></li>
-											<li><a className="dropdown-item" href="#">Wyloguj</a></li>
+											<li><a className="dropdown-item" onClick={async () => {
+												await axios.post("/api/Session/Logout", {
+													sessionId: sessionStorage.getItem("sessionId")
+												});
+												sessionStorage.removeItem("sessionId");
+												window.location.href = "/Login";
+											}}>Wyloguj</a></li>
 										</ul>
 									</div>
 								</li>
 								<hr/>
 								<li className="nav-item">
-									<a className="nav-link" aria-current="page" href="#">Panel</a>
+									<a className="nav-link" aria-current="page" href="#" onClick={() => this.changeUrl("/Panel/Overview")}>
+										<div className="d-inline">
+											<Speedometer2 size={25}/>
+											<span className="ms-2 h5 align-middle">Przegląd</span>
+										</div>
+									</a>
 								</li>
 								<li className="nav-item">
-									<a className="nav-link" href="#">Dziennik zdarzeń</a>
+									<a className="nav-link" href="#" onClick={() => this.changeUrl("/Panel/Logs")}>
+										<div className="d-inline">
+											<JournalText size={25}/>
+											<span className="ms-2 h5 align-middle">Dziennik zdarzeń</span>
+										</div>
+									</a>
 								</li>
 								<li className="nav-item">
-									<a className="nav-link" href="#">Operacje na turniejach</a>
+									<a className="nav-link" href="#" onClick={() => this.changeUrl("/Panel/Tournaments")}>
+										<div className="d-inline">
+											<Gear size={25}/>
+											<span className="ms-2 h5 align-middle">Operacje na turniejach</span>
+										</div>
+									</a>
 								</li>
 								<li className="nav-item">
-									<a className="nav-link" href="#">Operacje na użytkownikach</a>
+									<a className="nav-link" href="#" onClick={() => this.changeUrl("/Panel/Users")}>
+										<div className="d-inline">
+											<PersonCheck size={25}/>
+											<span className="ms-2 h5 align-middle">Operacje na użytkownikach</span>
+										</div>
+									</a>
 								</li>
+								<li/>
 								<li className="nav-item">
-									<a className="nav-link" href="/Guest">Podgląd LIVE</a>
+									<a className="nav-link" href="/Guest">
+										<div className="d-inline">
+											<Tv size={25}/>
+											<span className="ms-2 h5 align-middle">Podgląd LIVE</span>
+										</div>
+									</a>
 								</li>
 							</ul>
 						</div>
 					</Container>
 				</nav>
-				<Container fluid style={{background: "red"}}>
-					<Row style={{width: "100%"}}>
-						<Col>
-							<p>Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 </p>
-							<p>Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 </p>
-							<p>Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 </p>
-							<p>Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 Dupa dupa 321 </p>
-						</Col>
-					</Row>
-				</Container>
+				<iframe src={this.state.currentUrl} frameBorder={0} 
+				        style={{overflow: "hidden",overflowX: "hidden",overflowY: "hidden", height:"100%", paddingLeft: "340px", width:"100%",position:"absolute",top:"0px",left:"0px",right:"0px",bottom:"0px", display: this.state.isLoading ? "none" : "block"}} height="100%" width="100%"
+				onLoad={(event => this.setState({isLoading: false}))}/>
 			</div>
 		)
 	}

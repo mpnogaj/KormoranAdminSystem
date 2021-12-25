@@ -68,9 +68,9 @@ namespace KormoranAdminSystemRevamped.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Logout(string sessionId)
+		public IActionResult Logout(LogoutRequestModel model)
 		{
-			_sessionManager.ExpireSession(sessionId);
+			_sessionManager.ExpireSession(model.SessionId);
 			return StatusCode(200);
 		}
 
@@ -97,6 +97,11 @@ namespace KormoranAdminSystemRevamped.Controllers
 	{
 		public string Username { get; set; } = "";
 		public string Password { get; set; } = "";
+	}
+
+	public record LogoutRequestModel
+	{
+		public string SessionId { get; set; } = "";
 	}
 
 	public record LoginResponseModel

@@ -41,7 +41,7 @@ class Login extends React.Component<any, IState>{
 		}
 		try {
 			console.log("Ładowanie");
-			const response = await axios.post<ILoginResponse>("api/Session/Login",
+			const response = await axios.post<ILoginResponse>("/api/Session/Login",
 				{
 					Username: this.state.username,
 					Password: this.state.password
