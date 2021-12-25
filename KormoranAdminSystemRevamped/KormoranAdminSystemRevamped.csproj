@@ -28,6 +28,7 @@
     <TypeScriptCompile Include="ClientApp\src\Helpers\Authenticator.ts" />
     <TypeScriptCompile Include="ClientApp\src\Helpers\Essentials.ts" />
     <TypeScriptCompile Include="ClientApp\src\Models\IDiscipline.ts" />
+    <TypeScriptCompile Include="ClientApp\src\Models\ILog.ts" />
     <TypeScriptCompile Include="ClientApp\src\Models\IMatch.ts" />
     <TypeScriptCompile Include="ClientApp\src\Models\IState.ts" />
     <TypeScriptCompile Include="ClientApp\src\Models\ITeam.ts" />
