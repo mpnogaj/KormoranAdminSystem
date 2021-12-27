@@ -2,7 +2,7 @@
 ## Najważniejsza informacja w galaktyce i w tym repo:  
 **PLIS PRZY PISANU KODU UŻYWAJ TABÓW O DŁUGOŚCI 4, A NIE SPACJI JAK JAKIŚ BARBARZYŃCA**
 ## Wymagane oprogramowanie
-1. Zainstalowany .NET SDK w wersji 5. Można ściągnąć [tutaj](https://dotnet.microsoft.com/download/dotnet/5.0).
+1. Zainstalowany .NET SDK w wersji 6. Można ściągnąć [tutaj](https://dotnet.microsoft.com/en-us/download/dotnet/6.0).
 2. Zainstalowany i skonfigurowany serwer MySQL w wersji 8.0.27, lokalnie, lub na serwerze zewnętrznym. Do ściągnięcia [tutaj](https://dev.mysql.com/downloads/mysql/).
 3. Zainstalowany Entity Framework Core. Można zainstalować wywołując polecenie:  
 ```dotnet tool install --global dotnet-ef```
@@ -13,7 +13,7 @@
 **UWAGA**  
 Polecenie to warto wywołać za każdym razem po ściągnięcu zmian poleceniem ```git pull```. Automatycznie zaktualizuje tabele jeżeli będzie taka potrzeba. Jeżeli po wywołaniu tej komendy pokaże się błąd można spróbować usunąć tabele z bazy (nie powinno się zdarzać często, chyba że zostały wprowadzone drastyczne zmiany).
 ## Jak, co, po co i dlaczego
-Generalnie wszystko to co jest w katalogu **ClientApp** to nic innego jak aplikacja Reactowa pisana w **TypeScripcie**. Cała reszta, napisana w **C#** przy użyciu **ASP .NET Core 5.0**, to kod wykonywany po strone serwera.
+Generalnie wszystko to co jest w katalogu **ClientApp** to nic innego jak aplikacja Reactowa pisana w **TypeScripcie**. Cała reszta, napisana w **C#** przy użyciu **ASP .NET Core 6.0**, to kod wykonywany po strone serwera.
 
 Do nauki wyżej wymienionych technologi polecam:
 * TypeScript:
