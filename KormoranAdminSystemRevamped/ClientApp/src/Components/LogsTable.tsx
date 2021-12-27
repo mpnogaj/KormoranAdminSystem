@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { ReactEventHandler } from "react";
+import React from "react";
 import ILog from "../Models/ILog";
 import ILogsResponse from "../Models/Responses/ILogsResponse";
 import LogRow from "./LogRow";
@@ -41,6 +41,9 @@ class LogTable extends React.Component<IProps, IState> {
 			numberOfPages:
 				Math.floor(data.length / this.state.pageSize) +
 				(data.length % this.state.pageSize > 0 ? 1 : 0),
+			currentPage: 
+				Math.floor(data.length / this.state.pageSize) +
+				(data.length % this.state.pageSize > 0 ? 1 : 0) == 0 ? 0 : 1
 		});
 	}
 
@@ -57,10 +60,10 @@ class LogTable extends React.Component<IProps, IState> {
 						</tr>
 					</thead>
 					<tbody className="align-middle">
-						{this.state.isLoading == false ? (
+						{!this.state.isLoading ? (
 							this.state.logs
 								.slice(
-									this.state.currentPage - 1 * this.state.pageSize,
+									(this.state.currentPage - 1) * this.state.pageSize,
 									Math.min(
 										this.state.logs.length,
 										(this.state.currentPage - 1) * this.state.pageSize +
@@ -79,26 +82,27 @@ class LogTable extends React.Component<IProps, IState> {
 						)}
 					</tbody>
 				</table>
-				<div className="align-center">
+				<div className="d-flex justify-content-center">
+					<div>
 					<button
 						className="button btn-primary me-3"
 						disabled={this.state.currentPage <= 1}
 						onClick={() =>
 							this.setState({ currentPage: this.state.currentPage - 1 })
 						}
-					>&#8592;
+					>&#60;-
 					</button>
-					Strona {this.state.currentPage} z {this.state.numberOfPages}
+						<span className="align-middle">Strona {this.state.currentPage} z {this.state.numberOfPages}</span>
 					<button
-						className="button btn-primary ms-3"
+						className="button btn-primary ms-3 text-center align-middle"
 						disabled={this.state.currentPage >= this.state.numberOfPages}
 						onClick={() =>
 							this.setState({ currentPage: this.state.currentPage + 1 })
 						}
-					>&#8594;
+					>-&#62;
 					</button>
-					<span className="ms-3">Ilość logów w tabeli: </span>
-					<select
+					<span className="ms-3 align-middle">Ilość logów w tabeli: </span>
+					<select className="align-middle"
 						onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
 							this.setState({ pageSize: +event.target.value });
 							console.log(event);
@@ -110,6 +114,7 @@ class LogTable extends React.Component<IProps, IState> {
 						<option value="15">15</option>
 						<option value="20">20</option>
 					</select>
+					</div>
 				</div>
 			</div>
 		);
