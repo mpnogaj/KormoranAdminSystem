@@ -3,7 +3,7 @@ import IMatch from "../Models/IMatch";
 import axios from "axios";
 import IMatchesResponse from "../Models/Responses/IMatchesResponse";
 import {Table} from "react-bootstrap";
-import MatchesRow from "./MatchesRow";
+import MatchesRow from "./MatchRow";
 
 interface IProps{
 	tournamentId: number;

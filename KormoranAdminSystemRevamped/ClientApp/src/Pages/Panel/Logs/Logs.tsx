@@ -1,4 +1,5 @@
 import React from "react";
+import LogTable from "../../../Components/LogsTable";
 
 class Logs extends React.Component<any, any>{
 	render() {
@@ -7,6 +8,7 @@ class Logs extends React.Component<any, any>{
 				<div className="logo-container">
 					<p>Logi</p>
 				</div>
+				<LogTable />
 			</div>
 		)
 	}

@@ -1,7 +1,27 @@
 import React from "react";
+import ILog from "../Models/ILog";
 
-class LogRow extends React.Component<any, any>{
-	
+interface IProps {
+	item: ILog
+}
+
+class LogRow extends React.Component<IProps, any>{
+
+	constructor(props: IProps) {
+		super(props);
+	}
+
+
+	render() {
+		return (
+			<tr>
+				<td>{this.props.item.level}</td>
+				<td>{this.props.item.date}</td>
+				<td>{this.props.item.author}</td>
+				<td>{this.props.item.action}</td>
+			</tr>
+		);
+	}
 }
 
 export default LogRow;

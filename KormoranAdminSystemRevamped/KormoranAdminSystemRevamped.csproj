@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\Models\Responses\ILogsResponse.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="3.1.21" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.12" />
@@ -34,6 +38,7 @@
     <TypeScriptCompile Include="ClientApp\src\Models\ITeam.ts" />
     <TypeScriptCompile Include="ClientApp\src\Models\ITournament.ts" />
     <TypeScriptCompile Include="ClientApp\src\Models\Responses\ILoginResponse.ts" />
+    <TypeScriptCompile Include="ClientApp\src\Models\Responses\ILogsResponse.ts" />
     <TypeScriptCompile Include="ClientApp\src\Models\Responses\IMatchesResponse.ts" />
     <TypeScriptCompile Include="ClientApp\src\Models\Responses\ITournamentsResponse.ts" />
     <TypeScriptCompile Include="ClientApp\src\Models\Responses\IValidateResponse.ts" />
