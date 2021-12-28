@@ -115,9 +115,9 @@ class Panel extends React.Component<any, IState>{
 						</div>
 					</Container>
 				</nav>
-				<iframe src={this.state.currentUrl} frameBorder={0} 
-				        style={{overflow: "hidden",overflowX: "hidden",overflowY: "hidden", height:"100%", paddingLeft: "340px", width:"100%",position:"absolute",top:"0px",left:"0px",right:"0px",bottom:"0px", display: this.state.isLoading ? "none" : "block"}} height="100%" width="100%"
-				onLoad={(event => this.setState({isLoading: false}))}/>
+				<iframe src={this.state.currentUrl} frameBorder={0} id="panelIframe"
+				        style={{display: this.state.isLoading ? "none" : "block"}} 
+				        onLoad={(event => this.setState({isLoading: false}))}/>
 			</div>
 		)
 	}
