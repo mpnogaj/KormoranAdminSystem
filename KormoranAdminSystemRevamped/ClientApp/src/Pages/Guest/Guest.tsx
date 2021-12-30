@@ -8,7 +8,7 @@ class Guest extends React.Component<any, any>{
 				<div className="logo-container">
 					<p>Podgląd turniejów na żywo</p>
 				</div>
-				<TournamentsTable/>
+				<TournamentsTable allowEdit={false}/>
 			</div>
 		);
 	}

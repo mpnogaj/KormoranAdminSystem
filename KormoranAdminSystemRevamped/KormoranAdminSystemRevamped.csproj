@@ -37,9 +37,11 @@
     <TypeScriptCompile Include="ClientApp\src\Models\IState.ts" />
     <TypeScriptCompile Include="ClientApp\src\Models\ITeam.ts" />
     <TypeScriptCompile Include="ClientApp\src\Models\ITournament.ts" />
+    <TypeScriptCompile Include="ClientApp\src\Models\Responses\IDisciplinesResponse.ts" />
     <TypeScriptCompile Include="ClientApp\src\Models\Responses\ILoginResponse.ts" />
     <TypeScriptCompile Include="ClientApp\src\Models\Responses\ILogsResponse.ts" />
     <TypeScriptCompile Include="ClientApp\src\Models\Responses\IMatchesResponse.ts" />
+    <TypeScriptCompile Include="ClientApp\src\Models\Responses\IStateResponse.ts" />
     <TypeScriptCompile Include="ClientApp\src\Models\Responses\ITournamentsResponse.ts" />
     <TypeScriptCompile Include="ClientApp\src\Models\Responses\IValidateResponse.ts" />
     <TypeScriptCompile Include="ClientApp\src\Pages\Panel\Logs\Logs.tsx" />
