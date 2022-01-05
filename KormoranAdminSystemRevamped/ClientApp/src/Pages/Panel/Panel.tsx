@@ -5,7 +5,6 @@ import {ReactComponent as Logo} from "../../Icons/LogoNoText.svg";
 import {ReactComponent as Avatar} from "../../Icons/DefaultAvatar.svg";
 import {Speedometer2, JournalText, PersonCheck, Tv, Gear} from "react-bootstrap-icons";
 import axios from "axios";
-import IDisciplinesResponse from "../../Models/Responses/IDisciplinesResponse";
 
 interface IState{
 	currentUrl: string,
@@ -20,7 +19,6 @@ class Panel extends React.Component<any, IState>{
 			currentUrl: "/Panel/Overview",
 			isLoading: true
 		}
-		this.downloadDisciplines().catch(ex => console.error(ex));
 	}
 	
 	changeUrl = (newUrl: string) => {
@@ -28,17 +26,6 @@ class Panel extends React.Component<any, IState>{
 			this.setState({currentUrl: newUrl, isLoading: true})
 		}
 	};
-	
-	downloadDisciplines = async () => {
-		if(sessionStorage.getItem("disciplines") != null) return;
-		const response = await axios.get<IDisciplinesResponse>("/api/");
-		sessionStorage.setItem("disciplines", JSON.stringify(response.data.disciplines));
-	}
-	
-	downloadStates = async () => {
-		if(sessionStorage.getItem("states") != null) return;
-		
-	}
 	
 	render() {
 		return (

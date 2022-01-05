@@ -1,6 +1,6 @@
-interface ILoginResponse{
-	error: boolean,
-	message: string,
+import IBasicResponse from "./IBasicResponse";
+
+interface ILoginResponse extends IBasicResponse{
 	sessionId: string;
 }
 

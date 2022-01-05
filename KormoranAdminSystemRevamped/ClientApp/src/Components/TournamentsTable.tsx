@@ -3,67 +3,78 @@ import TournamentRow from "./TournamentRow";
 import {Button, Modal, Table} from "react-bootstrap";
 import MatchesTable from "./MatchesTable";
 import axios from "axios";
-import ITournamentsResponse from "../Models/Responses/ITournamentsResponse";
 import ITournament from "../Models/ITournament";
+import IDiscipline from "../Models/IDiscipline";
+import IState from "../Models/IState";
+import ICollectionResponse from "../Models/Responses/ICollectionResponse";
 
-interface IState{
+interface ICompState{
 	tournaments: Array<ITournament>,
-	modalVisible: boolean,
+	disciplines: Array<IDiscipline>,
+	states: Array<IState>,
+	previewModalVisible: boolean,
 	editModalVisible: boolean,
 	currentTournamentId : number,
 	isLoading: boolean;
 }
 
-interface IProps{
+interface ICompProps{
 	allowEdit: boolean;
 }
 
-class TournamentsTable extends React.Component<IProps, IState>{
+class TournamentsTable extends React.Component<ICompProps, ICompState>{
 
 	private timerID: number;
-	constructor(props: IProps) {
+
+	constructor(props: ICompProps) {
 		super(props);
 		this.state = {
 			tournaments: [],
-			modalVisible: false,
+			previewModalVisible: false,
+			states: [],
+			disciplines: [],
 			editModalVisible: true,
 			currentTournamentId: 0,
 			isLoading: true
 		};
 		this.timerID = 0;
-		this.loadTournaments = this.loadTournaments.bind(this);
-		this.loadTournaments().catch(ex => console.log(ex));
+		this.downloadData().catch(ex => console.error(ex));
 	}
 
-	toggleTimer(enable: boolean){
-		if(enable){
-			this.timerID = window.setInterval(this.loadTournaments,5000);
-		}
-		else {
-			window.clearTimeout(this.timerID);
-		}
+	downloadData = async () => {
+		await this.downloadDisciplines();
+		await this.downloadStates();
+		this.setState({
+			disciplines: JSON.parse(sessionStorage.getItem("disciplines") ?? "[]"),
+			states: JSON.parse(sessionStorage.getItem("states") ?? "[]"),
+		})
+		await this.downloadTournaments();
 	}
 
-	componentWillUnmount() {
-		this.toggleTimer(false);
+	downloadDisciplines = async () => {
+		if (sessionStorage.getItem("disciplines") != null) return;
+		const response = await axios.get<ICollectionResponse<IDiscipline>>("/api/Tournaments/GetDisciplines");
+		sessionStorage.setItem("disciplines", JSON.stringify(response.data.collection));
 	}
 
-	componentDidMount() {
-		this.toggleTimer(true);
+	downloadStates = async () => {
+		if (sessionStorage.getItem("states") != null) return;
+		const response = await axios.get<ICollectionResponse<IState>>("/api/Tournaments/GetStates");
+		sessionStorage.setItem("states", JSON.stringify(response.data.collection));
 	}
 
-	async loadTournaments(){
-		const response = await axios.get<ITournamentsResponse>("/api/Tournaments/GetTournaments", {
+	downloadTournaments = async () => {
+		const response = await axios.get<ICollectionResponse<ITournament>>("/api/Tournaments/GetTournaments", {
 			params: []
 		});
 		console.log(response);
-		if(response.status === 200){
+		if (response.status === 200) {
 			this.setState({
-				tournaments: response.data.tournaments,
+				tournaments: response.data.collection,
 				isLoading: false
 			});
 		}
-		else{
+		else {
 			this.setState({
 				tournaments: [],
 				isLoading: false
@@ -71,13 +82,36 @@ class TournamentsTable extends React.Component<IProps, IState>{
 		}
 	}
 
+	updateTournaments(enable: boolean){
+		if(enable){
+			this.timerID = window.setInterval(this.downloadTournaments, 5000);
+		}
+		else {
+			window.clearTimeout(this.timerID);
+		}
+	}
+
+	componentWillUnmount() {
+		this.updateTournaments(false);
+	}
+
+	componentDidMount() {
+		this.updateTournaments(true);
+	}
+
 	handleShow = (tournamentId: number, isEdit: boolean) => {
-		this.setState({
-			...this.state,
-			modalVisible: true,
-			currentTournamentId: tournamentId
-		});
-		this.toggleTimer(false);
+		if(isEdit){
+			this.setState({
+				editModalVisible: true
+			})
+		}
+		else{
+			this.setState({
+				previewModalVisible: true,
+				currentTournamentId: tournamentId
+			});
+		}
+		this.updateTournaments(false);
 	}
 	
 	render(){
@@ -97,24 +131,27 @@ class TournamentsTable extends React.Component<IProps, IState>{
 					{
 						!this.state.isLoading
 							?
-							this.state.tournaments.map((val) => {
-								return (
-									<TournamentRow key={val.id} tournament={val} showModalCallback={this.handleShow} 
-									               allowEdit={this.props.allowEdit}/>
-								);
-							})
+								this.state.tournaments.map((val) => {
+									val.discipline = this.state.disciplines[val.disciplineId - 1];
+									val.state = this.state.states[val.stateId - 1];
+									return (
+										<TournamentRow key={val.id} tournament={val} showModalCallback={this.handleShow} 
+											           allowEdit={this.props.allowEdit}/>
+									);
+								})
 							:
-							<tr>
-								<td style={{textAlign: "center"}} colSpan={5}>Ładowanie...</td>
-							</tr>
+								<tr>
+									<td style={{textAlign: "center"}} colSpan={5}>Ładowanie...</td>
+								</tr>
 					}
 					</tbody>
 				</Table>
-				<Modal show={this.state.modalVisible} onHide={() => {
+				{/* Modal podglądu */}
+				<Modal show={this.state.previewModalVisible} onHide={() => {
 					this.setState({
-						modalVisible: false
+						previewModalVisible: false
 					});
-					this.toggleTimer(true);
+					this.updateTournaments(true);
 				}} size="xl">
 					<Modal.Header closeButton>
 						<Modal.Title>Podgląd wyników</Modal.Title>
@@ -123,27 +160,58 @@ class TournamentsTable extends React.Component<IProps, IState>{
 						<MatchesTable tournamentId={this.state.currentTournamentId}/>
 					</Modal.Body>
 				</Modal>
+
+				{/* Modal edytowania */}
 				<Modal show={this.state.editModalVisible} onHide={() => {
 					this.setState({
 						editModalVisible: false
 					});
-					this.toggleTimer(true);
+					this.updateTournaments(true);
 				}}>
 					<Modal.Header closeButton>
 						<Modal.Title>Edytuj turniej</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						<div>
-							<label htmlFor="newTournamentNameBox" className="me-3">Nazwa turnieju</label>
-							<input id="newTournamentNameBox" type="text"/>
-						</div>
-						<div>
-							
-						</div>
+						<table>
+							<tbody>
+								<tr>
+									<td>
+										<label htmlFor="newTournamentNameBox" className="me-3">Nazwa turnieju</label>
+									</td>
+									<td>
+										<input id="newTournamentNameBox" type="text"/>
+									</td>
+								</tr>
+								<tr className="mt-3">
+									<td>
+										<label htmlFor="newTournamentNameBox" className="me-3 mt-2">Stan</label>
+									</td>
+									<td>
+										<select id="newTournamentDyscipline">
+											<option>Koniec</option>
+											<option>Trwa</option>
+											<option>20 pompek!</option>
+										</select> 
+									</td>
+								</tr>
+								<tr className="mt-3">
+									<td>
+										<label htmlFor="newTournamentDyscipline" className="me-3">Dyscyplina</label>
+									</td>
+									<td>
+										<select id="newTournamentDyscipline">
+											<option>Dobra chłopaki dzisiaj siata</option>
+											<option>Dupa321</option>
+											<option>Gargamel</option>
+										</select> 
+									</td>
+								</tr>
+							</tbody>
+						</table>
 					</Modal.Body>
 					<Modal.Footer>
 						<Button>Ok</Button>
-						<Button>Anuluj</Button>
+						<Button onClick={() => this.setState({editModalVisible: false})}>Anuluj</Button>
 					</Modal.Footer>
 				</Modal>
 			</div>

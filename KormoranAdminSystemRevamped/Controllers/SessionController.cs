@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using KormoranAdminSystemRevamped.Helpers;
 using KormoranAdminSystemRevamped.Services;
+using KormoranAdminSystemRevamped.Models.Responses;
 
 namespace KormoranAdminSystemRevamped.Controllers
 {
@@ -77,15 +78,15 @@ namespace KormoranAdminSystemRevamped.Controllers
 		[HttpGet]
 		public JsonResult Validate(string sessionId)
 		{
-			var response = new ValidateResponseModel();
+			var response = new BasicResponse();
 			if (_sessionManager.GetSession(sessionId) != null)
 			{
-				response.Valid = true;
+				response.Error = false;
 				response.Message = "Sesja jest ważna";
 			}
 			else
 			{
-				response.Valid = false;
+				response.Error = true;
 				response.Message = "Sesja wygasła. Zaloguj się ponownie";
 			}
 
@@ -104,16 +105,8 @@ namespace KormoranAdminSystemRevamped.Controllers
 		public string SessionId { get; set; } = "";
 	}
 
-	public record LoginResponseModel
+	public record LoginResponseModel : BasicResponse
 	{
-		public bool Error { get; set; }
-		public string Message { get; set; } = "";
 		public string SessionId { get; set; } = "";
-	}
-
-	public record ValidateResponseModel
-	{
-		public bool Valid { get; set; }
-		public string Message { get; set; } = "";
 	}
 }

@@ -14,9 +14,9 @@ class TournamentRow extends React.Component<IProps, any>{
 			<tr>
 				<td>{this.props.tournament.name}</td>
 				<td>
-					<Badge bg="success">{this.props.tournament.state.name}</Badge>
+					<Badge bg="success">{this.props.tournament.state == undefined ? "Ładowanie" : this.props.tournament.state.name}</Badge>
 				</td>
-				<td>{this.props.tournament.discipline.name}</td>
+				<td>{this.props.tournament.discipline == undefined ? "Ładowanie" : this.props.tournament.discipline.name}</td>
 				<td>{this.props.tournament.tournamentType}</td>
 				<td>
 					<Button variant="success" onClick={() => this.props.showModalCallback(this.props.tournament.id, false)}>Podgląd</Button>

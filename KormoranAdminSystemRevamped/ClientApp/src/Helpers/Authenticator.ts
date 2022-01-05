@@ -1,14 +1,14 @@
 import axios from "axios";
-import IValidateResponse from "../Models/Responses/IValidateResponse";
+import IBasicResponse from "../Models/Responses/IBasicResponse";
 
 export async function validateSessionId(sessionId: string){
 	try{
-		const response = await axios.get<IValidateResponse>('/api/Session/Validate', {
+		const response = await axios.get<IBasicResponse>('/api/Session/Validate', {
 			params: {
 				sessionId: sessionId
 			}
 		});
-		return response.data.valid;
+		return !response.data.error;
 	}
 	catch{
 		return false;

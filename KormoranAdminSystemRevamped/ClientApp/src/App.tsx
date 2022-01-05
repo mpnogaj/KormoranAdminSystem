@@ -4,7 +4,6 @@ import "./css/bootstrap.min.css";
 import "./css/main.css";
 import "./App.css";
 import {validateSessionId} from "./Helpers/Authenticator";
-import Panel from "./Pages/Panel/Panel";
 
 interface IProps{}
 interface IState{

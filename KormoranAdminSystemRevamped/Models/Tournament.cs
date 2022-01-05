@@ -18,16 +18,16 @@ namespace KormoranAdminSystemRevamped.Models
 		[Required]
 		public string Name { get; set; }
 		
-		[JsonIgnore]
 		[Column("discipline_id")]
 		[ForeignKey("Discipline")]
 		public int DisciplineId { get; set; }
+		[JsonIgnore]
 		public virtual Discipline Discipline { get; set; }
 		
-		[JsonIgnore]
 		[Column("state_id")]
 		[ForeignKey("State")]
 		public int StateId { get; set; }
+		[JsonIgnore]
 		public virtual State State { get; set; }
 		public virtual ICollection<Match> Matches { get; set; }
 		public virtual ICollection<Team> Teams { get; set; }

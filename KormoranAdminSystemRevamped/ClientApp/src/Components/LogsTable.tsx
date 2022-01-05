@@ -1,7 +1,7 @@
 import axios from "axios";
 import React from "react";
 import ILog from "../Models/ILog";
-import ILogsResponse from "../Models/Responses/ILogsResponse";
+import ICollectionResponse from "../Models/Responses/ICollectionResponse";
 import LogRow from "./LogRow";
 
 interface IProps { }
@@ -29,12 +29,12 @@ class LogTable extends React.Component<IProps, IState> {
 	}
 
 	async LoadLogs() {
-		const response = await axios.get<ILogsResponse>("/api/Logs/GetLogs", {
+		const response = await axios.get <ICollectionResponse<ILog>>("/api/Logs/GetLogs", {
 			params: {
 				sessionId: sessionStorage.getItem("sessionId"),
 			},
 		});
-		const data = response.data.logEntries;
+		const data = response.data.collection;
 		this.setState({
 			isLoading: false,
 			logs: data,

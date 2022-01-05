@@ -1,16 +1,17 @@
 import React from "react";
 import IMatch from "../Models/IMatch";
 import axios from "axios";
-import IMatchesResponse from "../Models/Responses/IMatchesResponse";
 import {Table} from "react-bootstrap";
 import MatchesRow from "./MatchRow";
+import ICollectionResponse from "../Models/Responses/ICollectionResponse";
 
 interface IProps{
 	tournamentId: number;
 }
 
 interface IState{
-	matches: Array<IMatch>
+	matches: Array<IMatch>,
+	isLoading: boolean
 }
 
 class MatchesTable extends React.Component<IProps, IState>{
@@ -18,10 +19,10 @@ class MatchesTable extends React.Component<IProps, IState>{
 	constructor(props: IProps) {
 		super(props);
 		this.state = {
-			matches: []
+			matches: [],
+			isLoading: true,
 		}
 		this.timerID = 0;
-		this.loadMatches = this.loadMatches.bind(this);
 		this.loadMatches().catch(ex => console.log(ex));
 	}
 
@@ -42,15 +43,14 @@ class MatchesTable extends React.Component<IProps, IState>{
 		this.toggleTimer(true);
 	}
 
-	async loadMatches(){
-		const response = await axios.get<IMatchesResponse>("api/Tournaments/GetMatches", {
+	loadMatches = async () => {
+		const response = await axios.get <ICollectionResponse<IMatch>>("/api/Tournaments/GetMatches", {
 			params: {
 				"id": this.props.tournamentId
 			}
 		});
-		console.log("update");
-		if(response.status === 200){
-			this.setState<"matches">({matches: response.data.matches});
+		if (response.status === 200) {
+			this.setState<"matches">({ matches: response.data.collection, isLoading: false });
 		}
 	}
 	
@@ -69,7 +69,7 @@ class MatchesTable extends React.Component<IProps, IState>{
 				</thead>
 				<tbody className="align-middle">
 				{
-					this.state.matches.length > 0
+					!this.state.isLoading
 					?
 					this.state.matches.map((val) => {
 						console.log(val);
