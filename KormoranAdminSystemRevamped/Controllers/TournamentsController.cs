@@ -5,7 +5,6 @@ using KormoranAdminSystemRevamped.Properties;
 using KormoranAdminSystemRevamped.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,10 +28,7 @@ namespace KormoranAdminSystemRevamped.Controllers
 		{
 			try
 			{
-				var tournamentList = await _db.Tournaments
-								.Include(x => x.Teams)
-								.Include(x => x.Matches)
-								.ToListAsync();
+				var tournamentList = await _db.Tournaments.ToListAsync();
 				if (model.StateId != null)
 				{
 					tournamentList = tournamentList.Where(x => x.State.Id == model.StateId).ToList();
@@ -59,12 +55,7 @@ namespace KormoranAdminSystemRevamped.Controllers
 		[HttpGet]
 		public async Task<JsonResult> GetMatches([FromQuery] int id)
 		{
-			var tournament = await _db.Tournaments
-				.Include(x => x.Discipline)
-				.Include(x => x.State)
-				.Include(x => x.Teams)
-				.Include(x => x.Matches)
-				.FirstAsync(x => x.Id == id);
+			var tournament = await _db.Tournaments.FirstAsync(x => x.Id == id);
 
 			if (tournament == null)
 			{

@@ -18,7 +18,6 @@ namespace KormoranAdminSystemRevamped.Models
 		[Column("name")]
 		public string Name { get; set; }
 		
-		[JsonIgnore]
 		[ForeignKey("Tournament")]
 		[Column("tournament_id")]
 		public int TournamentId { get; set; }
