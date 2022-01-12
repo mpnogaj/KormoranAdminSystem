@@ -1,119 +1,190 @@
 import axios from "axios";
-import IDiscipline from "../Models/IDiscipline";
-import ILog from "../Models/ILog";
-import IMatch from "../Models/IMatch";
-import IState from "../Models/IState";
-import ITeam from "../Models/ITeam";
-import ITournament from "../Models/ITournament";
 import ICollectionResponse from "../Models/Responses/ICollectionResponse";
+import IObjectResponse from "../Models/Responses/IObjectResponse";
 
-class StorageElementBasic{
+class StorageElement {
 	callbacks: Array<Callback> = [];
 	activeCallbacks: number = 0;
-	itemKey: string = "";
-	apiGetUrl: string = ""; 
-	plainData: Array<any> = [];
-	constructor(key: string, apiUrl: string){
-		this.itemKey = key;
+
+	plainData: any;
+	isError: boolean = true;
+	readonly apiGetUrl: string = "";
+	readonly dataIsArray: boolean;
+
+	constructor(apiUrl: string, dataIsArray: boolean = true) {
 		this.apiGetUrl = apiUrl;
+		this.dataIsArray = dataIsArray;
+	}
+
+	public getData<T>(): DataContainer<T> {
+		return new DataContainer<T>(
+			this.plainData as T,
+			this.isError
+		);
 	}
 }
 
-class StorageElement<T> extends StorageElementBasic{
-	public getData() : Array<T> {
-		return this.plainData as Array<T>;
-	}
-}
-
-class Callback{
+class Callback {
 	private callback: Function;
 	private isPaused: boolean = false;
-	readonly targetKey: string;
+	readonly targetKey: StorageTarget;
 
-	constructor(callback: Function, targetKey: string){
+	constructor(callback: Function, targetKey: StorageTarget) {
 		this.callback = callback;
 		this.targetKey = targetKey;
 	}
 
-	public getIsPaused() : boolean{
+	public getIsPaused(): boolean {
 		return this.isPaused;
 	}
 
-	public togglePause(){
+	public togglePause() {
 		this.isPaused = !this.isPaused;
-		const storage = ElementStorage.getInstance();
-		storage.elements.filter(x => x.itemKey == this.targetKey);
-		storage.elements[0].activeCallbacks += this.isPaused ? 1 : -1;
+		ElementStorage.getInstance().markPaused(this);
 	}
 
 	public run() {
-		this.callback();
+		this.callback(this.targetKey);
 	}
 }
 
-class ElementStorage{
+enum StorageTarget {
+	TOURNAMENTS,
+	MATCHES,
+	TEAMS,
+	LOGS,
+	STATES,
+	DISCIPLINES,
+}
 
-	elements: Array<StorageElementBasic> = [
-		new StorageElement<IDiscipline>("DISCIPLINES", "/api/tournaments/GetDisciplines"),
-		new StorageElement<IState>("STATES", "/api/tournaments/GetDisciplines"),
-		new StorageElement<ITournament>("TOURNAMENTS", "/api/tournaments/GetDisciplines"),
-		new StorageElement<IMatch>("MATCHES", "/api/tournaments/GetDisciplines"),
-		new StorageElement<ILog>("LOGS", "/api/tournaments/GetDisciplines"),
-		new StorageElement<ITeam>("TEAMS", "/api/tournaments/GetDisciplines"),
-	]
-	private readonly interval: number = 10;
+class DataContainer<Y>{
+	readonly isError: boolean;
+	readonly data: Y | undefined;
+
+	constructor(data: Y, isError: boolean) {
+		this.data = data;
+		this.isError = isError;
+	}
+}
+
+class ElementStorage {
+	/*
+		elements: Map<StorageTarget, StorageElement> = new Map([...])
+		This doesn't work ^
+		https://stackoverflow.com/questions/45223857/using-generics-in-es6-map-with-typescript
+	*/
+	private elements = new Map<StorageTarget, StorageElement>([
+		[
+			StorageTarget.TOURNAMENTS,
+			new StorageElement("/api/tournaments/GetTournaments")
+		], [
+			StorageTarget.MATCHES,
+			new StorageElement("/api/tournaments/GetMatches")
+		], [
+			StorageTarget.TEAMS,
+			new StorageElement("/api/tournaments/GetTeams")
+		], [
+			StorageTarget.LOGS,
+			new StorageElement("/api/tournaments/GetLogs")
+		], [
+			StorageTarget.DISCIPLINES,
+			new StorageElement("/api/tournaments/GetDisciplines")
+		], [
+			StorageTarget.STATES,
+			new StorageElement("/api/tournaments/GetStates")
+		]
+	]);
+	/*
+		jak polonez xd
+		raz, dwa, TRZY, raz, dwa, TRZY...
+	*/
+	private readonly interval: number = 3;
 	private static instance: ElementStorage;
-	private timerId: number = 0;
+	private timerId: number = -1;
 
 	public static getInstance() {
-		if(!ElementStorage.instance){
+		if (!ElementStorage.instance) {
 			ElementStorage.instance = new ElementStorage();
 		}
 		return ElementStorage.instance;
 	}
 
-	public subscribe(callback: Callback) {
-		var element = this.elements.filter(x => x.itemKey.toUpperCase() == callback.targetKey.toUpperCase());
-		if(element.length == 0){
+	public markPaused(callback: Callback) {
+		const element = this.elements.get(callback.targetKey);
+		if (element == undefined) {
 			console.error("Element with key: " + callback.targetKey + " hasn't been found");
 			return;
 		}
-		element[0].callbacks.push(callback);
+		element.activeCallbacks += callback.getIsPaused() ? 1 : -1;
+	}
+
+	public getData<T>(target: StorageTarget): DataContainer<T> {
+		const element = this.elements.get(target);
+		return element!.getData<T>();
+	}
+
+	public subscribe(callback: Callback) {
+		const element = this.elements.get(callback.targetKey)
+		if (element == undefined) {
+			console.error("Element with key: " + callback.targetKey + " hasn't been found");
+			return;
+		}
+		element.activeCallbacks++;
+		element.callbacks.push(callback);
 	}
 
 	public unsubscribe(callback: Callback) {
-		var element = this.elements.filter(x => x.itemKey.toUpperCase() == callback.targetKey.toUpperCase());
-		if(element.length == 0){
+		const element = this.elements.get(callback.targetKey)
+		if (element == undefined) {
 			console.error("Element with key: " + callback.targetKey + " hasn't been found");
 			return;
 		}
-		element[0].callbacks.splice(element[0].callbacks.indexOf(callback), 1);
+		element.activeCallbacks--;
+		element.callbacks.splice(element.callbacks.indexOf(callback), 1);
 	}
 
-	private constructor(){}
-
-	public startUpdating(){
-		this.timerId = window.setInterval(async () => this.updateData, this.interval * 100);
+	private constructor() {
+		this.startUpdating();
 	}
 
-	public stopUpdating(){
+	public startUpdating() {
+		if (this.timerId != -1) return;
+		this.timerId = window.setInterval(() => this.updateData(), this.interval * 1000);
+		console.log("Clock started: " + this.timerId);
+	}
+
+	public stopUpdating() {
 		window.clearInterval(this.timerId);
+		this.timerId = -1;
+		console.log("Clock stopped: " + this.timerId);
 	}
 
-	private async updateData(){
-		this.elements.forEach(async (element) =>  {
-			if(element.activeCallbacks == 0) return;
-			const response = await axios.get<ICollectionResponse<any>>(element.apiGetUrl);
-			if(response.data.collection != element.plainData){
-				element.plainData = response.data.collection;
+	private async updateData() {
+		console.log("Storage update!")
+		this.elements.forEach(async (element) => {
+			if (element.activeCallbacks == 0) return;
+			var data: any;
+			if (element.dataIsArray) {
+				const response = await axios.get<ICollectionResponse<any>>(element.apiGetUrl);
+				data = response.data.collection;
+			}
+			else {
+				const response = await axios.get<IObjectResponse<any>>(element.apiGetUrl);
+				data = response.data.item;
+			}
+			if (data != element.plainData) {
+				element.plainData = data;
+				element.isError = false;
 				element.callbacks.forEach(callback => callback.run());
 			}
 		})
 	}
 }
 
-export
-{
+export {
 	ElementStorage,
-	Callback
+	Callback,
+	DataContainer,
+	StorageElement,
+	StorageTarget
 };

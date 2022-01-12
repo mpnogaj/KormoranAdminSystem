@@ -7,6 +7,7 @@ import ITournament from "../Models/ITournament";
 import IDiscipline from "../Models/IDiscipline";
 import IState from "../Models/IState";
 import ICollectionResponse from "../Models/Responses/ICollectionResponse";
+import {Callback, ElementStorage, StorageTarget} from "../Helpers/ElementStorage";
 
 interface ICompState{
 	tournaments: Array<ITournament>,
@@ -23,8 +24,8 @@ interface ICompProps{
 }
 
 class TournamentsTable extends React.Component<ICompProps, ICompState>{
-
-	private timerID: number;
+	callbacks: Array<Callback>;
+	readonly storage: ElementStorage;
 
 	constructor(props: ICompProps) {
 		super(props);
@@ -37,66 +38,53 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 			currentTournamentId: 0,
 			isLoading: true
 		};
-		this.timerID = 0;
-		this.downloadData().catch(ex => console.error(ex));
-	}
-
-	downloadData = async () => {
-		await this.downloadDisciplines();
-		await this.downloadStates();
-		this.setState({
-			disciplines: JSON.parse(sessionStorage.getItem("disciplines") ?? "[]"),
-			states: JSON.parse(sessionStorage.getItem("states") ?? "[]"),
-		})
-		await this.downloadTournaments();
-	}
-
-	downloadDisciplines = async () => {
-		if (sessionStorage.getItem("disciplines") != null) return;
-		const response = await axios.get<ICollectionResponse<IDiscipline>>("/api/Tournaments/GetDisciplines");
-		sessionStorage.setItem("disciplines", JSON.stringify(response.data.collection));
-	}
-
-	downloadStates = async () => {
-		if (sessionStorage.getItem("states") != null) return;
-		const response = await axios.get<ICollectionResponse<IState>>("/api/Tournaments/GetStates");
-		sessionStorage.setItem("states", JSON.stringify(response.data.collection));
-	}
-
-	downloadTournaments = async () => {
-		const response = await axios.get<ICollectionResponse<ITournament>>("/api/Tournaments/GetTournaments", {
-			params: []
-		});
-		console.log(response);
-		if (response.status === 200) {
-			this.setState({
-				tournaments: response.data.collection,
-				isLoading: false
-			});
-		}
-		else {
-			this.setState({
-				tournaments: [],
-				isLoading: false
-			})
-		}
+		this.storage = ElementStorage.getInstance();
+		this.callbacks = [
+			new Callback((target: StorageTarget) => {
+				const data = 
+					this.storage.getData<Array<ITournament>>(target);
+				console.log(data);
+				if(!data.isError){
+					this.setState({
+						isLoading: false,
+						tournaments: data.data!
+					});
+				}
+			}, StorageTarget.TOURNAMENTS),
+			new Callback((target: StorageTarget) => {
+				const data = 
+					this.storage.getData<Array<IDiscipline>>(target);
+				console.log(data);
+				if(!data.isError){
+					this.setState({
+						disciplines: data.data!
+					});
+				}
+			}, StorageTarget.DISCIPLINES),
+			new Callback((target: StorageTarget) => {
+				const data = 
+					this.storage.getData<Array<IState>>(target);
+				console.log(data);
+				if(!data.isError){
+					this.setState({
+						states: data.data!
+					});
+				}
+			}, StorageTarget.STATES)
+		];
 	}
 
 	updateTournaments(enable: boolean){
-		if(enable){
-			this.timerID = window.setInterval(this.downloadTournaments, 5000);
-		}
-		else {
-			window.clearTimeout(this.timerID);
-		}
+		if(enable) ElementStorage.getInstance().subscribe(this.callbacks[0]);
+		else ElementStorage.getInstance().unsubscribe(this.callbacks[0]);
 	}
 
 	componentWillUnmount() {
-		this.updateTournaments(false);
+		this.callbacks.forEach(callback => ElementStorage.getInstance().subscribe(callback));
 	}
 
 	componentDidMount() {
-		this.updateTournaments(true);
+		this.callbacks.forEach(callback => ElementStorage.getInstance().subscribe(callback));
 	}
 
 	handleShow = (tournamentId: number, isEdit: boolean) => {

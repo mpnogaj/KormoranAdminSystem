@@ -29,7 +29,9 @@ namespace KormoranAdminSystemRevamped.Models
 		public int StateId { get; set; }
 		[JsonIgnore]
 		public virtual State State { get; set; }
+		[JsonIgnore]
 		public virtual ICollection<Match> Matches { get; set; }
+		[JsonIgnore]
 		public virtual ICollection<Team> Teams { get; set; }
 
 		[Required]
