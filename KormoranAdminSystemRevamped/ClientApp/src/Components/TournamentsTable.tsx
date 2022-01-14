@@ -2,12 +2,12 @@ import React from "react";
 import TournamentRow from "./TournamentRow";
 import {Button, Modal, Table} from "react-bootstrap";
 import MatchesTable from "./MatchesTable";
-import axios from "axios";
 import ITournament from "../Models/ITournament";
 import IDiscipline from "../Models/IDiscipline";
 import IState from "../Models/IState";
-import ICollectionResponse from "../Models/Responses/ICollectionResponse";
 import {Callback, ElementStorage, StorageTarget} from "../Helpers/ElementStorage";
+import axios from "axios";
+import IBasicResponse from "../Models/Responses/IBasicResponse";
 
 interface ICompState{
 	tournaments: Array<ITournament>,
@@ -17,6 +17,10 @@ interface ICompState{
 	editModalVisible: boolean,
 	currentTournamentId : number,
 	isLoading: boolean;
+
+	editName: string,
+	editState: number;
+	editDisc: number;
 }
 
 interface ICompProps{
@@ -32,11 +36,14 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 		this.state = {
 			tournaments: [],
 			previewModalVisible: false,
+			editModalVisible: false,
 			states: [],
 			disciplines: [],
-			editModalVisible: true,
 			currentTournamentId: 0,
-			isLoading: true
+			isLoading: true,
+			editDisc: 0,
+			editName: "",
+			editState: 0
 		};
 		this.storage = ElementStorage.getInstance();
 		this.callbacks = [
@@ -90,8 +97,12 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 	handleShow = (tournamentId: number, isEdit: boolean) => {
 		if(isEdit){
 			this.setState({
+				editName: this.state.tournaments[tournamentId - 1].name,
+				editDisc: this.state.tournaments[tournamentId - 1].disciplineId,
+				editState: this.state.tournaments[tournamentId - 1].stateId,
+				currentTournamentId: tournamentId,
 				editModalVisible: true
-			})
+			});
 		}
 		else{
 			this.setState({
@@ -167,18 +178,28 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 										<label htmlFor="newTournamentNameBox" className="me-3">Nazwa turnieju</label>
 									</td>
 									<td>
-										<input id="newTournamentNameBox" type="text"/>
+										<input value={this.state.editName} id="newTournamentNameBox" type="text"
+										onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+											this.setState({ editName: e.target.value });
+										}}/>
 									</td>
 								</tr>
 								<tr className="mt-3">
 									<td>
-										<label htmlFor="newTournamentNameBox" className="me-3 mt-2">Stan</label>
+										<label htmlFor="newTournamentState" className="me-3 mt-2">Stan</label>
 									</td>
 									<td>
-										<select id="newTournamentDyscipline">
-											<option>Koniec</option>
-											<option>Trwa</option>
-											<option>20 pompek!</option>
+										<select value={this.state.editState} id="newTournamentState"
+											onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+												this.setState({
+													editState: +event.target.value
+												});
+											}}>
+											{
+												this.state.states.map(state => {
+													return(<option key={state.id} value={state.id}>{state.name}</option>)
+												})	
+											}
 										</select> 
 									</td>
 								</tr>
@@ -187,10 +208,17 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 										<label htmlFor="newTournamentDyscipline" className="me-3">Dyscyplina</label>
 									</td>
 									<td>
-										<select id="newTournamentDyscipline">
-											<option>Dobra chłopaki dzisiaj siata</option>
-											<option>Dupa321</option>
-											<option>Gargamel</option>
+										<select value={this.state.editDisc} id="newTournamentDyscipline"
+											onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+												this.setState({
+													editDisc: +event.target.value
+												});
+											}}>
+											{
+												this.state.disciplines.map(disc => {
+													return(<option key={disc.id} value={disc.id}>{disc.name}</option>);
+												})
+											}
 										</select> 
 									</td>
 								</tr>
@@ -198,7 +226,17 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 						</table>
 					</Modal.Body>
 					<Modal.Footer>
-						<Button>Ok</Button>
+						<Button onClick={async () => {
+							console.log(this.state.currentTournamentId);
+							const response = await axios.post<IBasicResponse>("/api/Tournaments/UpdateTournament", {
+								tournamentId: this.state.currentTournamentId,
+								newName: this.state.editName,
+								newStateId: this.state.editState,
+								newDisciplineId: this.state.editDisc
+							});
+							alert(response.data.message);
+							this.setState({editModalVisible: false});
+						}}>Ok</Button>
 						<Button onClick={() => this.setState({editModalVisible: false})}>Anuluj</Button>
 					</Modal.Footer>
 				</Modal>

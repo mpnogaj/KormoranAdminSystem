@@ -5,6 +5,7 @@ using KormoranAdminSystemRevamped.Properties;
 using KormoranAdminSystemRevamped.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -48,6 +49,45 @@ namespace KormoranAdminSystemRevamped.Controllers
 					Message = Resources.serverError,
 					Error = true,
 					Collection = null
+				});
+			}
+		}
+
+		[HttpPost]
+		public async Task<JsonResult> UpdateTournament([FromBody] UpdateTournamentRequestModel request)
+		{
+			try
+			{
+				var tournament = await _db.Tournaments.
+								FirstOrDefaultAsync(x => x.Id == request.TournamentId);
+
+				tournament.Name = request.NewName;
+				tournament.StateId = request.NewStateId;
+				tournament.DisciplineId = request.NewDisciplineId;
+
+				_db.Tournaments.Update(tournament);
+				await _db.SaveChangesAsync();
+
+				return new JsonResult(new BasicResponse
+				{
+					Error = false,
+					Message = Resources.operationSuccessfull
+				});
+			}
+			catch(NullReferenceException)
+			{
+				return new JsonResult(new BasicResponse()
+				{
+					Error = true,
+					Message = "Turniej nie został znaleziony"
+				});
+			}
+			catch(Exception ex)
+			{
+				return new JsonResult(new BasicResponse
+				{
+					Error = true,
+					Message = $"Błąd serwera! {ex.Message}"
 				});
 			}
 		}
@@ -187,5 +227,13 @@ namespace KormoranAdminSystemRevamped.Controllers
 	{
 		[FromQuery(Name = "stateId")]
 		public int? StateId { get; set;}
+	}
+
+	public record UpdateTournamentRequestModel
+	{
+		public int TournamentId { get; set;}
+		public string? NewName { get; set; }
+		public int NewStateId { get; set; }
+		public int NewDisciplineId { get; set; }
 	}
 }
