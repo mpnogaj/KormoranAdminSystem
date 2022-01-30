@@ -1,8 +1,8 @@
-import axios from "axios";
 import React from "react";
+import { Callback, ElementStorage, StorageTarget } from "../Helpers/ElementStorage";
 import ILog from "../Models/ILog";
-import ICollectionResponse from "../Models/Responses/ICollectionResponse";
 import LogRow from "./LogRow";
+import {ArrowLeft, ArrowRight} from "react-bootstrap-icons"
 
 interface IProps { }
 
@@ -15,6 +15,10 @@ interface IState {
 }
 
 class LogTable extends React.Component<IProps, IState> {
+
+	callbacks: Array<Callback>;
+	readonly storage: ElementStorage;
+
 	constructor(props: IProps) {
 		super(props);
 		this.state = {
@@ -24,27 +28,36 @@ class LogTable extends React.Component<IProps, IState> {
 			numberOfPages: 1,
 			pageSize: 10,
 		};
-		this.LoadLogs = this.LoadLogs.bind(this);
-		this.LoadLogs().catch((ex) => console.log(ex));
+		this.storage = ElementStorage.getInstance();
+		this.callbacks = [
+			new Callback((target: StorageTarget) => {
+				const data = 
+					this.storage.getData<Array<ILog>>(target);
+				if(!data.isError && data.data != undefined){
+					this.setState({
+						isLoading: false,
+						logs: data.data,
+						numberOfPages:
+							Math.floor(data.data.length / this.state.pageSize) +
+							(data.data.length % this.state.pageSize > 0 ? 1 : 0),
+						currentPage: 
+							Math.floor(data.data.length / this.state.pageSize) +
+							(data.data.length % this.state.pageSize > 0 ? 1 : 0) == 0 ? 0 : 1
+					});
+				}
+			}, StorageTarget.LOGS)
+		]
 	}
 
-	async LoadLogs() {
-		const response = await axios.get <ICollectionResponse<ILog>>("/api/Logs/GetLogs", {
-			params: {
-				sessionId: sessionStorage.getItem("sessionId"),
-			},
-		});
-		const data = response.data.collection;
-		this.setState({
-			isLoading: false,
-			logs: data,
-			numberOfPages:
-				Math.floor(data.length / this.state.pageSize) +
-				(data.length % this.state.pageSize > 0 ? 1 : 0),
-			currentPage: 
-				Math.floor(data.length / this.state.pageSize) +
-				(data.length % this.state.pageSize > 0 ? 1 : 0) == 0 ? 0 : 1
-		});
+	componentDidMount(){
+		this.storage.updateParams({
+			sessionId: sessionStorage.getItem("sessionId")
+		}, StorageTarget.LOGS);
+		this.callbacks.forEach(callback => this.storage.subscribe(callback));
+	}
+
+	componentWillUnmount(){
+		this.callbacks.forEach(callback => this.storage.unsubscribe(callback));
 	}
 
 	render() {
@@ -90,7 +103,7 @@ class LogTable extends React.Component<IProps, IState> {
 						onClick={() =>
 							this.setState({ currentPage: this.state.currentPage - 1 })
 						}
-					>&#60;-
+					><ArrowLeft/>
 					</button>
 						<span className="align-middle">Strona {this.state.currentPage} z {this.state.numberOfPages}</span>
 					<button
@@ -99,7 +112,7 @@ class LogTable extends React.Component<IProps, IState> {
 						onClick={() =>
 							this.setState({ currentPage: this.state.currentPage + 1 })
 						}
-					>-&#62;
+					><ArrowRight/>
 					</button>
 					<span className="ms-3 align-middle">Ilość logów w tabeli: </span>
 					<select className="align-middle"

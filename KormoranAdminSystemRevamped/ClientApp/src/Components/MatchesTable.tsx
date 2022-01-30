@@ -1,59 +1,72 @@
 import React from "react";
 import IMatch from "../Models/IMatch";
-import axios from "axios";
-import {Table} from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import MatchesRow from "./MatchRow";
-import ICollectionResponse from "../Models/Responses/ICollectionResponse";
+import { Callback, ElementStorage, StorageTarget } from "../Helpers/ElementStorage";
+import ITeam from "../Models/ITeam";
+import IState from "../Models/IState";
 
-interface IProps{
+interface ICompProps {
+	states: Array<IState>
 	tournamentId: number;
 }
 
-interface IState{
+interface ICompState {
 	matches: Array<IMatch>,
+	teams: Array<ITeam>,
 	isLoading: boolean
 }
 
-class MatchesTable extends React.Component<IProps, IState>{
-	private timerID: number;
-	constructor(props: IProps) {
+class MatchesTable extends React.Component<ICompProps, ICompState>{
+	callbacks: Array<Callback> = [];
+	readonly storage: ElementStorage;
+	constructor(props: ICompProps) {
 		super(props);
 		this.state = {
 			matches: [],
+			teams: [],
 			isLoading: true,
-		}
-		this.timerID = 0;
-		this.loadMatches().catch(ex => console.log(ex));
-	}
-
-	toggleTimer(enable: boolean){
-		if(enable){
-			this.timerID = window.setInterval(this.loadMatches,5000);
-		}
-		else {
-			window.clearTimeout(this.timerID);
-		}
+		};
+		this.storage = ElementStorage.getInstance();
 	}
 
 	componentWillUnmount() {
-		this.toggleTimer(false);
+		this.callbacks.forEach(callback => 
+			this.storage.unsubscribe(callback)
+		);
 	}
 
 	componentDidMount() {
-		this.toggleTimer(true);
+		this.storage.updateParams({
+			id: this.props.tournamentId
+		}, StorageTarget.MATCHES);
+		this.storage.updateParams({
+			id: this.props.tournamentId
+		}, StorageTarget.TEAMS);
+		this.callbacks = [
+			new Callback((target: StorageTarget) => {
+				const data = this.storage.getData<Array<IMatch>>(target);
+				console.log(data);
+				if (!data.isError) {
+					this.setState({
+						matches: data.data!,
+						isLoading: false
+					});
+				}
+			}, StorageTarget.MATCHES),
+			new Callback((target: StorageTarget) => {
+				const data = this.storage.getData<Array<ITeam>>(target);
+				if (!data.isError) {
+					this.setState({
+						teams: data.data!,
+						isLoading: false
+					});
+				}
+			}, StorageTarget.TEAMS)
+		]
+		this.callbacks.forEach(callback => this.storage.subscribe(callback));
 	}
 
-	loadMatches = async () => {
-		const response = await axios.get <ICollectionResponse<IMatch>>("/api/Tournaments/GetMatches", {
-			params: {
-				"id": this.props.tournamentId
-			}
-		});
-		if (response.status === 200) {
-			this.setState<"matches">({ matches: response.data.collection, isLoading: false });
-		}
-	}
-	
 	render() {
 		return (
 			<Table hover={true} bordered={true}>
@@ -68,20 +81,23 @@ class MatchesTable extends React.Component<IProps, IState>{
 					</tr>
 				</thead>
 				<tbody className="align-middle">
-				{
-					!this.state.isLoading
-					?
-					this.state.matches.map((val) => {
-						console.log(val);
-						return <MatchesRow key={val.matchId} matchId={val.matchId} state={val.state} team1={val.team1}
-						                   team2={val.team2}
-						                   winner={val.winner} team1Score={val.team1Score} team2Score={val.team2Score}/>
-					})
-					:
-					<tr>
-						<td style={{textAlign: "center"}} colSpan={6}>Ładowanie...</td>
-					</tr>
-				}
+					{
+						!this.state.isLoading
+							?
+								this.state.matches.map((val) => {
+									const teams = this.state.teams;
+									val.team1 = teams[val.team1Id - 1];
+									val.team2 = teams[val.team2Id - 1];
+									val.winner = teams[val.winnerId - 1];
+									val.state = this.props.states[val.stateId - 1];
+									console.log(val);
+									return <MatchesRow key={val.matchId} match={val} />
+								})
+							:
+								<tr>
+									<td style={{ textAlign: "center" }} colSpan={6}>Ładowanie...</td>
+								</tr>
+					}
 				</tbody>
 			</Table>
 		);

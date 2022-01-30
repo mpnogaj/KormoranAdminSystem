@@ -74,7 +74,7 @@ namespace KormoranAdminSystemRevamped.Controllers
 					Message = Resources.operationSuccessfull
 				});
 			}
-			catch(NullReferenceException)
+			catch (NullReferenceException)
 			{
 				return new JsonResult(new BasicResponse()
 				{
@@ -82,7 +82,7 @@ namespace KormoranAdminSystemRevamped.Controllers
 					Message = "Turniej nie został znaleziony"
 				});
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				return new JsonResult(new BasicResponse
 				{
@@ -95,22 +95,45 @@ namespace KormoranAdminSystemRevamped.Controllers
 		[HttpGet]
 		public async Task<JsonResult> GetMatches([FromQuery] int id)
 		{
-			var tournament = await _db.Tournaments.FirstAsync(x => x.Id == id);
+			var tournament = await _db.Tournaments
+				.Include(x => x.Matches)
+				.FirstAsync(x => x.Id == id);
 
-			if (tournament == null)
-			{
-				return new JsonResult(new CollectionResponse<Match>
+			return tournament == null
+				? new JsonResult(new CollectionResponse<Match>
 				{
 					Error = true,
-					Collection = null
+					Collection = null,
+					Message = Resources.serverError
+				})
+				: new JsonResult(new CollectionResponse<Match>
+				{
+					Error = false,
+					Collection = tournament.Matches.ToList(),
+					Message = Resources.operationSuccessfull
 				});
-			}
+		}
 
-			return new JsonResult(new CollectionResponse<Match>
-			{
-				Error = false,
-				Collection = tournament.Matches.ToList()
-			});
+		[HttpGet]
+		public async Task<JsonResult> GetTeams([FromQuery] int id)
+		{
+			var tournament = await _db.Tournaments
+				.Include(x => x.Teams)
+				.FirstOrDefaultAsync();
+
+			return tournament == null
+				? new JsonResult(new CollectionResponse<Team>
+				{
+					Error = true,
+					Message = Resources.serverError,
+					Collection = null
+				})
+				: new JsonResult(new CollectionResponse<Team>
+				{
+					Error = false,
+					Message = Resources.operationSuccessfull,
+					Collection = tournament.Teams.ToList()
+				});
 		}
 
 		[HttpPost]
@@ -226,12 +249,12 @@ namespace KormoranAdminSystemRevamped.Controllers
 	public record TournamentRequestModel
 	{
 		[FromQuery(Name = "stateId")]
-		public int? StateId { get; set;}
+		public int? StateId { get; set; }
 	}
 
 	public record UpdateTournamentRequestModel
 	{
-		public int TournamentId { get; set;}
+		public int TournamentId { get; set; }
 		public string? NewName { get; set; }
 		public int NewStateId { get; set; }
 		public int NewDisciplineId { get; set; }

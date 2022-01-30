@@ -15,6 +15,7 @@ import Tournaments from "./Pages/Panel/Tournaments/Tournaments";
 import Overview from "./Pages/Panel/Overview/Overview";
 import Logs from "./Pages/Panel/Logs/Logs";
 import Users from "./Pages/Panel/Users/Users";
+import EditTournament from "./Pages/Panel/Tournaments/EditTournament";
 
 render(
 	<BrowserRouter>
@@ -25,6 +26,7 @@ render(
 			<Route path="Panel" element={<ProtectedRoute/>}>
 				<Route path="" element={<Panel/>}/>
 				<Route path="Tournaments" element={<Tournaments/>}/>
+				<Route path="EditTournament/:id" element={<EditTournament/>}/>
 				<Route path="Overview" element={<Overview/>}/>
 				<Route path="Logs" element={<Logs/>}/>
 				<Route path="Users" element={<Users/>}/>

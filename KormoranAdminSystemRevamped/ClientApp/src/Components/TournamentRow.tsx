@@ -1,10 +1,10 @@
 import React from "react";
-import {Badge, Button} from "react-bootstrap";
+import { Badge, Button } from "react-bootstrap";
 import ITournament from "../Models/ITournament";
 
-interface IProps{
+interface IProps {
 	tournament: ITournament,
-	allowEdit: boolean,
+	isEdit: boolean,
 	showModalCallback: Function,
 }
 
@@ -19,15 +19,21 @@ class TournamentRow extends React.Component<IProps, any>{
 				<td>{this.props.tournament.discipline == undefined ? "Ładowanie" : this.props.tournament.discipline.name}</td>
 				<td>{this.props.tournament.tournamentType}</td>
 				<td>
-					<Button variant="success" onClick={() => this.props.showModalCallback(this.props.tournament.id, false)}>Podgląd</Button>
 					{
-						this.props.allowEdit
-							? 
+						this.props.isEdit
+							?
+							<div>
 								<Button className="ms-3" variant="success" onClick={
 									() => this.props.showModalCallback(this.props.tournament.id, true)
-								}>Edytuj</Button> 
+								}>Szybka edycja</Button>
+								<Button className="ms-3" variant="success" onClick={
+									() => this.props.showModalCallback(this.props.tournament.id, true)
+								}>Pełna edycja</Button>
+							</div>
 							:
-								null
+							<Button variant="success" onClick={
+								() => this.props.showModalCallback(this.props.tournament.id, false)
+							}>Podgląd</Button>
 					}
 				</td>
 			</tr>

@@ -1,16 +1,9 @@
 import React from "react";
 import {Badge} from "react-bootstrap";
-import IState from "../Models/IState";
-import ITeam from "../Models/ITeam";
+import IMatch from "../Models/IMatch";
 
 interface IProps{
-	matchId: number,
-	state: IState,
-	team1: ITeam,
-	team2: ITeam
-	winner: ITeam,
-	team1Score: number,
-	team2Score: number;
+	match: IMatch
 }
 
 class TournamentRow extends React.Component<IProps, any>{
@@ -18,14 +11,14 @@ class TournamentRow extends React.Component<IProps, any>{
 		console.log(this.props);
 		return (
 			<tr>
-				<td>{this.props.matchId}</td>
+				<td>{this.props.match.matchId}</td>
 				<td>
-					<Badge bg="success">{this.props.state.name}</Badge>
+					<Badge bg="success">{this.props.match.state.name}</Badge>
 				</td>
-				<td>{this.props.team1 == undefined || null ? "-" : this.props.team1.name}</td>
-				<td>{this.props.team2 == undefined || null ? "-" : this.props.team2.name}</td>
-				<td>{this.props.winner == null ? "-" : this.props.winner.name}</td>
-				<td>{this.props.team1Score}:{this.props.team2Score}</td>
+				<td>{this.props.match.team1 == undefined || null ? "-" : this.props.match.team1.name}</td>
+				<td>{this.props.match.team2 == undefined || null ? "-" : this.props.match.team2.name}</td>
+				<td>{this.props.match.winner == null ? "-" : this.props.match.winner.name}</td>
+				<td>{this.props.match.team1Score}:{this.props.match.team2Score}</td>
 			</tr>
 		);
 	}

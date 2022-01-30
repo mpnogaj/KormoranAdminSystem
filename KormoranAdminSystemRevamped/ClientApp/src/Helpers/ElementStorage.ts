@@ -1,4 +1,5 @@
 import axios from "axios";
+import { TypeOfTag } from "typescript";
 import ICollectionResponse from "../Models/Responses/ICollectionResponse";
 import IObjectResponse from "../Models/Responses/IObjectResponse";
 
@@ -8,11 +9,12 @@ class StorageElement {
 
 	plainData: any;
 	isError: boolean = true;
-	readonly apiGetUrl: string = "";
+	private apiGetUrl: string = "";
 	readonly dataIsArray: boolean;
 
-	constructor(apiUrl: string, dataIsArray: boolean = true) {
+	constructor(apiUrl: string, dataIsArray: boolean = true, urlParams: object | undefined = undefined) {
 		this.apiGetUrl = apiUrl;
+		if(urlParams != undefined) this.updateParams(urlParams)
 		this.dataIsArray = dataIsArray;
 	}
 
@@ -21,6 +23,24 @@ class StorageElement {
 			this.plainData as T,
 			this.isError
 		);
+	}
+
+	public updateParams(newParams: object){
+		if(this.apiGetUrl.indexOf('?') != -1) 
+			this.apiGetUrl = this.apiGetUrl.slice(0, this.apiGetUrl.indexOf('?'));
+		if(Object.entries(newParams).length == 0) return;
+		this.apiGetUrl += "?";
+		Object.entries(newParams).forEach(keyVal => {
+			var key = keyVal.at(0);
+			var val = keyVal.at(1);
+			this.apiGetUrl += key + "=" + val + "&";
+		})
+		this.apiGetUrl = 
+			this.apiGetUrl.slice(0, this.apiGetUrl.length - 1);
+	}
+
+	public getApiUrl() : string{
+		return this.apiGetUrl;
 	}
 }
 
@@ -85,7 +105,7 @@ class ElementStorage {
 			new StorageElement("/api/tournaments/GetTeams")
 		], [
 			StorageTarget.LOGS,
-			new StorageElement("/api/tournaments/GetLogs")
+			new StorageElement("/api/Logs/GetLogs")
 		], [
 			StorageTarget.DISCIPLINES,
 			new StorageElement("/api/tournaments/GetDisciplines")
@@ -123,7 +143,16 @@ class ElementStorage {
 		return element!.getData<T>();
 	}
 
-	public subscribe(callback: Callback) {
+	public updateParams(newParams: object, target: StorageTarget){
+		const element = this.elements.get(target);
+		if (element == undefined) {
+			console.error("Element with key: " + target + " hasn't been found");
+			return;
+		}
+		element.updateParams(newParams);
+	}
+
+	public async subscribe(callback: Callback) {
 		const element = this.elements.get(callback.targetKey)
 		if (element == undefined) {
 			console.error("Element with key: " + callback.targetKey + " hasn't been found");
@@ -131,6 +160,8 @@ class ElementStorage {
 		}
 		element.activeCallbacks++;
 		element.callbacks.push(callback);
+		await this.fetchAndSetData(element);
+		callback.run();
 	}
 
 	public unsubscribe(callback: Callback) {
@@ -159,24 +190,27 @@ class ElementStorage {
 		console.log("Clock stopped: " + this.timerId);
 	}
 
+	private async fetchAndSetData(element: StorageElement) {
+		var data: any;
+		if (element.dataIsArray) {
+			const response = await axios.get<ICollectionResponse<any>>(element.getApiUrl());
+			data = response.data.collection;
+		}
+		else {
+			const response = await axios.get<IObjectResponse<any>>(element.getApiUrl());
+			data = response.data.item;
+		}
+		if (data != element.plainData) {
+			element.plainData = data;
+			element.isError = false;
+			element.callbacks.forEach(callback => callback.run());
+		}
+	}
+
 	private async updateData() {
-		console.log("Storage update!")
 		this.elements.forEach(async (element) => {
 			if (element.activeCallbacks == 0) return;
-			var data: any;
-			if (element.dataIsArray) {
-				const response = await axios.get<ICollectionResponse<any>>(element.apiGetUrl);
-				data = response.data.collection;
-			}
-			else {
-				const response = await axios.get<IObjectResponse<any>>(element.apiGetUrl);
-				data = response.data.item;
-			}
-			if (data != element.plainData) {
-				element.plainData = data;
-				element.isError = false;
-				element.callbacks.forEach(callback => callback.run());
-			}
+			await this.fetchAndSetData(element);
 		})
 	}
 }

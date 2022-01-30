@@ -1,5 +1,4 @@
 import React from "react";
-import LogTable from "../../../Components/LogsTable";
 import TournamentsTable from "../../../Components/TournamentsTable";
 
 class Tournaments extends React.Component<any, any>{
