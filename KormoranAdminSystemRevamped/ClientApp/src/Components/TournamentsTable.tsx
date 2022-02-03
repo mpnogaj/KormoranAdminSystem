@@ -127,35 +127,37 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 	render() {
 		return (
 			<div>
-				<Table hover bordered>
-					<thead>
-						<tr>
-							<th>Nazwa</th>
-							<th>Status</th>
-							<th>Dyscyplina</th>
-							<th>Typ turnieju</th>
-							<th>Akcja</th>
-						</tr>
-					</thead>
-					<tbody className="align-middle">
-						{
-							!this.state.isLoading
-								?
-								this.state.tournaments.map((val) => {
-									val.discipline = this.state.disciplines[val.disciplineId - 1];
-									val.state = this.state.states[val.stateId - 1];
-									return (
-										<TournamentRow key={val.id} tournament={val} showModalCallback={this.handleShow}
-											isEdit={this.props.allowEdit} />
-									);
-								})
-								:
-								<tr>
-									<td style={{ textAlign: "center" }} colSpan={5}>Ładowanie...</td>
-								</tr>
-						}
-					</tbody>
-				</Table>
+				<div className="table-responsive">
+					<Table hover bordered>
+						<thead>
+							<tr>
+								<th>Nazwa</th>
+								<th>Status</th>
+								<th>Dyscyplina</th>
+								<th>Typ turnieju</th>
+								<th>Akcja</th>
+							</tr>
+						</thead>
+						<tbody className="align-middle">
+							{
+								!this.state.isLoading
+									?
+									this.state.tournaments.map((val) => {
+										val.discipline = this.state.disciplines[val.disciplineId - 1];
+										val.state = this.state.states[val.stateId - 1];
+										return (
+											<TournamentRow key={val.id} tournament={val} showModalCallback={this.handleShow}
+												isEdit={this.props.allowEdit} />
+										);
+									})
+									:
+									<tr>
+										<td style={{ textAlign: "center" }} colSpan={5}>Ładowanie...</td>
+									</tr>
+							}
+						</tbody>
+					</Table>
+				</div>
 				{/* Modal podglądu */}
 				<Modal show={this.state.previewModalVisible} onHide={() => this.handleHide(false)} size="xl">
 					<Modal.Header closeButton>

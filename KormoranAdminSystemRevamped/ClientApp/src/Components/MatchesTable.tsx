@@ -69,18 +69,19 @@ class MatchesTable extends React.Component<ICompProps, ICompState>{
 
 	render() {
 		return (
-			<Table hover={true} bordered={true}>
-				<thead>
-					<tr>
-						<th>Identyfikator</th>
-						<th>Status</th>
-						<th>Drużyna 1</th>
-						<th>Drużyna 2</th>
-						<th>Zwycięzca</th>
-						<th>Wynik</th>
-					</tr>
-				</thead>
-				<tbody className="align-middle">
+			<div className="table-responsive">
+				<Table hover={true} bordered={true}>
+					<thead>
+						<tr>
+							<th>Id</th>
+							<th>Status</th>
+							<th>Drużyna 1</th>
+							<th>Drużyna 2</th>
+							<th>Zwycięzca</th>
+							<th>Wynik</th>
+						</tr>
+					</thead>
+					<tbody className="align-middle">
 					{
 						!this.state.isLoading
 							?
@@ -98,8 +99,9 @@ class MatchesTable extends React.Component<ICompProps, ICompState>{
 									<td style={{ textAlign: "center" }} colSpan={6}>Ładowanie...</td>
 								</tr>
 					}
-				</tbody>
-			</Table>
+					</tbody>
+				</Table>
+			</div>
 		);
 	}
 }
