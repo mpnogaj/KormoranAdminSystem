@@ -24,12 +24,12 @@ render(
 			<Route path="Login" element={<Login/>}/>
 			<Route path="Guest" element={<Guest/>}/>
 			<Route path="Panel" element={<ProtectedRoute/>}>
-				<Route path="" element={<Panel/>}/>
-				<Route path="Tournaments" element={<Tournaments/>}/>
-				<Route path="EditTournament/:id" element={<EditTournament/>}/>
-				<Route path="Overview" element={<Overview/>}/>
-				<Route path="Logs" element={<Logs/>}/>
-				<Route path="Users" element={<Users/>}/>
+				<Route path="" element={<Panel content={<Overview/>}/>}/>
+				<Route path="Tournaments" element={<Panel content={<Tournaments/>}/>}/>
+				<Route path="EditTournament/:id" element={<Panel content={<EditTournament/>}/>}/>
+				<Route path="Overview" element={<Panel content={<Overview/>}/>}/>
+				<Route path="Logs" element={<Panel content={<Logs/>}/>}/>
+				<Route path="Users" element={<Panel content={<Users/>}/>}/>
 			</Route>
 		</Routes>
 	</BrowserRouter>,

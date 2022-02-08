@@ -6,33 +6,22 @@ import {ReactComponent as Avatar} from "../../Icons/DefaultAvatar.svg";
 import {Speedometer2, JournalText, PersonCheck, Tv, Gear} from "react-bootstrap-icons";
 import axios from "axios";
 
-interface IState{
-	currentUrl: string,
-	isLoading: boolean;
+interface IProps{
+	content: any;
 }
 
-class Panel extends React.Component<any, IState>{
+class Panel extends React.Component<IProps, any>{
 	
-	constructor(props: any) {
+	constructor(props: IProps) {
 		super(props);
-		this.state = {
-			currentUrl: "/Panel/Overview",
-			isLoading: true
-		}
 	}
-	
-	changeUrl = (newUrl: string) => {
-		if(newUrl != this.state.currentUrl){
-			this.setState({currentUrl: newUrl, isLoading: true})
-		}
-	};
 	
 	render() {
 		return (
 			<div>
 				<nav className="navbar sticky-top navbar-expand-xl navbar-light bg-light">
 					<Container id="navBar">
-						<a className="navbar-brand" href="https://tools.webdevpuneet.com/">
+						<a className="navbar-brand">
 							<div className="d-inline">
 								<Logo height={52} width={94}/>
 								<span className="h5 align-middle">Kormoran Admin System</span>
@@ -71,9 +60,7 @@ class Panel extends React.Component<any, IState>{
 								</li>
 								<hr/>
 								<li className="nav-item">
-									<a className="nav-link" data-bs-toggle="collapse"
-									   data-bs-target=".navbar-collapse.show" href="#" 
-									   onClick={() => this.changeUrl("/Panel/Overview")}>
+									<a className="nav-link" href="/Panel/Overview">
 										<div className="d-inline">
 											<Speedometer2 size={25}/>
 											<span className="ms-2 h5 align-middle">Przegląd</span>
@@ -81,9 +68,7 @@ class Panel extends React.Component<any, IState>{
 									</a>
 								</li>
 								<li className="nav-item">
-									<a className="nav-link" data-bs-toggle="collapse" 
-									   data-bs-target=".navbar-collapse.show" href="#" 
-									   onClick={() => this.changeUrl("/Panel/Logs")}>
+									<a className="nav-link" href="/Panel/Logs">
 										<div className="d-inline">
 											<JournalText size={25}/>
 											<span className="ms-2 h5 align-middle">Dziennik zdarzeń</span>
@@ -91,9 +76,7 @@ class Panel extends React.Component<any, IState>{
 									</a>
 								</li>
 								<li className="nav-item">
-									<a className="nav-link" data-bs-toggle="collapse"
-									   data-bs-target=".navbar-collapse.show"
-									   href="#" onClick={() => this.changeUrl("/Panel/Tournaments")}>
+									<a className="nav-link" href="/Panel/Tournaments">
 										<div className="d-inline">
 											<Gear size={25}/>
 											<span className="ms-2 h5 align-middle">Operacje na turniejach</span>
@@ -101,9 +84,7 @@ class Panel extends React.Component<any, IState>{
 									</a>
 								</li>
 								<li className="nav-item">
-									<a className="nav-link" data-bs-toggle="collapse"
-									   data-bs-target=".navbar-collapse.show"
-									   href="#" onClick={() => this.changeUrl("/Panel/Users")}>
+									<a className="nav-link" href="/Panel/Users">
 										<div className="d-inline">
 											<PersonCheck size={25}/>
 											<span className="ms-2 h5 align-middle">Operacje na użytkownikach</span>
@@ -123,9 +104,7 @@ class Panel extends React.Component<any, IState>{
 						</div>
 					</Container>
 				</nav>
-				<iframe src={this.state.currentUrl} frameBorder={0} id="panelIframe"
-				        style={{display: this.state.isLoading ? "none" : "block"}} 
-				        onLoad={(() => this.setState({isLoading: false}))}/>
+				<div id="container">{this.props.content}</div>
 			</div>
 		)
 	}

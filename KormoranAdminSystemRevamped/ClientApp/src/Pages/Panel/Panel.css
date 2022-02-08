@@ -1,4 +1,4 @@
-#panelIframe{
+#container{
 	overflow: hidden;
 	height: 100%;
 	width: 100%;
@@ -55,14 +55,14 @@
 		margin-bottom:10px;
 	}
 
-	#panelIframe{
+	#container{
 		padding-left: 340px;
 		top: 0;
 	}
 }
 
 @media(max-width: 433px) {
-	#panelIframe{
+	#container{
 		top: 115px;
 	}
 }
