@@ -14,7 +14,7 @@ class StorageElement {
 
 	constructor(apiUrl: string, dataIsArray: boolean = true, urlParams: object | undefined = undefined) {
 		this.apiGetUrl = apiUrl;
-		if(urlParams != undefined) this.updateParams(urlParams)
+		if (urlParams != undefined) this.updateParams(urlParams)
 		this.dataIsArray = dataIsArray;
 	}
 
@@ -25,21 +25,21 @@ class StorageElement {
 		);
 	}
 
-	public updateParams(newParams: object){
-		if(this.apiGetUrl.indexOf('?') != -1) 
+	public updateParams(newParams: object) {
+		if (this.apiGetUrl.indexOf('?') != -1)
 			this.apiGetUrl = this.apiGetUrl.slice(0, this.apiGetUrl.indexOf('?'));
-		if(Object.entries(newParams).length == 0) return;
+		if (Object.entries(newParams).length == 0) return;
 		this.apiGetUrl += "?";
 		Object.entries(newParams).forEach(keyVal => {
 			var key = keyVal.at(0);
 			var val = keyVal.at(1);
 			this.apiGetUrl += key + "=" + val + "&";
 		})
-		this.apiGetUrl = 
+		this.apiGetUrl =
 			this.apiGetUrl.slice(0, this.apiGetUrl.length - 1);
 	}
 
-	public getApiUrl() : string{
+	public getApiUrl(): string {
 		return this.apiGetUrl;
 	}
 }
@@ -143,7 +143,7 @@ class ElementStorage {
 		return element!.getData<T>();
 	}
 
-	public updateParams(newParams: object, target: StorageTarget){
+	public updateParams(newParams: object, target: StorageTarget) {
 		const element = this.elements.get(target);
 		if (element == undefined) {
 			console.error("Element with key: " + target + " hasn't been found");

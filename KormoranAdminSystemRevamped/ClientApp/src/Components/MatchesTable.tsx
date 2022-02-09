@@ -2,16 +2,17 @@ import React from "react";
 import IMatch from "../Models/IMatch";
 import { Table } from "react-bootstrap";
 import MatchesRow from "./MatchRow";
-import { Callback, ElementStorage, StorageTarget } from "../Helpers/ElementStorage";
+import { Callback, ElementStorage, StorageElement, StorageTarget } from "../Helpers/ElementStorage";
 import ITeam from "../Models/ITeam";
 import IState from "../Models/IState";
 
 interface ICompProps {
-	states: Array<IState>
-	tournamentId: number;
+	tournamentId: number,
+	isEdit: boolean;
 }
 
 interface ICompState {
+	states: Array<IState>,
 	matches: Array<IMatch>,
 	teams: Array<ITeam>,
 	isLoading: boolean
@@ -23,6 +24,7 @@ class MatchesTable extends React.Component<ICompProps, ICompState>{
 	constructor(props: ICompProps) {
 		super(props);
 		this.state = {
+			states: [],
 			matches: [],
 			teams: [],
 			isLoading: true,
@@ -55,6 +57,15 @@ class MatchesTable extends React.Component<ICompProps, ICompState>{
 				}
 			}, StorageTarget.MATCHES),
 			new Callback((target: StorageTarget) => {
+				const data = this.storage.getData<Array<IState>>(target);
+				if(!data.isError){
+					this.setState({
+						states: data.data!,
+						isLoading: false
+					});
+				}
+			}, StorageTarget.STATES),
+			new Callback((target: StorageTarget) => {
 				const data = this.storage.getData<Array<ITeam>>(target);
 				if (!data.isError) {
 					this.setState({
@@ -72,32 +83,42 @@ class MatchesTable extends React.Component<ICompProps, ICompState>{
 			<div className="table-responsive">
 				<Table hover={true} bordered={true}>
 					<thead>
-						<tr>
-							<th>Id</th>
-							<th>Status</th>
-							<th>Drużyna 1</th>
-							<th>Drużyna 2</th>
-							<th>Zwycięzca</th>
-							<th>Wynik</th>
-						</tr>
+						{
+							!this.props.isEdit
+								?
+								<tr>
+									<th>L.p.</th>
+									<th>Status</th>
+									<th>Drużyna 1</th>
+									<th>Drużyna 2</th>
+									<th>Zwycięzca</th>
+									<th>Wynik</th>
+								</tr>
+								:
+								<tr>
+									<th>Id</th>
+									<th>Status</th>
+									<th>Dane</th>
+									<th>Akcje</th>
+								</tr>
+						}
 					</thead>
 					<tbody className="align-middle">
 					{
 						!this.state.isLoading
 							?
-								this.state.matches.map((val) => {
-									const teams = this.state.teams;
-									val.team1 = teams[val.team1Id - 1];
-									val.team2 = teams[val.team2Id - 1];
-									val.winner = teams[val.winnerId - 1];
-									val.state = this.props.states[val.stateId - 1];
-									console.log(val);
-									return <MatchesRow key={val.matchId} match={val} />
-								})
+							this.state.matches.map((val) => {
+								const teams = this.state.teams;
+								val.team1 = teams[val.team1Id - 1];
+								val.team2 = teams[val.team2Id - 1];
+								val.winner = teams[val.winnerId - 1];
+								val.state = this.state.states[val.stateId - 1];
+								return <MatchesRow key={val.matchId} match={val} />
+							})
 							:
-								<tr>
-									<td style={{ textAlign: "center" }} colSpan={6}>Ładowanie...</td>
-								</tr>
+							<tr>
+								<td style={{ textAlign: "center" }} colSpan={6}>Ładowanie...</td>
+							</tr>
 					}
 					</tbody>
 				</Table>

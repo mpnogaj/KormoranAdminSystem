@@ -8,6 +8,7 @@ import IState from "../Models/IState";
 import { Callback, ElementStorage, StorageTarget } from "../Helpers/ElementStorage";
 import axios from "axios";
 import IBasicResponse from "../Models/Responses/IBasicResponse";
+import { ThermometerSun } from "react-bootstrap-icons";
 
 interface ICompState {
 	tournaments: Array<ITournament>,
@@ -164,7 +165,7 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 						<Modal.Title>Podgląd wyników</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						<MatchesTable states={this.state.states} tournamentId={this.state.currentTournamentId} />
+						<MatchesTable isEdit={this.props.allowEdit} tournamentId={this.state.currentTournamentId} />
 					</Modal.Body>
 				</Modal>
 
