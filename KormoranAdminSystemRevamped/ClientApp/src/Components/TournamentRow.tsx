@@ -1,5 +1,6 @@
 import React from "react";
 import { Badge, Button } from "react-bootstrap";
+import { ThermometerSun } from "react-bootstrap-icons";
 import ITournament from "../Models/ITournament";
 
 interface IProps {
@@ -27,7 +28,7 @@ class TournamentRow extends React.Component<IProps, any>{
 									() => this.props.showModalCallback(this.props.tournament.id, true)
 								}>Szybka edycja</Button>
 								<Button className="ms-3" variant="success" onClick={
-									() => this.props.showModalCallback(this.props.tournament.id, true)
+									() => window.location.href="/Panel/EditTournament/" + this.props.tournament.id
 								}>Pełna edycja</Button>
 							</div>
 							:
