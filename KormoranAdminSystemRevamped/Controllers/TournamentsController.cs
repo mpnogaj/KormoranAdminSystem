@@ -53,13 +53,49 @@ namespace KormoranAdminSystemRevamped.Controllers
 			}
 		}
 
+		[HttpGet]
+		public async Task<JsonResult> GetAllTournamentData([FromQuery] int id)
+		{
+			try
+			{
+				var matches = await _db.Matches
+					.Where(x => x.TournamentId == id)
+					.ToListAsync();
+				var teams = await _db.Teams
+					.Where(x => x.TournamentId == id)
+					.ToListAsync();
+				var states = await _db.States
+					.ToListAsync();
+				var disciplines = await _db.Disciplines
+					.ToListAsync();
+
+				return new JsonResult(new GetFullTournamentDataResponseModel
+				{
+					Error = false,
+					Message = Resources.operationSuccessfull,
+					Matches = matches,
+					Teams = teams,
+					States = states,
+					Disciplines = disciplines
+				});
+			}
+			catch (Exception ex)
+			{
+				return new JsonResult(new GetFullTournamentDataResponseModel
+				{
+					Error = true,
+					Message = ex.Message
+				});
+			}
+		}
+
 		[HttpPost]
 		public async Task<JsonResult> UpdateTournament([FromBody] UpdateTournamentRequestModel request)
 		{
 			try
 			{
-				var tournament = await _db.Tournaments.
-								FirstOrDefaultAsync(x => x.Id == request.TournamentId);
+				var tournament = await _db.Tournaments
+					.FirstOrDefaultAsync(x => x.Id == request.TournamentId);
 
 				tournament.Name = request.NewName;
 				tournament.StateId = request.NewStateId;
@@ -258,5 +294,13 @@ namespace KormoranAdminSystemRevamped.Controllers
 		public string? NewName { get; set; }
 		public int NewStateId { get; set; }
 		public int NewDisciplineId { get; set; }
+	}
+
+	public record GetFullTournamentDataResponseModel : BasicResponse
+	{
+		public List<Match>? Matches { get; set; }
+		public List<Team>? Teams { get; set; }
+		public List<State>? States { get; set; }
+		public List<Discipline>? Disciplines { get; set; }
 	}
 }
