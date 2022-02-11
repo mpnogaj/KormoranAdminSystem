@@ -55,9 +55,11 @@ namespace KormoranAdminSystemRevamped.Controllers
 
 		[HttpGet]
 		public async Task<JsonResult> GetAllTournamentData([FromQuery] int id)
-		{
+		{	
 			try
 			{
+				var tournament = await _db.Tournaments
+					.FirstAsync(x => x.Id == id);
 				var matches = await _db.Matches
 					.Where(x => x.TournamentId == id)
 					.ToListAsync();
@@ -72,6 +74,7 @@ namespace KormoranAdminSystemRevamped.Controllers
 				return new JsonResult(new GetFullTournamentDataResponseModel
 				{
 					Error = false,
+					Tournament = tournament,
 					Message = Resources.operationSuccessfull,
 					Matches = matches,
 					Teams = teams,
@@ -298,6 +301,7 @@ namespace KormoranAdminSystemRevamped.Controllers
 
 	public record GetFullTournamentDataResponseModel : BasicResponse
 	{
+		public Tournament? Tournament { get; set; }
 		public List<Match>? Matches { get; set; }
 		public List<Team>? Teams { get; set; }
 		public List<State>? States { get; set; }
