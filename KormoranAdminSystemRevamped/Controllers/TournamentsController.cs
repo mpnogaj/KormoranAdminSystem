@@ -153,6 +153,19 @@ namespace KormoranAdminSystemRevamped.Controllers
 				});
 		}
 
+		[HttpPost]
+		public async Task<JsonResult> AddTeam([FromBody] Team team)
+		{
+			var res = await _db.Teams.AddAsync(team);
+			await _db.SaveChangesAsync();
+			return new JsonResult(new SingleItemResponse<int>
+			{
+				Error = false,
+				Message = Resources.operationSuccessfull,
+				Data = res.Entity.Id
+			});
+		}
+
 		[HttpGet]
 		public async Task<JsonResult> GetTeams([FromQuery] int id)
 		{
@@ -176,7 +189,7 @@ namespace KormoranAdminSystemRevamped.Controllers
 		}
 
 		[HttpPost]
-		public async Task<JsonResult> AddEdit(AddEditRequestModel model)
+		public async Task<JsonResult> CreateTournament(CreateTournamentRequestModel model)
 		{
 			var response = new BasicResponse();
 			if (_sessionManager.GetSession(model.SessionId) == null)
@@ -223,6 +236,12 @@ namespace KormoranAdminSystemRevamped.Controllers
 			}
 
 			return new JsonResult(response);
+		}
+
+		[HttpPost]
+		public async Task<JsonResult> TournamentFullUpdate([FromBody])
+		{
+
 		}
 
 		[HttpGet]
@@ -274,7 +293,7 @@ namespace KormoranAdminSystemRevamped.Controllers
 		}
 	}
 
-	public record AddEditRequestModel
+	public record CreateTournamentRequestModel
 	{
 		public string SessionId { get; set; }
 		public int Id { get; set; }

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { TypeOfTag } from "typescript";
 import ICollectionResponse from "../Models/Responses/ICollectionResponse";
-import IObjectResponse from "../Models/Responses/IObjectResponse";
+import ISingleItemResponse from "../Models/Responses/ISingleItemResponse";
 
 class StorageElement {
 	callbacks: Array<Callback> = [];
@@ -197,8 +197,8 @@ class ElementStorage {
 			data = response.data.collection;
 		}
 		else {
-			const response = await axios.get<IObjectResponse<any>>(element.getApiUrl());
-			data = response.data.item;
+			const response = await axios.get<ISingleItemResponse<any>>(element.getApiUrl());
+			data = response.data.data;
 		}
 		if (data != element.plainData) {
 			element.plainData = data;

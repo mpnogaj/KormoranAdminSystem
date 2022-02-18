@@ -1,17 +1,15 @@
 import React from "react";
-import { Row, Col, Button, Table, Modal, ModalBody, ModalFooter } from "react-bootstrap";
-import MatchesTable from "../../../Components/MatchesTable";
+import {Button, Table } from "react-bootstrap";
 import withParams from "../../../Helpers/HOC";
 import IMatch from "../../../Models/IMatch";
 import IState from "../../../Models/IState";
 import IDiscipline from "../../../Models/IDiscipline"
-import { ElementStorage, StorageTarget } from "../../../Helpers/ElementStorage";
 import ITeam from "../../../Models/ITeam";
 import axios from "axios";
 import ITournament from "../../../Models/ITournament";
 import ModalHeader from "react-bootstrap/esm/ModalHeader";
-import { idText } from "typescript";
 import { binsearch } from "../../../Helpers/Essentials";
+import ISingleItemResponse from "../../../Models/Responses/ISingleItemResponse";
 
 
 interface IParams {
@@ -41,10 +39,18 @@ interface ITournamentData {
 
 class EditTournament extends React.Component<ICompProps, ICompState>{
 	private isEdit: boolean;
+	/*
+		This serves as dummy id for new, no submitted to server teams
+		After creating new team increase this value by 1 (important!)
+		After saving changes server will calculate "deltaId" for first element 
+		and change all dummy id's (for matches too)
+	*/
+	private tempId: number;
 
 	constructor(props: ICompProps) {
 		super(props);
 		this.isEdit = this.props.params.id > 0;
+		this.tempId = 1000000000 + 7;
 		this.state = {
 			isLoading: true,
 			teamModal: false,
@@ -76,7 +82,7 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 		}).catch(ex => console.error(ex));
 	}
 
-	findTeamIndex = (teamId: number) => {
+	findTeamIndex = (teamId: number) : number => {
 		return binsearch<ITeam>(this.state.tournamentData.teams, (x) => {
 			if (x.id < teamId) return -1;
 			if (x.id == teamId) return 0;
@@ -98,7 +104,7 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 		}));
 	}
 
-	updateTeams = (operation: number) => {
+	updateTeams = async (operation: number) => {
 
 		const newTeams = this.state.tournamentData.teams.slice();
 		const index = this.state.selectedIndex!
@@ -107,18 +113,18 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 			if (window.confirm("Czy na pewno chcesz usunąć tę druynę")) 
 				newTeams.splice(index, 1);
 			this.setState(prevState => ({
-					...prevState,
-					selectedIndex: undefined
+				...prevState,
+				selectedIndex: undefined
 			}));
 		} else if (operation == 0) {
 			const newName = prompt("Nowa nazwa drużyny", newTeams[index].name);
 			if (newName == null) return;
 			newTeams[index].name = newName
 		} else {
-			const newName = prompt("Nowa nazwa drużyny");
+			const newName = prompt("Nazwa drużyny");
 			if (newName == null) return;
 			newTeams.push({
-				id: -1,
+				id: this.tempId++,
 				name: newName
 			});
 		}
