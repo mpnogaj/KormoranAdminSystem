@@ -239,9 +239,51 @@ namespace KormoranAdminSystemRevamped.Controllers
 		}
 
 		[HttpPost]
-		public async Task<JsonResult> TournamentFullUpdate([FromBody])
+		public async Task<JsonResult> TournamentFullUpdate([FromBody] TournamentFullUpdateRequestModel model)
 		{
-
+			var res = (await UpdateTournament(model)).Value as BasicResponse;
+			if(res == null || res.Error)
+			{
+				return new JsonResult(new BasicResponse
+				{
+					Error = true,
+					Message = Resources.serverError
+				});
+			}
+			try
+			{
+				model.Teams.Sort((x, y) => x.Id.CompareTo(y.Id));
+				var firstNewTeam = model.Teams.FirstOrDefault(x => x != null && x.Id < 0, null);
+				int deltaId = 0;
+				if (firstNewTeam != null)
+				{
+					deltaId = firstNewTeam.Id;
+					await _db.Teams.AddAsync(firstNewTeam);
+					await _db.SaveChangesAsync();
+					deltaId = firstNewTeam.Id - deltaId;
+				}
+				_db.Teams.UpdateRange(model.Teams);
+				model.Matches.ForEach(x =>
+				{
+					if (x.Team1Id < 0) x.Team1Id += deltaId;
+					if (x.Team2Id < 0) x.Team2Id += deltaId;
+				});
+				_db.Matches.UpdateRange(model.Matches);
+				await _db.SaveChangesAsync();
+				return new JsonResult(new BasicResponse
+				{
+					Error = false,
+					Message = Resources.operationSuccessfull
+				});
+			}
+			catch
+			{
+				return new JsonResult(new BasicResponse
+				{
+					Error = true,
+					Message = Resources.serverError
+				});
+			}
 		}
 
 		[HttpGet]
@@ -316,6 +358,12 @@ namespace KormoranAdminSystemRevamped.Controllers
 		public string? NewName { get; set; }
 		public int NewStateId { get; set; }
 		public int NewDisciplineId { get; set; }
+	}
+
+	public record TournamentFullUpdateRequestModel : UpdateTournamentRequestModel
+	{
+		public List<Team> Teams { get; set; }
+		public List<Match> Matches { get; set; }
 	}
 
 	public record GetFullTournamentDataResponseModel : BasicResponse
