@@ -7,9 +7,8 @@ import IDiscipline from "../../../Models/IDiscipline"
 import ITeam from "../../../Models/ITeam";
 import axios from "axios";
 import ITournament from "../../../Models/ITournament";
-import ModalHeader from "react-bootstrap/esm/ModalHeader";
 import { binsearch } from "../../../Helpers/Essentials";
-import ISingleItemResponse from "../../../Models/Responses/ISingleItemResponse";
+import EditMatchTable from "../../../Components/EditMatchTable";
 
 
 interface IParams {
@@ -246,11 +245,15 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 								</div>
 							</div>
 							<div className="mt-3">
-								<Table responsive={true}>
-
-								</Table>
+								Mecze<br></br>
+								<Button variant="success"
+									onClick={() => {
+										
+									}}>Dodaj nowy mecz</Button>
+								<EditMatchTable
+									matches={this.state.tournamentData.matches}
+									teams={this.state.tournamentData.teams}/>
 							</div>
-							<h1>{this.props.params.id}</h1>
 						</div>
 						:
 						<h1>Ładowanie</h1>

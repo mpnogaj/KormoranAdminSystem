@@ -113,7 +113,7 @@ class MatchesTable extends React.Component<ICompProps, ICompState>{
 								val.team2 = teams[val.team2Id - 1];
 								val.winner = teams[val.winnerId - 1];
 								val.state = this.state.states[val.stateId - 1];
-								return <MatchesRow key={val.matchId} match={val} />
+								return <MatchesRow key={val.matchId} match={val} states={this.state.states} />
 							})
 							:
 							<tr>
