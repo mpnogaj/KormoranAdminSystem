@@ -1,4 +1,6 @@
 import React from "react";
+import { isGetAccessorDeclaration } from "typescript";
+import { binsearch } from "../Helpers/Essentials";
 import IMatch from "../Models/IMatch";
 import ITeam from "../Models/ITeam";
 
@@ -28,6 +30,12 @@ class EditMatchRow extends React.Component<IProps, IState>{
 			team2Pts: props.match.team2Score,
 			winner: props.match.winnerId
 		};
+
+		
+		if(!this.checkIfTeamExists(this.state.team1))
+			this.setState({team1: 0});
+		if(!this.checkIfTeamExists(this.state.team2))
+			this.setState({team2: 0});
 	}
 
 	getTeamName = (teamId: number) : string => {
@@ -36,6 +44,17 @@ class EditMatchRow extends React.Component<IProps, IState>{
 			if(element.id == teamId) return element.name;
 		}
 		return "NULL";
+	}
+
+	checkIfTeamExists = (teamId: number) : boolean => {
+		//default team
+		if(teamId == 0) return true;
+		const index = binsearch(this.props.teams, t => {
+			if(t.id == teamId) return 0;
+			if(t.id < teamId) return -1;
+			return 1;
+		});
+		return index != -1;
 	}
 
 	recalculateWinner = (): number => {
@@ -50,9 +69,14 @@ class EditMatchRow extends React.Component<IProps, IState>{
 				<th>{this.props.match.matchId}</th>
 				<th>
 					<select onChange={(e) => {
+						const val = e.target.value;
+						if(val === "NaN") return;
+						const cast = +e.target.value;
+						if(cast === NaN) return;
 						this.setState({team1: +e.target.value});
 						this.props.onTeamUpdate(this.props.id, 1, +e.target.value);
 					}} value={this.state.team1}>
+						<option value={0}>NULL</option>
 						{
 							this.props.teams.map((team) => {
 								return (
@@ -66,9 +90,11 @@ class EditMatchRow extends React.Component<IProps, IState>{
 				</th>
 				<th>
 					<select onChange={(e) => {
+						if(isNaN(+e.target.value)) return;
 						this.setState({team2: +e.target.value});
 						this.props.onTeamUpdate(this.props.id, 2, +e.target.value);
 					}} value={this.state.team2}>
+						<option value={0}>NULL</option>
 						{
 							this.props.teams.map((team) => {
 								return (
