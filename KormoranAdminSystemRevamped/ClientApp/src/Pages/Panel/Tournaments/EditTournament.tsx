@@ -64,7 +64,7 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 				disciplines: []
 			}
 		};
-
+		if(!this.isEdit) return;
 		axios.get<ITournamentData>("http://localhost/api/tournaments/GetAllTournamentData", {
 			params: {
 				id: this.props.params.id
@@ -79,6 +79,10 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 				isLoading: false
 			});
 		}).catch(ex => console.error(ex));
+	}
+
+	componentDidMount(){
+		if(!this.isEdit) this.setState({isLoading: false});
 	}
 
 	findTeamIndex = (teamId: number) : number => {
@@ -109,7 +113,7 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 		const index = this.state.selectedIndex!
 
 		if (operation == -1) {
-			if (window.confirm("Czy na pewno chcesz usunąć tę druynę")) 
+			if (window.confirm("Czy na pewno chcesz usunąć tę drużynę")) 
 				newTeams.splice(index, 1);
 			this.setState(prevState => ({
 				...prevState,
@@ -245,11 +249,6 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 								</div>
 							</div>
 							<div className="mt-3">
-								Mecze<br></br>
-								<Button variant="success"
-									onClick={() => {
-										
-									}}>Dodaj nowy mecz</Button>
 								<EditMatchTable
 									matches={this.state.tournamentData.matches}
 									teams={this.state.tournamentData.teams}/>
