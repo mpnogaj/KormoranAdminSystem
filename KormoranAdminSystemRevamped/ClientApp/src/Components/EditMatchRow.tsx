@@ -4,14 +4,18 @@ import ITeam from "../Models/ITeam";
 import {IRowData} from "../Components/EditMatchTable";
 import { Trash } from "react-bootstrap-icons";
 import IconButton from "./IconButton";
-interface IProps{
+import IState from "../Models/IState";
+
+interface ICompProps{
 	match: IRowData,
 	teams: Array<ITeam>,
+	states: Array<IState>,
 	id: number
 	onUpdate: (targetId: number, target: number, data: number) => void;
 }
 
-interface IState {
+interface ICompState {
+	state: number
 	team1: number,
 	team2: number,
 	team1Pts: number,
@@ -19,11 +23,12 @@ interface IState {
 	winner: number;
 }
 
-class EditMatchRow extends React.Component<IProps, IState>{
+class EditMatchRow extends React.Component<ICompProps, ICompState>{
 
-	constructor(props: IProps){
+	constructor(props: ICompProps){
 		super(props);
 		this.state = {
+			state: props.match.stateId,
 			team1: props.match.team1,
 			team2: props.match.team2,
 			team1Pts: props.match.team1Score,
@@ -46,6 +51,16 @@ class EditMatchRow extends React.Component<IProps, IState>{
 			if(element.id == teamId) return element.name;
 		}
 		return "-";
+	}
+
+	getStateName = (stateId: number) : string => {
+		const res = binsearch(this.props.states, (state) => {
+			if(state.id < stateId) return -1;
+			if(state.id == stateId) return 0;
+			return 1;
+		})
+		if(res == -1) return "-";
+		else return this.props.states[res].name;
 	}
 
 	checkIfTeamExists = (teamId: number) : boolean => {
@@ -71,12 +86,29 @@ class EditMatchRow extends React.Component<IProps, IState>{
 		this.props.onUpdate(this.props.id, target, newId);
 	}
 
-	renderTeams = (teams: Array<ITeam>) : Array<JSX.Element> => { 
+	updateState = (newId: number) => {
+		this.setState({state: newId});
+		this.props.onUpdate(this.props.id, 6, newId);
+	}
+
+	renderTeams = () : Array<JSX.Element> => { 
 		return (
-			teams.map((team) => {
+			this.props.teams.map((team) => {
 				return (
 					<option key={team.id} value={team.id}>
 						{this.getTeamName(team.id)}
+					</option>
+				);
+			})
+		);
+	}
+
+	renderStates = () : Array<JSX.Element> => {
+		return (
+			this.props.states.map((state) => {
+				return (
+					<option key={state.id} value={state.id}>
+						{this.getStateName(state.id)}
 					</option>
 				);
 			})
@@ -89,10 +121,17 @@ class EditMatchRow extends React.Component<IProps, IState>{
 				<th>{this.props.match.matchId == 0 ? '-' : this.props.match.matchId}</th>
 				<th>
 					<select onChange={(e) => {
+						this.updateState(parseInt(e.target.value));
+					}} value={this.state.state}>
+						{this.renderStates()}
+					</select>
+				</th>
+				<th>
+					<select onChange={(e) => {
 						this.updateTeam(parseInt(e.target.value), 1);
 					}} value={this.state.team1}>
 						<option value={0}>-</option>
-						{this.renderTeams(this.props.teams)}
+						{this.renderTeams()}
 					</select>
 				</th>
 				<th>
@@ -100,7 +139,7 @@ class EditMatchRow extends React.Component<IProps, IState>{
 						this.updateTeam(parseInt(e.target.value), 2);
 					}} value={this.state.team2}>
 						<option value={0}>-</option>
-						{this.renderTeams(this.props.teams)}
+						{this.renderTeams()}
 					</select>
 				</th>
 				<th>

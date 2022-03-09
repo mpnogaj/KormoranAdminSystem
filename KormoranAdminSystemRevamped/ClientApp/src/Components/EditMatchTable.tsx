@@ -4,30 +4,34 @@ import IMatch from "../Models/IMatch";
 import ITeam from "../Models/ITeam";
 import EditMatchRow from "./EditMatchRow";
 import { nanoid } from "nanoid";
+import IState from "../Models/IState";
 
 export interface IRowData{
 	matchId: number,
+	stateId: number,
 	team1: number,
 	team2: number,
 	team1Score: number,
 	team2Score: number;
 }
 
-interface IProps{
+interface ICompProps{
 	matches: Array<IMatch>,
-	teams: Array<ITeam>
+	teams: Array<ITeam>,
+	states: Array<IState>
 }
 
-interface IState {
+interface ICompState {
 	matchesData: Array<IRowData>;
 }
 
-class EditMatchTable extends React.Component<IProps, IState>{
-
+class EditMatchTable extends React.Component<ICompProps, ICompState>{
+	
 	private DefaultMatchData() : IRowData {
 		return {
 			/*Id 0 will be changed to '-'*/
 			matchId: 0,
+			stateId: 0,
 			team1: 0,
 			team2: 0,
 			team1Score: 0,
@@ -35,7 +39,7 @@ class EditMatchTable extends React.Component<IProps, IState>{
 		}
 	}
 
-	constructor(props: IProps){
+	constructor(props: ICompProps){
 		super(props);
 		this.state = {
 			matchesData: [],
@@ -48,6 +52,7 @@ class EditMatchTable extends React.Component<IProps, IState>{
 		this.props.matches.forEach(match => {
 			strippedMatches.push({
 				matchId: match.matchId,
+				stateId: match.stateId,
 				team1: match.team1Id,
 				team2: match.team2Id,
 				team1Score: match.team1Score,
@@ -73,6 +78,7 @@ class EditMatchTable extends React.Component<IProps, IState>{
 					<thead>
 						<tr>
 							<th>Id</th>
+							<th>Stan</th>
 							<th>Drużyna 1</th>
 							<th>Drużyna 2</th>
 							<th>Wynik drużyny 1</th>
@@ -88,6 +94,7 @@ class EditMatchTable extends React.Component<IProps, IState>{
 									<EditMatchRow 
 										match={data}
 										teams={this.props.teams}
+										states={this.props.states}
 										id={index} key={nanoid()}
 										onUpdate={(targetId, targetVal, value) => {
 											const newData: Array<IRowData> = this.state.matchesData.slice();
@@ -105,10 +112,10 @@ class EditMatchTable extends React.Component<IProps, IState>{
 													newData[targetId].team2Score = value;
 													break;
 												case 5:
-													//console.log(targetId);
-													//console.log(newData);
 													newData.splice(targetId, 1);
-													//console.log(newData);
+													break;
+												case 6:
+													newData[targetId].stateId = value;
 													break;
 												default:
 													console.error("Invalid targetVal parameter! Passed: " + targetVal);

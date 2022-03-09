@@ -251,7 +251,8 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 							<div className="mt-3">
 								<EditMatchTable
 									matches={this.state.tournamentData.matches}
-									teams={this.state.tournamentData.teams}/>
+									teams={this.state.tournamentData.teams}
+									states={this.state.tournamentData.states}/>
 							</div>
 						</div>
 						:
