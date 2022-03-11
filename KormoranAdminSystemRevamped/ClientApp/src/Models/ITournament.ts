@@ -6,10 +6,10 @@ interface ITournament{
 	id: number,
 	name: string,
 	disciplineId: number,
-	discipline: IDiscipline,
+	discipline: IDiscipline | undefined,
 	stateId: number,
-	state: IState,
-	teams: Array<ITeam>,
+	state: IState | undefined,
+	teams: Array<ITeam> | undefined,
 	tournamentType: string,
 	tournamentTypeShort: string;
 }

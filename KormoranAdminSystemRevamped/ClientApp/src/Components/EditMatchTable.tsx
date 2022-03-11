@@ -5,31 +5,25 @@ import ITeam from "../Models/ITeam";
 import EditMatchRow from "./EditMatchRow";
 import { nanoid } from "nanoid";
 import IState from "../Models/IState";
-
-export interface IRowData{
-	matchId: number,
-	stateId: number,
-	team1: number,
-	team2: number,
-	team1Score: number,
-	team2Score: number;
-}
+import { IRowData } from "../Pages/Panel/Tournaments/EditTournament";
+import { binsearch } from "../Helpers/Essentials";
 
 interface ICompProps{
-	matches: Array<IMatch>,
 	teams: Array<ITeam>,
-	states: Array<IState>
+	states: Array<IState>,
+	matchesData: Array<IRowData>,
+	updateMatches: (newData: Array<IRowData>) => void;
 }
 
-interface ICompState {
-	matchesData: Array<IRowData>;
-}
-
-class EditMatchTable extends React.Component<ICompProps, ICompState>{
+class EditMatchTable extends React.Component<ICompProps, any>{
 	
-	private DefaultMatchData() : IRowData {
+	constructor(props: ICompProps){
+		super(props);
+	}
+
+	private defaultMatchData() : IRowData {
 		return {
-			/*Id 0 will be changed to '-'*/
+			id: nanoid(),
 			matchId: 0,
 			stateId: 0,
 			team1: 0,
@@ -39,27 +33,15 @@ class EditMatchTable extends React.Component<ICompProps, ICompState>{
 		}
 	}
 
-	constructor(props: ICompProps){
-		super(props);
-		this.state = {
-			matchesData: [],
-		};
-	}
-
-	componentDidMount(){
-		const strippedMatches: Array<IRowData> = [];
-		//append fetched data from serwer to local container
-		this.props.matches.forEach(match => {
-			strippedMatches.push({
-				matchId: match.matchId,
-				stateId: match.stateId,
-				team1: match.team1Id,
-				team2: match.team2Id,
-				team1Score: match.team1Score,
-				team2Score: match.team2Score
-			});
-		})
-		this.setState({matchesData: strippedMatches});
+	checkIfTeamExists = (teamId: number) : boolean => {
+		//default team
+		if(teamId == 0) return true;
+		const index = binsearch(this.props.teams, t => {
+			if(t.id == teamId) return 0;
+			if(t.id < teamId) return -1;
+			return 1;
+		});
+		return index != -1;
 	}
 	
 	render() {
@@ -68,11 +50,9 @@ class EditMatchTable extends React.Component<ICompProps, ICompState>{
 				<span>Mecze turnijowe: </span><br />
 				<span>{}</span>
 				<Button onClick={() => {
-					this.setState(prevState => ({
-						matchesData: [
-							...prevState.matchesData, this.DefaultMatchData()
-						]
-					}), () => console.log(this.state.matchesData));
+					const newData = this.props.matchesData;
+					newData.push(this.defaultMatchData())
+					this.props.updateMatches(newData);
 				}}>Dodaj nowy</Button>
 				<Table className="mt-3" responsive={true} bordered={true}>
 					<thead>
@@ -89,15 +69,19 @@ class EditMatchTable extends React.Component<ICompProps, ICompState>{
 					</thead>
 					<tbody>
 						{
-							this.state.matchesData.map((data: IRowData, index) => {
+							this.props.matchesData.map((data: IRowData, index) => {
 								return (
 									<EditMatchRow 
 										match={data}
 										teams={this.props.teams}
 										states={this.props.states}
-										id={index} key={nanoid()}
+										id={index} key={data.id}
+										team1={this.checkIfTeamExists(data.team1) ? data.team1 : 0} 
+										team2={this.checkIfTeamExists(data.team2) ? data.team2 : 0} 
+										team1Pts={data.team1Score} team2Pts={data.team2Score}
+										state={data.stateId}
 										onUpdate={(targetId, targetVal, value) => {
-											const newData: Array<IRowData> = this.state.matchesData.slice();
+											const newData: Array<IRowData> = this.props.matchesData.slice();
 											switch(targetVal){
 												case 1:
 													newData[targetId].team1 = value;
@@ -121,7 +105,7 @@ class EditMatchTable extends React.Component<ICompProps, ICompState>{
 													console.error("Invalid targetVal parameter! Passed: " + targetVal);
 													break;
 											}
-											this.setState({matchesData: newData});
+											this.props.updateMatches(newData);
 										}}
 									/>
 								);
