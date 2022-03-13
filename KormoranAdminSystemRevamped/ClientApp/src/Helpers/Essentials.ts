@@ -3,6 +3,13 @@ export function isInIFrame() {
 	return window != window.top;
 }
 
+/*
+returns index to element that matches given predictate. Predictate function should return:
+value < 0 when target item is on the right,
+value = 0 when an item meets the criteria,
+value > 0 when target item is on the left
+when there is no element that meets the criteria function returns -1
+*/
 export function binsearch<T>(array: Array<T>, predicate: (item: T) => number){
 	var l = 0, p = array.length - 1;
 	while(l < p){

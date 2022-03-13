@@ -33,17 +33,6 @@ class EditMatchTable extends React.Component<ICompProps, any>{
 		}
 	}
 
-	checkIfTeamExists = (teamId: number) : boolean => {
-		//default team
-		if(teamId == 0) return true;
-		const index = binsearch(this.props.teams, t => {
-			if(t.id == teamId) return 0;
-			if(t.id < teamId) return -1;
-			return 1;
-		});
-		return index != -1;
-	}
-	
 	render() {
 		return(
 			<div>
@@ -76,8 +65,8 @@ class EditMatchTable extends React.Component<ICompProps, any>{
 										teams={this.props.teams}
 										states={this.props.states}
 										id={index} key={data.id}
-										team1={this.checkIfTeamExists(data.team1) ? data.team1 : 0} 
-										team2={this.checkIfTeamExists(data.team2) ? data.team2 : 0} 
+										team1={data.team1} 
+										team2={data.team2} 
 										team1Pts={data.team1Score} team2Pts={data.team2Score}
 										state={data.stateId}
 										onUpdate={(targetId, targetVal, value) => {

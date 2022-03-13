@@ -97,6 +97,7 @@ class EditMatchRow extends React.Component<ICompProps, any>{
 					<select onChange={(e) => {
 						this.updateState(parseInt(e.target.value));
 					}} value={this.props.state}>
+						<option value={0}>-</option>
 						{this.renderStates()}
 					</select>
 				</th>

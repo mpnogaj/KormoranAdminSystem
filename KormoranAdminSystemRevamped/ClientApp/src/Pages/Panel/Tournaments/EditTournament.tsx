@@ -34,16 +34,15 @@ interface ICompProps {
 interface ICompState {
 	isLoading: boolean,
 	selectedIndex: number | undefined,
-	teamTempName: string | undefined,
 	teamModal: boolean,
 	isEditModal: boolean,
+	saveEnabled: boolean,
 	matchesData: Array<IRowData>,
 	tournamentData: ITournamentData;
-
 }
 
 interface ITournamentData {
-	tournament: ITournament | undefined
+	tournament: ITournament
 	matches: Array<IMatch>,
 	teams: Array<ITeam>,
 	states: Array<IState>,
@@ -68,8 +67,8 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 			isLoading: true,
 			teamModal: false,
 			selectedIndex: undefined,
-			teamTempName: undefined,
 			isEditModal: false,
+			saveEnabled: true,
 			tournamentData: {
 				tournament: {
 					id: 0,
@@ -89,6 +88,11 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 			},
 			matchesData: []
 		};
+	}
+
+	componentDidMount() {
+		if(this.isEdit) this.downloadEditTorunament().catch(ex => console.error(ex));
+		else this.downloadAddTournament().catch(ex => console.error(ex));
 	}
 
 	downloadEditTorunament = async () => {
@@ -126,17 +130,13 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 		}));
 	}
 
-	componentDidMount() {
-		if(this.isEdit) this.downloadEditTorunament().catch(ex => console.error(ex));
-		else this.downloadAddTournament().catch(ex => console.error(ex));
-	}
-
-	findTeamIndex = (teamId: number): number => {
-		return binsearch<ITeam>(this.state.tournamentData.teams, (x) => {
+	checkIfTeamExists = (teamId: number, teams: Array<ITeam>) : boolean => {
+		if(teamId == 0) return false;
+		return binsearch<ITeam>(teams, (x) => {
 			if (x.id < teamId) return -1;
 			if (x.id == teamId) return 0;
 			return 1;
-		});
+		}) == -1;
 	}
 
 	handleShow = (show: boolean, isEdit: boolean) => {
@@ -153,10 +153,33 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 		}));
 	}
 
-	updateTeams = async (operation: number) => {
+	renderStates = () : Array<JSX.Element> => {
+		return (
+			this.state.tournamentData.states.map((state) => {
+				return (
+					<option key={state.id} value={state.id}>
+						{state.name}
+					</option>
+				);
+			})
+		);
+	}
 
+	renderDisciplines = () : Array<JSX.Element> => {
+		return (
+			this.state.tournamentData.disciplines.map((discipline) => {
+				return (
+					<option key={discipline.id} value={discipline.id}>
+						{discipline.name}
+					</option>
+				);
+			})
+		);
+	}
+
+	updateTeams = async (operation: number) => {
 		const newTeams = this.state.tournamentData.teams.slice();
-		const index = this.state.selectedIndex!
+		const index = this.state.selectedIndex!;
 
 		if (operation == -1) {
 			if (window.confirm("Czy na pewno chcesz usunąć tę drużynę"))
@@ -168,7 +191,7 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 		} else if (operation == 0) {
 			const newName = prompt("Nowa nazwa drużyny", newTeams[index].name);
 			if (newName == null) return;
-			newTeams[index].name = newName
+			newTeams[index].name = newName;
 		} else {
 			const newName = prompt("Nazwa drużyny");
 			if (newName == null) return;
@@ -201,9 +224,9 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 								<span>Nazwa: </span>
 								<input type="text" value={this.state.tournamentData.tournament!.name}
 									onChange={(event) => {
-										{/*iks de*/ }
 										this.setState(prevState => ({
 											...prevState,
+											saveEnabled: event.target.value != "",
 											tournamentData: {
 												...prevState.tournamentData,
 												tournament: {
@@ -220,6 +243,7 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 									onChange={(event) => {
 										this.setState(prevState => ({
 											...prevState,
+											saveEnabled: event.target.value != "0",
 											tournamentData: {
 												...prevState.tournamentData,
 												tournament: {
@@ -229,11 +253,8 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 											}
 										}));
 									}}>
-									{
-										this.state.tournamentData.disciplines.map((disc) => {
-											return <option key={disc.id} value={disc.id}>{disc.name}</option>
-										})
-									}
+									<option value={0}>-</option>
+									{this.renderDisciplines()}
 								</select>
 							</div>
 							<div className="mt-3 flexbox inline-d">
@@ -242,6 +263,7 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 									onChange={(event) => {
 										this.setState(prevState => ({
 											...prevState,
+											saveEnabled: event.target.value != "0",
 											tournamentData: {
 												...prevState.tournamentData,
 												tournament: {
@@ -251,11 +273,8 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 											}
 										}));
 									}}>
-									{
-										this.state.tournamentData.states.map((state) => {
-											return <option key={state.id} value={state.id}>{state.name}</option>
-										})
-									}
+									<option value={0}>-</option>
+									{this.renderStates()}
 								</select>
 							</div>
 							<div className="mt-3">
@@ -300,12 +319,18 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 									states={this.state.tournamentData.states}
 									matchesData={this.state.matchesData}
 									updateMatches={(newData) => {
+										const shouldDisable = newData.some(x => 
+											x.team1 == 0 || x.team2 == 0 || x.stateId == 0
+										);
 										this.setState((prevState) => ({
 											...prevState,
+											saveEnabled: !shouldDisable,
 											matchesData: newData
 										}));
 									}} />
 							</div>
+							<Button className="mt-3" variant="success" disabled={!this.state.saveEnabled}
+								onClick={() => alert("Zapisano zmiany")}>Zapisz zmiany</Button>
 						</div>
 						:
 						<h1>Ładowanie</h1>
