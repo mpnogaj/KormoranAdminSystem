@@ -96,7 +96,7 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 	}
 
 	downloadEditTorunament = async () => {
-		const res = await axios.get<ITournamentData>("http://localhost/api/tournaments/GetAllTournamentData", {
+		const res = await axios.get<ITournamentData>("/api/tournaments/GetAllTournamentData", {
 			params: {
 				id: this.props.params.id
 			}
@@ -117,8 +117,8 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 	}
 
 	downloadAddTournament = async () => {
-		const disc = (await axios.get<Array<IDiscipline>>("api/tournaments/GetDiscipl")).data;
-		const stat = (await axios.get<Array<IState>>("api/Disciplines/GetStates")).data;
+		const disc = (await axios.get<Array<IDiscipline>>("/api/tournaments/GetDisciplines")).data;
+		const stat = (await axios.get<Array<IState>>("/api/tournaments/GetStates")).data;
 		this.setState(prevState => ({
 			...prevState,
 			isLoading: false,
