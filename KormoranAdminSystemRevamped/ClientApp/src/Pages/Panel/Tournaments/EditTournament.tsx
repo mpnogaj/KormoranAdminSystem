@@ -167,16 +167,25 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 
 	updateTeams = async (operation: number) => {
 		const newTeams = this.state.tournamentData.teams.slice();
+		const newMatchesData = this.state.matchesData.slice();
+		let shoudlBeDisabled = false;
 		const index = this.state.selectedIndex!;
 
 		if (operation == -1) {
 			if (window.confirm("Czy na pewno chcesz usunąć tę drużynę")) {
+				const deletedId = newTeams[index].id;
 				await axios.delete("/api/teams/DeleteTeam", {
 					params: {
 						teamId: newTeams[index].id
 					}
 				});
 				newTeams.splice(index, 1);
+				newMatchesData.forEach(x => {
+					if(x.team1 != deletedId && x.team2 != deletedId) return;
+					if(x.team1 == deletedId) x.team1 = 0;
+					if(x.team2 == deletedId) x.team2 = 0;
+					shoudlBeDisabled = true;
+				});
 			}
 			this.setState(prevState => ({
 				...prevState,
@@ -209,9 +218,10 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 				newTeams.push(newTeam);
 			}
 		}
-		
 		this.setState(prevState => ({
 			...prevState,
+			matchesData: newMatchesData,
+			saveEnabled: !shoudlBeDisabled,
 			tournamentData: {
 				...prevState.tournamentData,
 				teams: newTeams
