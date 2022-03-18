@@ -5,12 +5,12 @@ import IMatch from "../../../Models/IMatch";
 import IState from "../../../Models/IState";
 import IDiscipline from "../../../Models/IDiscipline"
 import ITeam from "../../../Models/ITeam";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import ITournament from "../../../Models/ITournament";
 import { binsearch } from "../../../Helpers/Essentials";
 import EditMatchTable from "../../../Components/EditMatchTable";
 import { nanoid } from "nanoid";
-
+import ISingleItemResponse from "../../../Models/Responses/ISingleItemResponse";
 
 export interface IRowData {
 	id: string,
@@ -50,19 +50,8 @@ interface ITournamentData {
 }
 
 class EditTournament extends React.Component<ICompProps, ICompState>{
-	private isEdit: boolean;
-	/*
-		This serves as dummy id for new, no submitted to server teams
-		After creating new team increase this value by 1 (important!)
-		After saving changes server will calculate "deltaId" for first element 
-		and change all dummy id's (for matches too)
-	*/
-	private tempId: number;
-
 	constructor(props: ICompProps) {
 		super(props);
-		this.isEdit = this.props.params.id > 0;
-		this.tempId = 1000000000 + 7;
 		this.state = {
 			isLoading: true,
 			teamModal: false,
@@ -91,8 +80,7 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 	}
 
 	componentDidMount() {
-		if(this.isEdit) this.downloadEditTorunament().catch(ex => console.error(ex));
-		else this.downloadAddTournament().catch(ex => console.error(ex));
+		this.downloadEditTorunament().catch(ex => console.error(ex));
 	}
 
 	downloadEditTorunament = async () => {
@@ -113,7 +101,7 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 				team2Score: match.team2Score
 			});
 		});
-		this.setState({tournamentData: res.data, matchesData: strippedMatches, isLoading: false});
+		this.setState({ tournamentData: res.data, matchesData: strippedMatches, isLoading: false });
 	}
 
 	downloadAddTournament = async () => {
@@ -130,8 +118,8 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 		}));
 	}
 
-	checkIfTeamExists = (teamId: number, teams: Array<ITeam>) : boolean => {
-		if(teamId == 0) return false;
+	checkIfTeamExists = (teamId: number, teams: Array<ITeam>): boolean => {
+		if (teamId == 0) return false;
 		return binsearch<ITeam>(teams, (x) => {
 			if (x.id < teamId) return -1;
 			if (x.id == teamId) return 0;
@@ -153,7 +141,7 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 		}));
 	}
 
-	renderStates = () : Array<JSX.Element> => {
+	renderStates = (): Array<JSX.Element> => {
 		return (
 			this.state.tournamentData.states.map((state) => {
 				return (
@@ -165,7 +153,7 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 		);
 	}
 
-	renderDisciplines = () : Array<JSX.Element> => {
+	renderDisciplines = (): Array<JSX.Element> => {
 		return (
 			this.state.tournamentData.disciplines.map((discipline) => {
 				return (
@@ -182,8 +170,14 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 		const index = this.state.selectedIndex!;
 
 		if (operation == -1) {
-			if (window.confirm("Czy na pewno chcesz usunąć tę drużynę"))
+			if (window.confirm("Czy na pewno chcesz usunąć tę drużynę")) {
+				await axios.delete("/api/teams/DeleteTeam", {
+					params: {
+						teamId: newTeams[index].id
+					}
+				});
 				newTeams.splice(index, 1);
+			}
 			this.setState(prevState => ({
 				...prevState,
 				selectedIndex: undefined
@@ -192,15 +186,30 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 			const newName = prompt("Nowa nazwa drużyny", newTeams[index].name);
 			if (newName == null) return;
 			newTeams[index].name = newName;
+			await axios.post<
+				ISingleItemResponse<number>,
+				AxiosResponse<ISingleItemResponse<number>, ITeam>,
+				ITeam
+			>("/api/teams/UpdateTeams", newTeams[index]);
 		} else {
 			const newName = prompt("Nazwa drużyny");
 			if (newName == null) return;
-			newTeams.push({
-				id: this.tempId++,
+			const newTeam: ITeam = {
+				id: 0,
+				tournamentId: this.props.params.id,
 				name: newName
-			});
+			};
+			const res = await axios.post<
+				ISingleItemResponse<number>,
+				AxiosResponse<ISingleItemResponse<number>, ITeam>,
+				ITeam
+			>("/api/teams/UpdateTeams", newTeam);
+			if(!res.data.error) {
+				newTeam.id = res.data.data;
+				newTeams.push(newTeam);
+			}
 		}
-
+		
 		this.setState(prevState => ({
 			...prevState,
 			tournamentData: {
@@ -214,7 +223,7 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 		return (
 			<div className="container mt-3">
 				<div className="logo-container">
-					<p>{this.isEdit ? "Edytuj" : "Dodaj"} turniej</p>
+					<p>Edytuj turniej</p>
 				</div>
 				{
 					!this.state.isLoading
@@ -319,7 +328,7 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 									states={this.state.tournamentData.states}
 									matchesData={this.state.matchesData}
 									updateMatches={(newData) => {
-										const shouldDisable = newData.some(x => 
+										const shouldDisable = newData.some(x =>
 											x.team1 == 0 || x.team2 == 0 || x.stateId == 0
 										);
 										this.setState((prevState) => ({

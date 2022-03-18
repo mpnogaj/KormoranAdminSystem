@@ -2,7 +2,6 @@
 using KormoranAdminSystemRevamped.Models;
 using KormoranAdminSystemRevamped.Models.Responses;
 using KormoranAdminSystemRevamped.Properties;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -12,11 +11,11 @@ namespace KormoranAdminSystemRevamped.Controllers
 {
 	[Route("api/[controller]/[action]")]
 	[ApiController]
-	public class MatchesController : ControllerBase
+	public class TeamsController : ControllerBase
 	{
 		private KormoranContext _db;
 
-		public MatchesController(KormoranContext db)
+		public TeamsController(KormoranContext db)
 		{
 			_db = db;
 		}
@@ -86,8 +85,6 @@ namespace KormoranAdminSystemRevamped.Controllers
 		{
 			try
 			{
-
-
 				if (team.Id == 0)
 				{
 					await _db.Teams.AddAsync(team);
@@ -95,16 +92,14 @@ namespace KormoranAdminSystemRevamped.Controllers
 				else
 				{
 					var t = await _db.Teams.FirstOrDefaultAsync(x => x.Id == team.Id);
-					if (t != null)
-					{
-						t = team;
-					}
+					if (t != null) t.Name = team.Name;
 				}
 				await _db.SaveChangesAsync();
-				return new JsonResult(new BasicResponse
+				return new JsonResult(new SingleItemResponse<int>
 				{
 					Error = false,
-					Message = Resources.operationSuccessfull
+					Message = Resources.operationSuccessfull,
+					Data = team.Id
 				});
 			}
 			catch
