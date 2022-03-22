@@ -1,7 +1,7 @@
 import axios from "axios";
-import { TypeOfTag } from "typescript";
 import ICollectionResponse from "../Models/Responses/ICollectionResponse";
 import ISingleItemResponse from "../Models/Responses/ISingleItemResponse";
+import {GET_DISCIPLINES, GET_LOGS, GET_MATCHES, GET_STATES, GET_TEAMS, GET_TOURNAMENTS} from "./Endpoints";
 
 class StorageElement {
 	callbacks: Array<Callback> = [];
@@ -96,22 +96,22 @@ class ElementStorage {
 	private elements = new Map<StorageTarget, StorageElement>([
 		[
 			StorageTarget.TOURNAMENTS,
-			new StorageElement("/api/tournaments/GetTournaments")
+			new StorageElement(GET_TOURNAMENTS)
 		], [
 			StorageTarget.MATCHES,
-			new StorageElement("/api/tournaments/GetMatches")
+			new StorageElement(GET_MATCHES)
 		], [
 			StorageTarget.TEAMS,
-			new StorageElement("/api/tournaments/GetTeams")
+			new StorageElement(GET_TEAMS)
 		], [
 			StorageTarget.LOGS,
-			new StorageElement("/api/Logs/GetLogs")
+			new StorageElement(GET_LOGS)
 		], [
 			StorageTarget.DISCIPLINES,
-			new StorageElement("/api/tournaments/GetDisciplines")
+			new StorageElement(GET_DISCIPLINES)
 		], [
 			StorageTarget.STATES,
-			new StorageElement("/api/tournaments/GetStates")
+			new StorageElement(GET_STATES)
 		]
 	]);
 	/*

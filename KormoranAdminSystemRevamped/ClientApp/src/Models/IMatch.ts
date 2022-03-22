@@ -3,13 +3,13 @@ import ITeam from "./ITeam";
 
 interface IMatch {
 	matchId: number,
-	state: IState,
+	state: IState | undefined,
 	stateId: number,
-	team1: ITeam,
+	team1: ITeam | undefined,
 	team1Id: number,
-	team2: ITeam,
+	team2: ITeam | undefined,
 	team2Id: number,
-	winner: ITeam,
+	winner: ITeam | undefined,
 	winnerId: number,
 	team1Score: number,
 	team2Score: number;

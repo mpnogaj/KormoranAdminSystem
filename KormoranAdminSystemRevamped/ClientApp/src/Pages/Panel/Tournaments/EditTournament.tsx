@@ -349,7 +349,29 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 									}} />
 							</div>
 							<Button className="mt-3" variant="success" disabled={!this.state.saveEnabled}
-								onClick={() => alert("Zapisano zmiany")}>Zapisz zmiany</Button>
+								onClick={async () => {
+									const tournamentData = this.state.tournamentData;
+									const matches: Array<IMatch> = [];
+									this.state.matchesData.forEach(x => {
+										matches.push({
+											matchId: x.matchId,
+											team1: undefined,
+											team2: undefined,
+											winner: undefined,
+											state: undefined,
+											team1Id: x.team1,
+											team2Id: x.team2,
+											winnerId: x.team1Score > x.team2Score ? x.team1 : x.team2,
+											team1Score: x.team1Score,
+											team2Score: x.team2Score,
+											stateId: x.stateId
+										})
+									});
+									tournamentData.matches = matches;
+									await axios.post("/api/tournaments/TournamentFullUpdate", {
+										
+									});
+								}}>Zapisz zmiany</Button>
 						</div>
 						:
 						<h1>Ładowanie</h1>

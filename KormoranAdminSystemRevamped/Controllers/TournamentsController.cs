@@ -115,7 +115,7 @@ namespace KormoranAdminSystemRevamped.Controllers
 			}
 			catch (NullReferenceException)
 			{
-				return new JsonResult(new BasicResponse()
+				return new JsonResult(new BasicResponse() 
 				{
 					Error = true,
 					Message = "Turniej nie został znaleziony"
@@ -129,63 +129,6 @@ namespace KormoranAdminSystemRevamped.Controllers
 					Message = $"Błąd serwera! {ex.Message}"
 				});
 			}
-		}
-
-		[HttpGet]
-		public async Task<JsonResult> GetMatches([FromQuery] int id)
-		{
-			var tournament = await _db.Tournaments
-				.Include(x => x.Matches)
-				.FirstAsync(x => x.Id == id);
-
-			return tournament == null
-				? new JsonResult(new CollectionResponse<Match>
-				{
-					Error = true,
-					Collection = null,
-					Message = Resources.serverError
-				})
-				: new JsonResult(new CollectionResponse<Match>
-				{
-					Error = false,
-					Collection = tournament.Matches.ToList(),
-					Message = Resources.operationSuccessfull
-				});
-		}
-
-		[HttpPost]
-		public async Task<JsonResult> AddTeam([FromBody] Team team)
-		{
-			var res = await _db.Teams.AddAsync(team);
-			await _db.SaveChangesAsync();
-			return new JsonResult(new SingleItemResponse<int>
-			{
-				Error = false,
-				Message = Resources.operationSuccessfull,
-				Data = res.Entity.Id
-			});
-		}
-
-		[HttpGet]
-		public async Task<JsonResult> GetTeams([FromQuery] int id)
-		{
-			var tournament = await _db.Tournaments
-				.Include(x => x.Teams)
-				.FirstOrDefaultAsync();
-
-			return tournament == null
-				? new JsonResult(new CollectionResponse<Team>
-				{
-					Error = true,
-					Message = Resources.serverError,
-					Collection = null
-				})
-				: new JsonResult(new CollectionResponse<Team>
-				{
-					Error = false,
-					Message = Resources.operationSuccessfull,
-					Collection = tournament.Teams.ToList()
-				});
 		}
 
 		[HttpPost]
@@ -236,102 +179,6 @@ namespace KormoranAdminSystemRevamped.Controllers
 			}
 
 			return new JsonResult(response);
-		}
-
-		[HttpPost]
-		public async Task<JsonResult> TournamentFullUpdate([FromBody] TournamentFullUpdateRequestModel model)
-		{
-			var res = (await UpdateTournament(model)).Value as BasicResponse;
-			if(res == null || res.Error)
-			{
-				return new JsonResult(new BasicResponse
-				{
-					Error = true,
-					Message = Resources.serverError
-				});
-			}
-			try
-			{
-				model.Teams.Sort((x, y) => x.Id.CompareTo(y.Id));
-				var firstNewTeam = model.Teams.FirstOrDefault(x => x != null && x.Id < 0, null);
-				int deltaId = 0;
-				if (firstNewTeam != null)
-				{
-					deltaId = firstNewTeam.Id;
-					await _db.Teams.AddAsync(firstNewTeam);
-					await _db.SaveChangesAsync();
-					deltaId = firstNewTeam.Id - deltaId;
-				}
-				_db.Teams.UpdateRange(model.Teams);
-				model.Matches.ForEach(x =>
-				{
-					if (x.Team1Id < 0) x.Team1Id += deltaId;
-					if (x.Team2Id < 0) x.Team2Id += deltaId;
-				});
-				_db.Matches.UpdateRange(model.Matches);
-				await _db.SaveChangesAsync();
-				return new JsonResult(new BasicResponse
-				{
-					Error = false,
-					Message = Resources.operationSuccessfull
-				});
-			}
-			catch
-			{
-				return new JsonResult(new BasicResponse
-				{
-					Error = true,
-					Message = Resources.serverError
-				});
-			}
-		}
-
-		[HttpGet]
-		public async Task<JsonResult> GetStates()
-		{
-			try
-			{
-				var states = await _db.States.ToListAsync();
-				return new JsonResult(new CollectionResponse<State>
-				{
-					Message = Resources.operationSuccessfull,
-					Error = false,
-					Collection = states
-				});
-			}
-			catch
-			{
-				return new JsonResult(new CollectionResponse<State>
-				{
-					Message = Resources.serverError,
-					Error = true,
-					Collection = null
-				});
-			}
-		}
-
-		[HttpGet]
-		public async Task<JsonResult> GetDisciplines()
-		{
-			try
-			{
-				var disciplines = await _db.Disciplines.ToListAsync();
-				return new JsonResult(new CollectionResponse<Discipline>
-				{
-					Message = Resources.operationSuccessfull,
-					Error = false,
-					Collection = disciplines
-				});
-			}
-			catch
-			{
-				return new JsonResult(new CollectionResponse<Discipline>
-				{
-					Message = Resources.serverError,
-					Error = true,
-					Collection = null
-				});
-			}
 		}
 	}
 
