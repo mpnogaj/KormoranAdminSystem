@@ -8,7 +8,6 @@ import IState from "../Models/IState";
 import { Callback, ElementStorage, StorageTarget } from "../Helpers/ElementStorage";
 import axios from "axios";
 import IBasicResponse from "../Models/Responses/IBasicResponse";
-import { ThermometerSun } from "react-bootstrap-icons";
 
 interface ICompState {
 	tournaments: Array<ITournament>,
@@ -51,7 +50,6 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 			new Callback((target: StorageTarget) => {
 				const data =
 					this.storage.getData<Array<ITournament>>(target);
-				//console.log(data);
 				if (!data.isError) {
 					this.setState({
 						isLoading: false,
@@ -62,7 +60,6 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 			new Callback((target: StorageTarget) => {
 				const data =
 					this.storage.getData<Array<IDiscipline>>(target);
-				//console.log(data);
 				if (!data.isError) {
 					this.setState({
 						disciplines: data.data!
@@ -72,7 +69,6 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 			new Callback((target: StorageTarget) => {
 				const data =
 					this.storage.getData<Array<IState>>(target);
-				//console.log(data);
 				if (!data.isError) {
 					this.setState({
 						states: data.data!
@@ -100,8 +96,8 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 		if (isEdit) {
 			this.setState({
 				editName: this.state.tournaments[tournamentId - 1].name,
-				editDisc: this.state.tournaments[tournamentId - 1].disciplineId,
-				editState: this.state.tournaments[tournamentId - 1].stateId,
+				editDisc: this.state.tournaments[tournamentId - 1].discipline.id,
+				editState: this.state.tournaments[tournamentId - 1].state.id,
 				currentTournamentId: tournamentId,
 				editModalVisible: true
 			});
@@ -135,7 +131,6 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 								<th>Nazwa</th>
 								<th>Status</th>
 								<th>Dyscyplina</th>
-								<th>Typ turnieju</th>
 								<th>Akcja</th>
 							</tr>
 						</thead>
@@ -144,8 +139,8 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 								!this.state.isLoading
 									?
 									this.state.tournaments.map((val) => {
-										val.discipline = this.state.disciplines[val.disciplineId - 1];
-										val.state = this.state.states[val.stateId - 1];
+										val.discipline = this.state.disciplines[val.discipline.id - 1];
+										val.state = this.state.states[val.state.id - 1];
 										return (
 											<TournamentRow key={val.id} tournament={val} showModalCallback={this.handleShow}
 												isEdit={this.props.allowEdit} />

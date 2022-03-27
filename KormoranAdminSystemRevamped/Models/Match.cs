@@ -22,27 +22,31 @@ namespace KormoranAdminSystemRevamped.Models
 		
 		[ForeignKey("State")]
 		[Column("state_id")]
-		public int StateId { get; set; }
 		[JsonIgnore]
+		public int StateId { get; set; }
 		public virtual State State { get; set; }
 		
 		[ForeignKey("Team1")]
 		[Column("team_1_id")]
-		public int Team1Id { get; set; }
 		[JsonIgnore]
+		public int Team1Id { get; set; }
 		public virtual Team Team1 { get; set; }
 		
 		[ForeignKey("Team2")]
 		[Column("team_2_id")]
-		public int Team2Id { get; set; }
 		[JsonIgnore]
+		public int Team2Id { get; set; }
 		public virtual Team Team2 { get; set; }
 		
-		[ForeignKey("Winner")]
-		[Column("winner_id")]
-		public int WinnerId { get; set; }
-		[JsonIgnore]
-		public virtual Team Winner { get; set; }
+		[NotMapped]
+		public virtual Team Winner
+        {
+			get
+            {
+				if (Team2 == null || Team1 == null) return null;
+				return Team1Score >= Team2Score ? Team1 : Team2;
+            }
+        }
 		
 		[Column("team_1_score", TypeName = "int(11)")]
 		public int Team1Score { get; set; }

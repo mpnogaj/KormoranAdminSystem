@@ -35,35 +35,35 @@ class EditMatchRow extends React.Component<ICompProps, any>{
 			if(element.id == teamId) return element.name;
 		}
 		return "-";
-	}
+	};
 
 	getStateName = (stateId: number) : string => {
 		const res = binsearch(this.props.states, (state) => {
 			if(state.id < stateId) return -1;
 			if(state.id == stateId) return 0;
 			return 1;
-		})
+		});
 		if(res == -1) return "-";
 		else return this.props.states[res].name;
-	}
+	};
 
 	recalculateWinner = (): number => {
 		if(this.props.team1Pts >= this.props.team2Pts) 
 			return this.props.team1;
 		return this.props.team2;
-	}
+	};
 
 	updateTeam = (newId: number, target: number) => {
 		this.props.onUpdate(this.props.id, target, newId);
-	}
+	};
 
 	updateScore = (newScore: number, target: number) => {
 		this.props.onUpdate(this.props.id, target + 2, newScore);
-	}
+	};
 
 	updateState = (newId: number) => {
 		this.props.onUpdate(this.props.id, 6, newId);
-	}
+	};
 
 	renderTeams = () : Array<JSX.Element> => { 
 		return (
@@ -75,7 +75,7 @@ class EditMatchRow extends React.Component<ICompProps, any>{
 				);
 			})
 		);
-	}
+	};
 
 	renderStates = () : Array<JSX.Element> => {
 		return (
@@ -87,12 +87,12 @@ class EditMatchRow extends React.Component<ICompProps, any>{
 				);
 			})
 		);
-	}
+	};
 
 	render() {
 		return (
 			<tr className="align-middle">
-				<th>{this.props.match.matchId == 0 ? '-' : this.props.match.matchId}</th>
+				<th>{this.props.match.matchId == 0 ? "-" : this.props.match.matchId}</th>
 				<th>
 					<select onChange={(e) => {
 						this.updateState(parseInt(e.target.value));

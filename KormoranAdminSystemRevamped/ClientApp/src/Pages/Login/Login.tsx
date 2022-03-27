@@ -2,7 +2,7 @@ import React from "react";
 import {Button, Col, Container, FormControl, FormFloating, Row} from 'react-bootstrap'
 import axios from "axios";
 import './Login.css';
-import ILoginResponse from "../../Models/Responses/ILoginResponse";
+import {ILoginResponse} from "../../Models/IResponses";
 import {useNavigate} from "react-router";
 
 interface IState {

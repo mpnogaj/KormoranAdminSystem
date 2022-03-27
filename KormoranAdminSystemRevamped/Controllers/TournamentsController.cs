@@ -29,7 +29,12 @@ namespace KormoranAdminSystemRevamped.Controllers
 		{
 			try
 			{
-				var tournamentList = await _db.Tournaments.ToListAsync();
+				var tournamentList = await _db.Tournaments
+					.Include(x => x.Teams)
+					.Include(x => x.Matches)
+					.Include(x => x.Discipline)
+					.Include(x => x.State)
+					.ToListAsync();
 				if (model.StateId != null)
 				{
 					tournamentList = tournamentList.Where(x => x.State.Id == model.StateId).ToList();
@@ -49,45 +54,6 @@ namespace KormoranAdminSystemRevamped.Controllers
 					Message = Resources.serverError,
 					Error = true,
 					Collection = null
-				});
-			}
-		}
-
-		[HttpGet]
-		public async Task<JsonResult> GetAllTournamentData([FromQuery] int id)
-		{	
-			try
-			{
-				var tournament = await _db.Tournaments
-					.FirstAsync(x => x.Id == id);
-				var matches = await _db.Matches
-					.Where(x => x.TournamentId == id)
-					.ToListAsync();
-				var teams = await _db.Teams
-					.Where(x => x.TournamentId == id)
-					.ToListAsync();
-				var states = await _db.States
-					.ToListAsync();
-				var disciplines = await _db.Disciplines
-					.ToListAsync();
-
-				return new JsonResult(new GetFullTournamentDataResponseModel
-				{
-					Error = false,
-					Tournament = tournament,
-					Message = Resources.operationSuccessfull,
-					Matches = matches,
-					Teams = teams,
-					States = states,
-					Disciplines = disciplines
-				});
-			}
-			catch (Exception ex)
-			{
-				return new JsonResult(new GetFullTournamentDataResponseModel
-				{
-					Error = true,
-					Message = ex.Message
 				});
 			}
 		}
@@ -148,9 +114,7 @@ namespace KormoranAdminSystemRevamped.Controllers
 			{
 				Name = model.Name,
 				Discipline = _db.Disciplines.FirstOrDefault(x => x.Id == model.DisciplineId),
-				State = _db.States.FirstOrDefault(x => x.Id == model.StateId),
-				TournamentType = model.TournamentType,
-				TournamentTypeShort = model.TournamentTypeShort
+				State = _db.States.FirstOrDefault(x => x.Id == model.StateId)
 			};
 			if (model.Id == -1)
 			{
@@ -167,8 +131,6 @@ namespace KormoranAdminSystemRevamped.Controllers
 					toReplace.Discipline = tournament.Discipline;
 					toReplace.Name = tournament.Name;
 					toReplace.State = tournament.State;
-					toReplace.TournamentType = tournament.TournamentType;
-					toReplace.TournamentTypeShort = tournament.TournamentTypeShort;
 					await _db.SaveChangesAsync();
 				}
 				else

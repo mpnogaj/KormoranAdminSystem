@@ -10,7 +10,7 @@ import ITournament from "../../../Models/ITournament";
 import { binsearch } from "../../../Helpers/Essentials";
 import EditMatchTable from "../../../Components/EditMatchTable";
 import { nanoid } from "nanoid";
-import ISingleItemResponse from "../../../Models/Responses/ISingleItemResponse";
+import {ISingleItemResponse} from "../../../Models/IResponses";
 
 export interface IRowData {
 	id: string,
@@ -62,13 +62,15 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 				tournament: {
 					id: 0,
 					name: "Nowy turniej",
-					stateId: 0,
-					state: undefined,
-					teams: undefined,
-					discipline: undefined,
-					disciplineId: 0,
-					tournamentType: "R",
-					tournamentTypeShort: "RR"
+					state: {
+						id: 0,
+						name: "-"
+                    },
+					teams: [],
+					discipline: {
+						id: 0,
+						name: "-"
+                    }
 				},
 				matches: [],
 				teams: [],
@@ -94,7 +96,7 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 			strippedMatches.push({
 				id: nanoid(),
 				matchId: match.matchId,
-				stateId: match.stateId,
+				stateId: match.state.id,
 				team1: match.team1Id,
 				team2: match.team2Id,
 				team1Score: match.team1Score,
