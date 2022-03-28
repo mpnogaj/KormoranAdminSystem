@@ -4,16 +4,14 @@ import "./css/bootstrap.min.css";
 import "./css/main.css";
 import "./App.css";
 import {validateSessionId} from "./Helpers/Authenticator";
-
-interface IProps{}
 interface IState{
 	isLoading: boolean
 	isAuthenticated: boolean;
 }
 
-class App extends React.Component<IProps, IState> {
+class App extends React.Component<any, IState> {
 	
-	constructor(props: IProps) {
+	constructor(props: any) {
 		super(props);
 		this.state = {
 			isLoading: true,
@@ -38,7 +36,7 @@ class App extends React.Component<IProps, IState> {
 			}
 			this.setState({isLoading: false, isAuthenticated: true});
 		}
-	}
+	};
 
 	render() {
 		if(this.state.isLoading) return null;

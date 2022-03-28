@@ -18,7 +18,6 @@ class TournamentRow extends React.Component<IProps, any>{
 					<Badge bg="success">{this.props.tournament.state == undefined ? "Ładowanie" : this.props.tournament.state.name}</Badge>
 				</td>
 				<td>{this.props.tournament.discipline == undefined ? "Ładowanie" : this.props.tournament.discipline.name}</td>
-				<td>{this.props.tournament.tournamentType}</td>
 				<td>
 					{
 						this.props.isEdit

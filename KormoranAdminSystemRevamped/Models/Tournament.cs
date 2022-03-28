@@ -20,26 +20,16 @@ namespace KormoranAdminSystemRevamped.Models
 		
 		[Column("discipline_id")]
 		[ForeignKey("Discipline")]
-		public int DisciplineId { get; set; }
 		[JsonIgnore]
+		public int DisciplineId { get; set; }
 		public virtual Discipline Discipline { get; set; }
 		
 		[Column("state_id")]
 		[ForeignKey("State")]
+		[JsonIgnore]
 		public int StateId { get; set; }
-		[JsonIgnore]
 		public virtual State State { get; set; }
-		[JsonIgnore]
 		public virtual ICollection<Match> Matches { get; set; }
-		[JsonIgnore]
 		public virtual ICollection<Team> Teams { get; set; }
-
-		[Required]
-		[Column("tournament_type")]
-		public string TournamentType { get; set; }
-
-		[Required]
-		[Column("tournament_type_short")]
-		public string TournamentTypeShort { get; set; } = "";
 	}
 }

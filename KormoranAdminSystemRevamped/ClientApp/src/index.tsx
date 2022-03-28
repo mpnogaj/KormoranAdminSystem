@@ -3,13 +3,14 @@ import {
 	BrowserRouter,
 	Routes,
 	Route,
-} from "react-router-dom"
+} from "react-router-dom";
 import "./index.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
+import React from "react";
 import App from "./App";
 import Guest from "./Pages/Guest/Guest";
 import Login from "./Pages/Login/Login";
-import Panel from "./Pages/Panel/Panel"
+import Panel from "./Pages/Panel/Panel";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import Tournaments from "./Pages/Panel/Tournaments/Tournaments";
 import Overview from "./Pages/Panel/Overview/Overview";

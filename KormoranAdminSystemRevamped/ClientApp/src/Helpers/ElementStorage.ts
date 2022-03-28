@@ -1,7 +1,7 @@
 import axios from "axios";
-import { TypeOfTag } from "typescript";
 import ICollectionResponse from "../Models/Responses/ICollectionResponse";
-import IObjectResponse from "../Models/Responses/IObjectResponse";
+import ISingleItemResponse from "../Models/Responses/ISingleItemResponse";
+import {GET_DISCIPLINES, GET_LOGS, GET_MATCHES, GET_STATES, GET_TEAMS, GET_TOURNAMENTS} from "./Endpoints";
 
 class StorageElement {
 	callbacks: Array<Callback> = [];
@@ -14,7 +14,7 @@ class StorageElement {
 
 	constructor(apiUrl: string, dataIsArray: boolean = true, urlParams: object | undefined = undefined) {
 		this.apiGetUrl = apiUrl;
-		if(urlParams != undefined) this.updateParams(urlParams)
+		if (urlParams != undefined) this.updateParams(urlParams)
 		this.dataIsArray = dataIsArray;
 	}
 
@@ -25,21 +25,21 @@ class StorageElement {
 		);
 	}
 
-	public updateParams(newParams: object){
-		if(this.apiGetUrl.indexOf('?') != -1) 
+	public updateParams(newParams: object) {
+		if (this.apiGetUrl.indexOf('?') != -1)
 			this.apiGetUrl = this.apiGetUrl.slice(0, this.apiGetUrl.indexOf('?'));
-		if(Object.entries(newParams).length == 0) return;
+		if (Object.entries(newParams).length == 0) return;
 		this.apiGetUrl += "?";
 		Object.entries(newParams).forEach(keyVal => {
 			var key = keyVal.at(0);
 			var val = keyVal.at(1);
 			this.apiGetUrl += key + "=" + val + "&";
 		})
-		this.apiGetUrl = 
+		this.apiGetUrl =
 			this.apiGetUrl.slice(0, this.apiGetUrl.length - 1);
 	}
 
-	public getApiUrl() : string{
+	public getApiUrl(): string {
 		return this.apiGetUrl;
 	}
 }
@@ -96,22 +96,22 @@ class ElementStorage {
 	private elements = new Map<StorageTarget, StorageElement>([
 		[
 			StorageTarget.TOURNAMENTS,
-			new StorageElement("/api/tournaments/GetTournaments")
+			new StorageElement(GET_TOURNAMENTS)
 		], [
 			StorageTarget.MATCHES,
-			new StorageElement("/api/tournaments/GetMatches")
+			new StorageElement(GET_MATCHES)
 		], [
 			StorageTarget.TEAMS,
-			new StorageElement("/api/tournaments/GetTeams")
+			new StorageElement(GET_TEAMS)
 		], [
 			StorageTarget.LOGS,
-			new StorageElement("/api/Logs/GetLogs")
+			new StorageElement(GET_LOGS)
 		], [
 			StorageTarget.DISCIPLINES,
-			new StorageElement("/api/tournaments/GetDisciplines")
+			new StorageElement(GET_DISCIPLINES)
 		], [
 			StorageTarget.STATES,
-			new StorageElement("/api/tournaments/GetStates")
+			new StorageElement(GET_STATES)
 		]
 	]);
 	/*
@@ -143,7 +143,7 @@ class ElementStorage {
 		return element!.getData<T>();
 	}
 
-	public updateParams(newParams: object, target: StorageTarget){
+	public updateParams(newParams: object, target: StorageTarget) {
 		const element = this.elements.get(target);
 		if (element == undefined) {
 			console.error("Element with key: " + target + " hasn't been found");
@@ -197,8 +197,8 @@ class ElementStorage {
 			data = response.data.collection;
 		}
 		else {
-			const response = await axios.get<IObjectResponse<any>>(element.getApiUrl());
-			data = response.data.item;
+			const response = await axios.get<ISingleItemResponse<any>>(element.getApiUrl());
+			data = response.data.data;
 		}
 		if (data != element.plainData) {
 			element.plainData = data;
