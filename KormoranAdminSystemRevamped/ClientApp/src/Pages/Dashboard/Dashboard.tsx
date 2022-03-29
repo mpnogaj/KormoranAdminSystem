@@ -1,13 +1,8 @@
-﻿import React from 'react';
+﻿import React from "react";
 
 class Dashboard extends React.Component {
-
-	constructor(props: any) {
-		super(props);
-	}
-
-	render() {
-		return ('<a>a</a>');
+	render(): JSX.Element {
+		return (<h1>Dashboard</h1>);
 	}
 }
 

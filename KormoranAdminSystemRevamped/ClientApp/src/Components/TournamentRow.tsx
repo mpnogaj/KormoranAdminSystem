@@ -8,7 +8,7 @@ interface IProps {
 	showModalCallback: (tId: number, isEdit: boolean) => void;
 }
 
-class TournamentRow extends React.Component<IProps, any>{
+class TournamentRow extends React.Component<IProps>{
 	render(): JSX.Element {
 		return (
 			<tr>

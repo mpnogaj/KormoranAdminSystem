@@ -19,7 +19,7 @@ interface ICompProps {
 	onUpdate: (targetId: number, target: number, data: number) => void;
 }
 
-class EditMatchRow extends React.Component<ICompProps, any>{
+class EditMatchRow extends React.Component<ICompProps>{
 
 	componentDidMount(): void {
 		this.recalculateWinner();

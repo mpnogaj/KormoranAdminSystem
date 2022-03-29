@@ -1,14 +1,26 @@
-import React from "react";
-import { useParams } from "react-router";
+import React, { ReactElement } from "react";
+import { Params, useParams, useNavigate, NavigateFunction } from "react-router";
 
-export default function withParams(Component: new () => React.Component<any, any>): any {
-	const comp = returnWithParams(Component, {});
-	return comp;
+interface IWithParams {
+		params: Readonly<Params<string>>;
 }
 
-function returnWithParams(Component: new () => React.Component<any, any>, props: any): JSX.Element {
-	const params = useParams();
-	return (
-		<Component {...props} params={params} />
-	);
+export function withParams<T extends IWithParams>(Component: React.ComponentType<T>): (props: T) => JSX.Element{
+	const componentWithParams = (props: T): ReactElement<T> => {
+		const params = useParams();
+		return (<Component {...props} params={params}/>);
+	};
+	return componentWithParams;
+}
+
+interface IWithNavigaton{
+	navigation: NavigateFunction
+}
+
+export function withNavigation<T extends IWithNavigaton>(Component: React.ComponentType<T>): (props: T) => JSX.Element{
+	const componentWithParams = (props: T): ReactElement<T> => {
+		const navigation = useNavigate();
+		return (<Component {...props} navigation={navigation}/>);
+	};
+	return componentWithParams;
 }

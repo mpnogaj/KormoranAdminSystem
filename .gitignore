@@ -365,3 +365,4 @@ FodyWeavers.xsd
 KormoranAdminSystemRevamped/appsettings.json
 .idea/
 .vscode/
+KormoranAdminSystemRevamped/ClientApp/package-lock.json

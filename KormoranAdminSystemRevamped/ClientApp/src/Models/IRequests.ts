@@ -1,5 +1,12 @@
 interface IGetMatchesRequest{
-  tornamentId: number;
+	tornamentId: number;
 }
 
-export default IGetMatchesRequest;
+interface ILogsParams{
+	sessionId: string;
+}
+
+export type {
+	IGetMatchesRequest,
+	ILogsParams
+};

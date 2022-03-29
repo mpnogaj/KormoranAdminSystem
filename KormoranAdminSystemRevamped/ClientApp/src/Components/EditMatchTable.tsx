@@ -6,14 +6,14 @@ import { nanoid } from "nanoid";
 import IState from "../Models/IState";
 import { IRowData } from "../Pages/Panel/Tournaments/EditTournament";
 
-interface ICompProps {
+interface IProps {
 	teams: Array<ITeam>,
 	states: Array<IState>,
 	matchesData: Array<IRowData>,
 	updateMatches: (newData: Array<IRowData>) => void;
 }
 
-class EditMatchTable extends React.Component<ICompProps, any>{
+class EditMatchTable extends React.Component<IProps>{
 	private defaultMatchData(): IRowData {
 		return {
 			id: nanoid(),

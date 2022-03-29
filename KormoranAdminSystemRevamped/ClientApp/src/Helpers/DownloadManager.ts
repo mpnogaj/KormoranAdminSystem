@@ -4,6 +4,8 @@
 
 import axios from "axios";
 
+const DEFAULT_TIMEOUT = 5000;
+
 class DownloadManager<T, Y> {
 
 	readonly timerId: number;
@@ -46,4 +48,7 @@ class DownloadManager<T, Y> {
 	}
 }
 
-export default DownloadManager;
+export {
+	DownloadManager,
+	DEFAULT_TIMEOUT
+};

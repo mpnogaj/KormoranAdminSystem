@@ -1,9 +1,13 @@
-import React from "react";
-import { Button, Col, Container, FormControl, FormFloating, Row } from 'react-bootstrap'
+import React, { FormEvent } from "react";
+import { Button, Col, Container, FormControl, FormFloating, Row } from "react-bootstrap";
 import axios from "axios";
-import './Login.css';
+import "./Login.css";
 import { ILoginResponse } from "../../Models/IResponses";
-import { useNavigate } from "react-router";
+import { NavigateFunction } from "react-router";
+
+interface IProps {
+	navigation: NavigateFunction
+}
 
 interface IState {
 	username: string,
@@ -12,9 +16,9 @@ interface IState {
 	errorText: string;
 }
 
-class Login extends React.Component<any, IState>{
+class Login extends React.Component<IProps, IState>{
 
-	constructor(props: any) {
+	constructor(props: IProps) {
 		super(props);
 		this.state = {
 			username: "",
@@ -24,20 +28,12 @@ class Login extends React.Component<any, IState>{
 		};
 	}
 
-	loginClick = (e: React.FormEvent) => {
-		this.loginHandler(e).then(correct => {
-			if (correct) {
-				this.props.navigation("/Panel");
-			}
-		})
-	}
-
-	loginHandler = async (e: React.FormEvent) => {
-		this.setState<"buttonEnabled">({ buttonEnabled: false });
+	loginHandler = async (e: FormEvent): Promise<boolean> => {
+		this.setState({ buttonEnabled: false });
 		e.preventDefault();
 		if (this.state.password === "" || this.state.username === "") {
 			alert("Podaj login i hasło!");
-			return;
+			return false;
 		}
 		try {
 			console.log("Ładowanie");
@@ -50,16 +46,16 @@ class Login extends React.Component<any, IState>{
 			if (response.status === 200) {
 				const data = response.data;
 				if (data.error) {
-					this.setState<"errorText">({ errorText: data.message });
+					this.setState({ errorText: data.message });
 				} else {
 					sessionStorage.setItem("sessionId", data.sessionId);
 					return true;
 				}
-				this.setState<"buttonEnabled">({ buttonEnabled: true });
+				this.setState({ buttonEnabled: true });
 			}
 		} catch (error) {
 			if (error instanceof Error) {
-				this.setState<"errorText">({
+				this.setState({
 					errorText:
 						"Wystąpił inny błąd. Otwórz konsolę przeglądarki (Ctrl + Shift + I -> 'Console') i wyślij zdjęcie administratorowi"
 				});
@@ -67,22 +63,28 @@ class Login extends React.Component<any, IState>{
 			}
 			else console.log("Error", error);
 		}
-		this.setState<"buttonEnabled">({ buttonEnabled: true });
+		this.setState({ buttonEnabled: true });
 		return false;
 	};
 
-	render() {
+	render(): JSX.Element {
 		return (
 			<Container style={{ width: "90%", maxWidth: "700px" }}>
 				<div className="logo-container">
 					<p>Kormoran Admin System</p>
 				</div>
 				<Row className="justify-content-sm-center">
-					<form onSubmit={this.loginClick}>
+					<form onSubmit={(e): void => {
+						this.loginHandler(e).then((correct: boolean) => {
+							if (correct) {
+								this.props.navigation("/Panel");
+							}
+						});
+					}}>
 						<FormFloating className="mb-3">
 							<FormControl type="text" id="floatingInput"
 								placeholder="Nazwa użytkownika" required={true}
-								onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+								onChange={(e): void => {
 									this.setState<"username">({ username: e.target.value });
 								}} />
 							<label htmlFor="floatingInput">Nazwa użytkownika</label>
@@ -90,7 +92,7 @@ class Login extends React.Component<any, IState>{
 						<FormFloating>
 							<FormControl type="password" id="floatingPassword"
 								placeholder="Hasło" required={true}
-								onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+								onChange={(e): void => {
 									this.setState<"password">({ password: e.target.value });
 								}}
 							/>
@@ -113,8 +115,5 @@ class Login extends React.Component<any, IState>{
 		);
 	}
 }
-
-export default function (props: any) {
-	const navigation = useNavigate();
-	return <Login {...props} navigation={navigation} />
-}
+export default Login;
+//export default withNavigation<IProps>(Login);

@@ -7,16 +7,11 @@ import { Speedometer2, JournalText, PersonCheck, Tv, Gear } from "react-bootstra
 import axios from "axios";
 
 interface IProps {
-	content: any;
+	content: JSX.Element;
 }
 
-class Panel extends React.Component<IProps, any>{
-
-	constructor(props: IProps) {
-		super(props);
-	}
-
-	render() {
+class Panel extends React.Component<IProps>{
+	render(): JSX.Element {
 		return (
 			<div>
 				<nav className="navbar sticky-top navbar-expand-xl navbar-light bg-light">
@@ -48,7 +43,7 @@ class Panel extends React.Component<IProps, any>{
 											</li>
 											<li><a className="dropdown-item" href="#">Ustawienia</a></li>
 											<li><hr className="dropdown-divider" /></li>
-											<li><a className="dropdown-item" onClick={async () => {
+											<li><a className="dropdown-item" onClick={async (): Promise<void> => {
 												await axios.post("/api/Session/Logout", {
 													sessionId: sessionStorage.getItem("sessionId")
 												});
@@ -106,7 +101,7 @@ class Panel extends React.Component<IProps, any>{
 				</nav>
 				<div id="container">{this.props.content}</div>
 			</div>
-		)
+		);
 	}
 }
 

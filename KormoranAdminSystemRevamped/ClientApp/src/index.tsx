@@ -17,12 +17,13 @@ import Overview from "./Pages/Panel/Overview/Overview";
 import Logs from "./Pages/Panel/Logs/Logs";
 import Users from "./Pages/Panel/Users/Users";
 import EditTournament from "./Pages/Panel/Tournaments/EditTournament";
+import { withNavigation } from "./Helpers/HOC";
 
 render(
 	<BrowserRouter>
 		<Routes>
 			<Route path="/" element={<App />} />
-			<Route path="Login" element={<Login />} />
+			<Route path="Login" element={withNavigation(Login)} />
 			<Route path="Guest" element={<Guest />} />
 			<Route path="Panel" element={<ProtectedRoute />}>
 				<Route path="" element={<Panel content={<Overview />} />} />

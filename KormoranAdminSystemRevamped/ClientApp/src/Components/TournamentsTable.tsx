@@ -7,7 +7,7 @@ import IDiscipline from "../Models/IDiscipline";
 import IState from "../Models/IState";
 import axios from "axios";
 import { IBasicResponse, ICollectionResponse } from "../Models/IResponses";
-import DownloadManager from "../Helpers/DownloadManager";
+import { DownloadManager, DEFAULT_TIMEOUT } from "../Helpers/DownloadManager";
 import { GET_TOURNAMENTS } from "../Helpers/Endpoints";
 import IMatch from "../Models/IMatch";
 import { binsearch } from "../Helpers/Essentials";
@@ -49,7 +49,7 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 			editState: 0
 		};
 		this.tournamentDownloader = new DownloadManager<ICollectionResponse<ITournament>, null>(
-			GET_TOURNAMENTS, 5000, (data) => {
+			GET_TOURNAMENTS, DEFAULT_TIMEOUT, (data: ICollectionResponse<ITournament>) => {
 				if (data.error) {
 					return;
 				}

@@ -1,10 +1,10 @@
 import React from "react";
 
-class Users extends React.Component<any, any>{
-	render() {
+class Users extends React.Component{
+	render(): JSX.Element {
 		return (
 			<h1>UŻYTKOWNICY</h1>
-		)
+		);
 	}
 
 }

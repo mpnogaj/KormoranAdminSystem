@@ -1,8 +1,8 @@
 import React from "react";
 import TournamentsTable from "../../../Components/TournamentsTable";
 
-class Tournaments extends React.Component<any, any>{
-	render() {
+class Tournaments extends React.Component{
+	render(): JSX.Element {
 		return (
 			<div className="container mt-3">
 				<div className="logo-container">
@@ -10,7 +10,7 @@ class Tournaments extends React.Component<any, any>{
 				</div>
 				<TournamentsTable allowEdit={true} />
 			</div>
-		)
+		);
 	}
 }
 

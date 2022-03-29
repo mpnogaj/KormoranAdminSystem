@@ -5,7 +5,7 @@ interface IProps {
 	item: ILog
 }
 
-class LogRow extends React.Component<IProps, any>{
+class LogRow extends React.Component<IProps>{
 	render(): JSX.Element {
 		return (
 			<tr>

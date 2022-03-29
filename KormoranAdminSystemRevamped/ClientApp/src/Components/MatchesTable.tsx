@@ -2,11 +2,11 @@ import React from "react";
 import IMatch from "../Models/IMatch";
 import { Table } from "react-bootstrap";
 import MatchesRow from "./MatchRow";
-interface ICompProps {
+interface IProps {
 	matches: Array<IMatch>
 }
 
-class MatchesTable extends React.Component<ICompProps, any>{
+class MatchesTable extends React.Component<IProps>{
 	render(): JSX.Element {
 		return (
 			<div className="table-responsive">
@@ -25,7 +25,7 @@ class MatchesTable extends React.Component<ICompProps, any>{
 					</thead>
 					<tbody className="align-middle">
 						{
-							this.state.matches.map((val: IMatch): JSX.Element => {
+							this.props.matches.map((val: IMatch): JSX.Element => {
 								return <MatchesRow key={val.matchId} match={val} />;
 							})
 						}

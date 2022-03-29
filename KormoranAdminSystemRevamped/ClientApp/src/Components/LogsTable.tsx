@@ -1,8 +1,12 @@
 import React from "react";
-import { Callback, ElementStorage, StorageTarget } from "../Helpers/ElementStorage";
 import ILog from "../Models/ILog";
 import LogRow from "./LogRow";
 import { ArrowLeft, ArrowRight } from "react-bootstrap-icons";
+import { Empty } from "../Helpers/Aliases";
+import { DownloadManager, DEFAULT_TIMEOUT } from "../Helpers/DownloadManager";
+import { GET_LOGS } from "../Helpers/Endpoints";
+import { ICollectionResponse } from "../Models/IResponses";
+import { ILogsParams } from "../Models/IRequests";
 
 interface IState {
 	isLoading: boolean;
@@ -12,11 +16,11 @@ interface IState {
 	pageSize: number;
 }
 
-class LogTable extends React.Component<any, IState> {
-	callbacks: Array<Callback>;
-	readonly storage: ElementStorage;
 
-	constructor(props: any) {
+
+class LogTable extends React.Component<Empty, IState> {
+	readonly logsDownloader: DownloadManager<ICollectionResponse<ILog>, ILogsParams>;
+	constructor(props: Empty) {
 		super(props);
 		this.state = {
 			isLoading: true,
@@ -25,25 +29,22 @@ class LogTable extends React.Component<any, IState> {
 			numberOfPages: 1,
 			pageSize: 10,
 		};
-		this.storage = ElementStorage.getInstance();
-		this.callbacks = [
-			new Callback((target: StorageTarget) => {
-				const data =
-					this.storage.getData<Array<ILog>>(target);
-				if (!data.isError && data.data != undefined) {
-					this.setState({
-						isLoading: false,
-						logs: data.data,
-						numberOfPages:
-							Math.floor(data.data.length / this.state.pageSize) +
-							(data.data.length % this.state.pageSize > 0 ? 1 : 0),
-						currentPage:
-							Math.floor(data.data.length / this.state.pageSize) +
-								(data.data.length % this.state.pageSize > 0 ? 1 : 0) == 0 ? 0 : 1
-					});
-				}
-			}, StorageTarget.LOGS)
-		];
+		this.logsDownloader = new DownloadManager<ICollectionResponse<ILog>, ILogsParams>(
+			GET_LOGS, DEFAULT_TIMEOUT, (data: ICollectionResponse<ILog>): void => {
+				this.setState({
+					isLoading: false,
+					logs: data.collection,
+					numberOfPages:
+						Math.floor(data.collection.length / this.state.pageSize) +
+						(data.collection.length % this.state.pageSize > 0 ? 1 : 0),
+					currentPage:
+						Math.floor(data.collection.length / this.state.pageSize) +
+							(data.collection.length % this.state.pageSize > 0 ? 1 : 0) == 0 ? 0 : 1
+				});
+			}
+		).setParams({
+			sessionId: sessionStorage.getItem("sessionId") ?? ""
+		});
 	}
 
 	componentDidMount(): void {

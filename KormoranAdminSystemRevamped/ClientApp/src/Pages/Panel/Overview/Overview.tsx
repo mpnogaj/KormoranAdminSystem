@@ -1,10 +1,10 @@
 import React from "react";
 
-class Overview extends React.Component<any, any>{
-	render() {
+class Overview extends React.Component{
+	render(): JSX.Element {
 		return (
 			<h1>PODSUMOWANIE</h1>
-		)
+		);
 	}
 
 }

@@ -1,5 +1,6 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
+import { Empty } from "../Helpers/Aliases";
 import { validateSessionId } from "../Helpers/Authenticator";
 
 interface IState {
@@ -7,8 +8,8 @@ interface IState {
 	isAuthenticated: boolean;
 }
 
-class ProtectedRoute extends React.Component<any, IState>{
-	constructor(props: any) {
+class ProtectedRoute extends React.Component<Empty, IState>{
+	constructor(props: Empty) {
 		super(props);
 
 		this.state = {

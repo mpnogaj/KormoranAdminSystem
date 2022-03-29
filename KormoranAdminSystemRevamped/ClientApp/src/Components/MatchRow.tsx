@@ -6,7 +6,7 @@ interface IProps {
 	match: IMatch,
 }
 
-class TournamentRow extends React.Component<IProps, any>{
+class TournamentRow extends React.Component<IProps>{
 	render(): JSX.Element {
 		return (
 			<tr>

@@ -1,9 +1,9 @@
 import React from "react";
-import { Button, Table } from "react-bootstrap";
-import withParams from "../../../Helpers/HOC";
+import { Button } from "react-bootstrap";
+import { withParams } from "../../../Helpers/HOC";
 import IMatch from "../../../Models/IMatch";
 import IState from "../../../Models/IState";
-import IDiscipline from "../../../Models/IDiscipline"
+import IDiscipline from "../../../Models/IDiscipline";
 import ITeam from "../../../Models/ITeam";
 import axios, { AxiosResponse } from "axios";
 import ITournament from "../../../Models/ITournament";
