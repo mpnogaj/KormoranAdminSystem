@@ -6,7 +6,7 @@ import IconButton from "./IconButton";
 import IState from "../Models/IState";
 import { IRowData } from "../Pages/Panel/Tournaments/EditTournament";
 
-interface ICompProps{
+interface ICompProps {
 	match: IRowData,
 	teams: Array<ITeam>,
 	states: Array<IState>,
@@ -21,51 +21,47 @@ interface ICompProps{
 
 class EditMatchRow extends React.Component<ICompProps, any>{
 
-	constructor(props: ICompProps){
-		super(props);
-	}
-
-	componentDidMount(){
+	componentDidMount(): void {
 		this.recalculateWinner();
 	}
 
-	getTeamName = (teamId: number) : string => {
+	getTeamName = (teamId: number): string => {
 		for (let i = 0; i < this.props.teams.length; i++) {
 			const element = this.props.teams[i];
-			if(element.id == teamId) return element.name;
+			if (element.id == teamId) return element.name;
 		}
 		return "-";
 	};
 
-	getStateName = (stateId: number) : string => {
+	getStateName = (stateId: number): string => {
 		const res = binsearch(this.props.states, (state) => {
-			if(state.id < stateId) return -1;
-			if(state.id == stateId) return 0;
+			if (state.id < stateId) return -1;
+			if (state.id == stateId) return 0;
 			return 1;
 		});
-		if(res == -1) return "-";
+		if (res == -1) return "-";
 		else return this.props.states[res].name;
 	};
 
 	recalculateWinner = (): number => {
-		if(this.props.team1Pts >= this.props.team2Pts) 
+		if (this.props.team1Pts >= this.props.team2Pts)
 			return this.props.team1;
 		return this.props.team2;
 	};
 
-	updateTeam = (newId: number, target: number) => {
+	updateTeam = (newId: number, target: number): void => {
 		this.props.onUpdate(this.props.id, target, newId);
 	};
 
-	updateScore = (newScore: number, target: number) => {
+	updateScore = (newScore: number, target: number): void => {
 		this.props.onUpdate(this.props.id, target + 2, newScore);
 	};
 
-	updateState = (newId: number) => {
+	updateState = (newId: number): void => {
 		this.props.onUpdate(this.props.id, 6, newId);
 	};
 
-	renderTeams = () : Array<JSX.Element> => { 
+	renderTeams = (): Array<JSX.Element> => {
 		return (
 			this.props.teams.map((team) => {
 				return (
@@ -77,7 +73,7 @@ class EditMatchRow extends React.Component<ICompProps, any>{
 		);
 	};
 
-	renderStates = () : Array<JSX.Element> => {
+	renderStates = (): Array<JSX.Element> => {
 		return (
 			this.props.states.map((state) => {
 				return (
@@ -89,12 +85,12 @@ class EditMatchRow extends React.Component<ICompProps, any>{
 		);
 	};
 
-	render() {
+	render(): JSX.Element {
 		return (
 			<tr className="align-middle">
 				<th>{this.props.match.matchId == 0 ? "-" : this.props.match.matchId}</th>
 				<th>
-					<select onChange={(e) => {
+					<select onChange={(e): void => {
 						this.updateState(parseInt(e.target.value));
 					}} value={this.props.state}>
 						<option value={0}>-</option>
@@ -102,7 +98,7 @@ class EditMatchRow extends React.Component<ICompProps, any>{
 					</select>
 				</th>
 				<th>
-					<select onChange={(e) => {
+					<select onChange={(e): void => {
 						this.updateTeam(parseInt(e.target.value), 1);
 					}} value={this.props.team1}>
 						<option value={0}>-</option>
@@ -110,7 +106,7 @@ class EditMatchRow extends React.Component<ICompProps, any>{
 					</select>
 				</th>
 				<th>
-					<select onChange={(e) => {
+					<select onChange={(e): void => {
 						this.updateTeam(parseInt(e.target.value), 2);
 					}} value={this.props.team2}>
 						<option value={0}>-</option>
@@ -119,7 +115,7 @@ class EditMatchRow extends React.Component<ICompProps, any>{
 				</th>
 				<th>
 					<input type="number" value={this.props.team1Pts}
-						onChange={(e) => {
+						onChange={(e): void => {
 							const val = parseInt(e.target.value);
 							e.target.value = val.toString();
 							this.updateScore(isNaN(val) ? 0 : val, 1);
@@ -128,7 +124,7 @@ class EditMatchRow extends React.Component<ICompProps, any>{
 				</th>
 				<th>
 					<input type="number" value={this.props.team2Pts}
-						onChange={(e) => {
+						onChange={(e): void => {
 							const val = parseInt(e.target.value);
 							e.target.value = val.toString();
 							this.updateScore(isNaN(val) ? 0 : val, 2);
@@ -139,9 +135,9 @@ class EditMatchRow extends React.Component<ICompProps, any>{
 					{this.getTeamName(this.recalculateWinner())}
 				</th>
 				<th>
-					<IconButton icon={<Trash height={24} width={24}/>} onClick={() => {
+					<IconButton icon={<Trash height={24} width={24} />} onClick={(): void => {
 						this.props.onUpdate(this.props.id, 5, -1);
-					}}/>
+					}} />
 				</th>
 			</tr>
 		);

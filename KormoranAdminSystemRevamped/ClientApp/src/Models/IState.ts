@@ -1,4 +1,4 @@
-interface IState{
+interface IState {
 	id: number,
 	name: string;
 }

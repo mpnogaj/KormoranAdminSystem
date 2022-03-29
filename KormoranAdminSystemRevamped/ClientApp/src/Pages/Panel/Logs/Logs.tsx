@@ -3,7 +3,7 @@ import LogTable from "../../../Components/LogsTable";
 
 class Logs extends React.Component<any, any>{
 	render() {
-		return(
+		return (
 			<div className="container mt-3">
 				<div className="logo-container">
 					<p>Logi</p>

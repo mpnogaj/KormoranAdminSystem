@@ -5,9 +5,12 @@ import MatchesTable from "./MatchesTable";
 import ITournament from "../Models/ITournament";
 import IDiscipline from "../Models/IDiscipline";
 import IState from "../Models/IState";
-import { Callback, ElementStorage, StorageTarget } from "../Helpers/ElementStorage";
 import axios from "axios";
-import IBasicResponse from "../Models/Responses/IBasicResponse";
+import { IBasicResponse, ICollectionResponse } from "../Models/IResponses";
+import DownloadManager from "../Helpers/DownloadManager";
+import { GET_TOURNAMENTS } from "../Helpers/Endpoints";
+import IMatch from "../Models/IMatch";
+import { binsearch } from "../Helpers/Essentials";
 
 interface ICompState {
 	tournaments: Array<ITournament>,
@@ -28,8 +31,8 @@ interface ICompProps {
 }
 
 class TournamentsTable extends React.Component<ICompProps, ICompState>{
-	callbacks: Array<Callback>;
-	readonly storage: ElementStorage;
+	readonly tournamentDownloader: DownloadManager<ICollectionResponse<ITournament>, null>;
+
 
 	constructor(props: ICompProps) {
 		super(props);
@@ -45,54 +48,30 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 			editName: "",
 			editState: 0
 		};
-		this.storage = ElementStorage.getInstance();
-		this.callbacks = [
-			new Callback((target: StorageTarget) => {
-				const data =
-					this.storage.getData<Array<ITournament>>(target);
-				if (!data.isError) {
-					this.setState({
-						isLoading: false,
-						tournaments: data.data!
-					});
+		this.tournamentDownloader = new DownloadManager<ICollectionResponse<ITournament>, null>(
+			GET_TOURNAMENTS, 5000, (data) => {
+				if (data.error) {
+					return;
 				}
-			}, StorageTarget.TOURNAMENTS),
-			new Callback((target: StorageTarget) => {
-				const data =
-					this.storage.getData<Array<IDiscipline>>(target);
-				if (!data.isError) {
-					this.setState({
-						disciplines: data.data!
-					});
-				}
-			}, StorageTarget.DISCIPLINES),
-			new Callback((target: StorageTarget) => {
-				const data =
-					this.storage.getData<Array<IState>>(target);
-				if (!data.isError) {
-					this.setState({
-						states: data.data!
-					});
-				}
-			}, StorageTarget.STATES)
-		];
+				this.setState({ tournaments: data.collection });
+			}
+		);
 	}
 
-	updateTournaments(enable: boolean) {
-		console.log("Tournament update: " + enable);
-		if (enable) ElementStorage.getInstance().subscribe(this.callbacks[0]);
-		else ElementStorage.getInstance().unsubscribe(this.callbacks[0]);
+	componentWillUnmount(): void {
+		this.tournamentDownloader.destroy();
 	}
 
-	componentWillUnmount() {
-		this.callbacks.forEach(callback => ElementStorage.getInstance().unsubscribe(callback));
+	componentDidMount(): void {
+		this.tournamentDownloader.start();
 	}
 
-	componentDidMount() {
-		this.callbacks.forEach(callback => ElementStorage.getInstance().subscribe(callback));
-	}
+	getMatches = (id: number): Array<IMatch> => {
+		const res = binsearch(this.state.tournaments, (x) => x.id - id);
+		return this.state.tournaments[res].matches;
+	};
 
-	handleShow = (tournamentId: number, isEdit: boolean) => {
+	handleShow = (tournamentId: number, isEdit: boolean): void => {
 		if (isEdit) {
 			this.setState({
 				editName: this.state.tournaments[tournamentId - 1].name,
@@ -108,20 +87,18 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 				currentTournamentId: tournamentId
 			});
 		}
-		this.updateTournaments(false);
-	}
+	};
 
-	handleHide = (isEdit: boolean) => {
+	handleHide = (isEdit: boolean): void => {
 		if (isEdit) {
 			this.setState({ editModalVisible: false });
 		}
 		else {
 			this.setState({ previewModalVisible: false });
 		}
-		this.updateTournaments(true);
-	}
+	};
 
-	render() {
+	render(): JSX.Element {
 		return (
 			<div>
 				<div className="table-responsive">
@@ -155,17 +132,17 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 					</Table>
 				</div>
 				{/* Modal podglądu */}
-				<Modal show={this.state.previewModalVisible} onHide={() => this.handleHide(false)} size="xl">
+				<Modal show={this.state.previewModalVisible} onHide={(): void => this.handleHide(false)} size="xl">
 					<Modal.Header closeButton>
 						<Modal.Title>Podgląd wyników</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						<MatchesTable isEdit={this.props.allowEdit} tournamentId={this.state.currentTournamentId} />
+						<MatchesTable matches={this.getMatches(this.state.currentTournamentId)} />
 					</Modal.Body>
 				</Modal>
 
 				{/* Modal edytowania */}
-				<Modal show={this.state.editModalVisible} onHide={() => this.handleHide(true)}>
+				<Modal show={this.state.editModalVisible} onHide={(): void => this.handleHide(true)}>
 					<Modal.Header closeButton>
 						<Modal.Title>Edytuj turniej</Modal.Title>
 					</Modal.Header>
@@ -178,7 +155,7 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 									</td>
 									<td>
 										<input value={this.state.editName} id="newTournamentNameBox" type="text"
-											onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+											onChange={(e): void => {
 												this.setState({ editName: e.target.value });
 											}} />
 									</td>
@@ -189,14 +166,14 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 									</td>
 									<td>
 										<select value={this.state.editState} id="newTournamentState"
-											onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+											onChange={(e): void => {
 												this.setState({
-													editState: +event.target.value
+													editState: +e.target.value
 												});
 											}}>
 											{
 												this.state.states.map(state => {
-													return (<option key={state.id} value={state.id}>{state.name}</option>)
+													return (<option key={state.id} value={state.id}>{state.name}</option>);
 												})
 											}
 										</select>
@@ -208,9 +185,9 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 									</td>
 									<td>
 										<select value={this.state.editDisc} id="newTournamentDyscipline"
-											onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+											onChange={(e): void => {
 												this.setState({
-													editDisc: +event.target.value
+													editDisc: +e.target.value
 												});
 											}}>
 											{
@@ -225,21 +202,24 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 						</table>
 					</Modal.Body>
 					<Modal.Footer>
-						<Button onClick={async () => {
+						<Button onClick={async (): Promise<void> => {
 							const response = await axios.post<IBasicResponse>("/api/Tournaments/UpdateTournament", {
 								tournamentId: this.state.currentTournamentId,
 								newName: this.state.editName,
 								newStateId: this.state.editState,
 								newDisciplineId: this.state.editDisc
 							});
+							if (response.data.error) {
+								alert("Wystaplil blad");
+							}
 							this.handleHide(true);
 						}}>Ok</Button>
-						<Button onClick={() => this.handleHide(true)}>Anuluj</Button>
+						<Button onClick={(): void => this.handleHide(true)}>Anuluj</Button>
 					</Modal.Footer>
 				</Modal>
 			</div>
-		)
+		);
 	}
 }
 
-export default TournamentsTable
+export default TournamentsTable;

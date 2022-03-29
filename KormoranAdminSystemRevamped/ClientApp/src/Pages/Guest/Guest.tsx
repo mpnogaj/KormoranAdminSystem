@@ -2,13 +2,13 @@ import React from "react";
 import TournamentsTable from "../../Components/TournamentsTable";
 
 class Guest extends React.Component<any, any>{
-	render(){
+	render() {
 		return (
 			<div className="container mt-3">
 				<div className="logo-container">
 					<p>Podgląd turniejów na żywo</p>
 				</div>
-				<TournamentsTable allowEdit={false}/>
+				<TournamentsTable allowEdit={false} />
 			</div>
 		);
 	}

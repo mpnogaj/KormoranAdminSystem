@@ -3,7 +3,7 @@ import TournamentsTable from "../../../Components/TournamentsTable";
 
 class Tournaments extends React.Component<any, any>{
 	render() {
-		return(
+		return (
 			<div className="container mt-3">
 				<div className="logo-container">
 					<p>Zarządzanie turniejami</p>

@@ -1,11 +1,14 @@
-import { useParams } from "react-router"
+import React from "react";
+import { useParams } from "react-router";
 
-const withParams = (Component: any) => (props: any) => {
-    const params = useParams();
-    console.log(params);
-    return (
-        <Component {...props} params={params}/>
-    );
+export default function withParams(Component: new () => React.Component<any, any>): any {
+	const comp = returnWithParams(Component, {});
+	return comp;
 }
 
-export default withParams;
+function returnWithParams(Component: new () => React.Component<any, any>, props: any): JSX.Element {
+	const params = useParams();
+	return (
+		<Component {...props} params={params} />
+	);
+}

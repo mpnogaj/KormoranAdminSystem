@@ -1,14 +1,12 @@
 import React from "react";
 import { Table, Button } from "react-bootstrap";
-import IMatch from "../Models/IMatch";
 import ITeam from "../Models/ITeam";
 import EditMatchRow from "./EditMatchRow";
 import { nanoid } from "nanoid";
 import IState from "../Models/IState";
 import { IRowData } from "../Pages/Panel/Tournaments/EditTournament";
-import { binsearch } from "../Helpers/Essentials";
 
-interface ICompProps{
+interface ICompProps {
 	teams: Array<ITeam>,
 	states: Array<IState>,
 	matchesData: Array<IRowData>,
@@ -16,12 +14,7 @@ interface ICompProps{
 }
 
 class EditMatchTable extends React.Component<ICompProps, any>{
-	
-	constructor(props: ICompProps){
-		super(props);
-	}
-
-	private defaultMatchData() : IRowData {
+	private defaultMatchData(): IRowData {
 		return {
 			id: nanoid(),
 			matchId: 0,
@@ -30,17 +23,17 @@ class EditMatchTable extends React.Component<ICompProps, any>{
 			team2: 0,
 			team1Score: 0,
 			team2Score: 0
-		}
+		};
 	}
 
-	render() {
-		return(
+	render(): JSX.Element {
+		return (
 			<div>
 				<span>Mecze turnijowe: </span><br />
-				<span>{}</span>
-				<Button onClick={() => {
+				<span>{ }</span>
+				<Button onClick={(): void => {
 					const newData = this.props.matchesData;
-					newData.push(this.defaultMatchData())
+					newData.push(this.defaultMatchData());
 					this.props.updateMatches(newData);
 				}}>Dodaj nowy</Button>
 				<Table className="mt-3" responsive={true} bordered={true}>
@@ -60,18 +53,18 @@ class EditMatchTable extends React.Component<ICompProps, any>{
 						{
 							this.props.matchesData.map((data: IRowData, index) => {
 								return (
-									<EditMatchRow 
+									<EditMatchRow
 										match={data}
 										teams={this.props.teams}
 										states={this.props.states}
 										id={index} key={data.id}
-										team1={data.team1} 
-										team2={data.team2} 
+										team1={data.team1}
+										team2={data.team2}
 										team1Pts={data.team1Score} team2Pts={data.team2Score}
 										state={data.stateId}
-										onUpdate={(targetId, targetVal, value) => {
+										onUpdate={(targetId, targetVal, value): void => {
 											const newData: Array<IRowData> = this.props.matchesData.slice();
-											switch(targetVal){
+											switch (targetVal) {
 												case 1:
 													newData[targetId].team1 = value;
 													break;
@@ -103,8 +96,8 @@ class EditMatchTable extends React.Component<ICompProps, any>{
 					</tbody>
 				</Table>
 			</div>
-		)
+		);
 	}
 }
 
-export default EditMatchTable
+export default EditMatchTable;

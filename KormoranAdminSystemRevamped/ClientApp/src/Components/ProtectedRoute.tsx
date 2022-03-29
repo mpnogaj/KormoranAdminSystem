@@ -1,8 +1,8 @@
 import React from "react";
-import {Navigate, Outlet} from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { validateSessionId } from "../Helpers/Authenticator";
 
-interface IState{
+interface IState {
 	isLoading: boolean,
 	isAuthenticated: boolean;
 }
@@ -10,39 +10,39 @@ interface IState{
 class ProtectedRoute extends React.Component<any, IState>{
 	constructor(props: any) {
 		super(props);
-		
+
 		this.state = {
 			isLoading: true,
 			isAuthenticated: false
 		};
 	}
-	
-	componentDidMount() {
+
+	componentDidMount(): void {
 		this.authenticate(sessionStorage.getItem("sessionId")).catch((e) => console.log(e));
 	}
 
-	authenticate = async (sessionId: string | null | undefined) => {
-		if(typeof (sessionId) != "string"){
-			this.setState({isLoading: false, isAuthenticated: false});
+	authenticate = async (sessionId: string | null | undefined): Promise<void> => {
+		if (typeof (sessionId) != "string") {
+			this.setState({ isLoading: false, isAuthenticated: false });
 		}
 		else {
 			const isAuth = await validateSessionId(sessionId);
 			console.log(isAuth);
-			if(!isAuth){
+			if (!isAuth) {
 				alert("Nieautoryzowany dostęp (sesja mogła wygasnąć). Nastąpi przekierowanie do formularza logowania");
-				this.setState({isLoading: false, isAuthenticated: false});
+				this.setState({ isLoading: false, isAuthenticated: false });
 			}
-			this.setState({isLoading: false, isAuthenticated: true});
+			this.setState({ isLoading: false, isAuthenticated: true });
 		}
-	}
-	
-	render(){
-		if(this.state.isLoading) return <p>Ładowanie</p>;
+	};
+
+	render(): JSX.Element {
+		if (this.state.isLoading) return <p>Ładowanie</p>;
 		return (
 			this.state.isAuthenticated ?
-				<Outlet/>
+				<Outlet />
 				:
-				<Navigate to="/Login"/>
+				<Navigate to="/Login" />
 		);
 	}
 }

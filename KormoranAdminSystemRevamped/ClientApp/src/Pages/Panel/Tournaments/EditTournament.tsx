@@ -10,7 +10,7 @@ import ITournament from "../../../Models/ITournament";
 import { binsearch } from "../../../Helpers/Essentials";
 import EditMatchTable from "../../../Components/EditMatchTable";
 import { nanoid } from "nanoid";
-import {ISingleItemResponse} from "../../../Models/IResponses";
+import { ISingleItemResponse } from "../../../Models/IResponses";
 
 export interface IRowData {
 	id: string,
@@ -65,12 +65,12 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 					state: {
 						id: 0,
 						name: "-"
-                    },
+					},
 					teams: [],
 					discipline: {
 						id: 0,
 						name: "-"
-                    }
+					}
 				},
 				matches: [],
 				teams: [],
@@ -183,9 +183,9 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 				});
 				newTeams.splice(index, 1);
 				newMatchesData.forEach(x => {
-					if(x.team1 != deletedId && x.team2 != deletedId) return;
-					if(x.team1 == deletedId) x.team1 = 0;
-					if(x.team2 == deletedId) x.team2 = 0;
+					if (x.team1 != deletedId && x.team2 != deletedId) return;
+					if (x.team1 == deletedId) x.team1 = 0;
+					if (x.team2 == deletedId) x.team2 = 0;
 					shoudlBeDisabled = true;
 				});
 			}
@@ -215,7 +215,7 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 				AxiosResponse<ISingleItemResponse<number>, ITeam>,
 				ITeam
 			>("/api/teams/UpdateTeams", newTeam);
-			if(!res.data.error) {
+			if (!res.data.error) {
 				newTeam.id = res.data.data;
 				newTeams.push(newTeam);
 			}
@@ -371,7 +371,7 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 									});
 									tournamentData.matches = matches;
 									await axios.post("/api/tournaments/TournamentFullUpdate", {
-										
+
 									});
 								}}>Zapisz zmiany</Button>
 						</div>
@@ -379,7 +379,7 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 						<h1>Ładowanie</h1>
 				}
 			</div>
-		)
+		);
 	}
 }
 

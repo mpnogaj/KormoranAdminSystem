@@ -2,7 +2,7 @@ import React from "react";
 
 class Overview extends React.Component<any, any>{
 	render() {
-		return(
+		return (
 			<h1>PODSUMOWANIE</h1>
 		)
 	}

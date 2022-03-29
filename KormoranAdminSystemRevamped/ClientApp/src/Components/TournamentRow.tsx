@@ -1,16 +1,15 @@
 import React from "react";
 import { Badge, Button } from "react-bootstrap";
-import { ThermometerSun } from "react-bootstrap-icons";
 import ITournament from "../Models/ITournament";
 
 interface IProps {
 	tournament: ITournament,
 	isEdit: boolean,
-	showModalCallback: Function,
+	showModalCallback: (tId: number, isEdit: boolean) => void;
 }
 
 class TournamentRow extends React.Component<IProps, any>{
-	render() {
+	render(): JSX.Element {
 		return (
 			<tr>
 				<td>{this.props.tournament.name}</td>
@@ -24,15 +23,21 @@ class TournamentRow extends React.Component<IProps, any>{
 							?
 							<div>
 								<Button className="ms-3" variant="success" onClick={
-									() => this.props.showModalCallback(this.props.tournament.id, true)
+									(): void => {
+										this.props.showModalCallback(this.props.tournament.id, true);
+									}
 								}>Szybka edycja</Button>
 								<Button className="ms-3" variant="success" onClick={
-									() => window.location.href="/Panel/EditTournament/" + this.props.tournament.id
+									(): void => {
+										window.location.href = "/Panel/EditTournament/" + this.props.tournament.id;
+									}
 								}>Pełna edycja</Button>
 							</div>
 							:
 							<Button variant="success" onClick={
-								() => this.props.showModalCallback(this.props.tournament.id, false)
+								(): void => {
+									this.props.showModalCallback(this.props.tournament.id, false);
+								}
 							}>Podgląd</Button>
 					}
 				</td>
@@ -41,4 +46,4 @@ class TournamentRow extends React.Component<IProps, any>{
 	}
 
 }
-export default TournamentRow
+export default TournamentRow;

@@ -1,17 +1,17 @@
 interface IBasicResponse {
-	message: string,
-	error: boolean;
+    message: string,
+    error: boolean;
 }
 
 interface ICollectionResponse<T> extends IBasicResponse {
-	collection: Array<T>;
+    collection: Array<T>;
 }
 
-interface ILoginResponse extends IBasicResponse{
-	sessionId: string;
+interface ILoginResponse extends IBasicResponse {
+    sessionId: string;
 }
 
-interface ISingleItemResponse<T> extends IBasicResponse{
+interface ISingleItemResponse<T> extends IBasicResponse {
     data: T;
 }
 

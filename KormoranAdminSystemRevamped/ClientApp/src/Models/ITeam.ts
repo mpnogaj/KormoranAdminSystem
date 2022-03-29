@@ -1,4 +1,4 @@
-interface ITeam{
+interface ITeam {
 	id: number,
 	tournamentId: number,
 	name: string;

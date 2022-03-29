@@ -6,13 +6,7 @@ interface IProps {
 }
 
 class LogRow extends React.Component<IProps, any>{
-
-	constructor(props: IProps) {
-		super(props);
-	}
-
-
-	render() {
+	render(): JSX.Element {
 		return (
 			<tr>
 				<td>{this.props.item.level}</td>

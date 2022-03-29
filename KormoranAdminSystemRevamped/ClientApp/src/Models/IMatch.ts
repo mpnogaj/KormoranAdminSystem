@@ -6,6 +6,7 @@ interface IMatch {
 	state: IState,
 	team1: ITeam,
 	team2: ITeam,
+	winner: ITeam,
 	team1Score: number,
 	team2Score: number;
 }
