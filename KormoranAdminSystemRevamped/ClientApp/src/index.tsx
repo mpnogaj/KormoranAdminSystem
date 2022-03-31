@@ -17,8 +17,6 @@ import Overview from "./Pages/Panel/Overview/Overview";
 import Logs from "./Pages/Panel/Logs/Logs";
 import Users from "./Pages/Panel/Users/Users";
 import EditTournament from "./Pages/Panel/Tournaments/EditTournament";
-import { withParams } from "./Helpers/HOC";
-
 render(
 	<BrowserRouter>
 		<Routes>
@@ -28,7 +26,7 @@ render(
 			<Route path="Panel" element={<ProtectedRoute />}>
 				<Route path="" element={<Panel content={<Overview />} />} />
 				<Route path="Tournaments" element={<Panel content={<Tournaments />} />} />
-				<Route path="EditTournament/:id" element={<Panel content={withParams(EditTournament)} />} />
+				<Route path="EditTournament/:id" element={<Panel content={<EditTournament/>} />} />
 				<Route path="Overview" element={<Panel content={<Overview />} />} />
 				<Route path="Logs" element={<Panel content={<Logs />} />} />
 				<Route path="Users" element={<Panel content={<Users />} />} />

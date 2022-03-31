@@ -7,7 +7,7 @@ import { Speedometer2, JournalText, PersonCheck, Tv, Gear } from "react-bootstra
 import axios from "axios";
 
 interface IProps {
-	content: JSX.Element | ((props: any) => JSX.Element);
+	content: JSX.Element;
 }
 
 class Panel extends React.Component<IProps>{

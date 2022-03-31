@@ -4,17 +4,17 @@
 
 import axios from "axios";
 
-const DEFAULT_TIMEOUT = 5000;
+const DEFAULT_TIMEOUT = 3000;
 
 class DownloadManager<T, Y> {
 
 	readonly timerId: number;
 	readonly endpoint: string;
 	readonly timeout: number;
-	readonly action: (data: T) => void;
+	readonly action: (data: object) => void;
 	params: Y | null;
 
-	constructor(endpoint: string, timeout: number, action: (data: T) => void) {
+	constructor(endpoint: string, timeout: number, action: (data: object) => void) {
 		this.endpoint = endpoint;
 		this.action = action;
 		this.timeout = timeout;
@@ -27,17 +27,24 @@ class DownloadManager<T, Y> {
 		return this;
 	}
 
+	downloadAndCallAction = async (): Promise<void> => {
+		const response = await axios.get<object>(this.endpoint, {
+			params: this.params
+		});
+		
+		if (response.status != 200) {
+			console.log("Coś poszło nie tak podczas wykonywania zapytania! Szczegóły:");
+			console.log("Endpoint: %s. Params: ", this.endpoint);
+			console.log(this.params);
+			return;
+		}
+		this.action(response.data as object);
+	};
+
 	start(): void {
+		this.downloadAndCallAction();
 		window.setInterval(async (): Promise<void> => {
-			const response = await axios.get<T>(this.endpoint, {
-				params: this.params
-			});
-			if (response.status != 200) {
-				console.log("Coś poszło nie tak podczas wykonywania zapytania! Szczegóły:");
-				console.log("Endpoint: %d. Params: ", this.endpoint);
-				return;
-			}
-			this.action(response.data);
+			await this.downloadAndCallAction();
 		}, this.timeout);
 	}
 

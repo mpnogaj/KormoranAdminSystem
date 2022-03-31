@@ -28,8 +28,9 @@ class LogTable extends React.Component<Empty, IState> {
 			pageSize: 10,
 		};
 		this.logsDownloader = new DownloadManager<ICollectionResponse<ILog>, ILogsParams>(
-			GET_LOGS, DEFAULT_TIMEOUT, (data: ICollectionResponse<ILog>): void => {
-				this.setState({
+			GET_LOGS, DEFAULT_TIMEOUT, (data: object): void => {
+				console.log(data);
+				/*this.setState({
 					isLoading: false,
 					logs: data.collection,
 					numberOfPages:
@@ -38,7 +39,7 @@ class LogTable extends React.Component<Empty, IState> {
 					currentPage:
 						Math.floor(data.collection.length / this.state.pageSize) +
 							(data.collection.length % this.state.pageSize > 0 ? 1 : 0) == 0 ? 0 : 1
-				});
+				});*/
 			}
 		).setParams({
 			sessionId: sessionStorage.getItem("sessionId") ?? ""

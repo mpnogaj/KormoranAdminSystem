@@ -1,7 +1,6 @@
 import React from "react";
 import TournamentRow from "./TournamentRow";
 import { Button, Modal, Table } from "react-bootstrap";
-import MatchesTable from "./MatchesTable";
 import ITournament from "../Models/ITournament";
 import IDiscipline from "../Models/IDiscipline";
 import IState from "../Models/IState";
@@ -9,8 +8,6 @@ import axios from "axios";
 import { IBasicResponse, ICollectionResponse } from "../Models/IResponses";
 import { DownloadManager, DEFAULT_TIMEOUT } from "../Helpers/DownloadManager";
 import { GET_TOURNAMENTS } from "../Helpers/Endpoints";
-import IMatch from "../Models/IMatch";
-import { binsearch } from "../Helpers/Essentials";
 
 interface ICompState {
 	tournaments: Array<ITournament>,
@@ -49,11 +46,17 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 			editState: 0
 		};
 		this.tournamentDownloader = new DownloadManager<ICollectionResponse<ITournament>, null>(
-			GET_TOURNAMENTS, DEFAULT_TIMEOUT, (data: ICollectionResponse<ITournament>) => {
-				if (data.error) {
-					return;
+			GET_TOURNAMENTS, DEFAULT_TIMEOUT, (data: any) => {
+				//console.log(data);
+				if(data.collection){
+					const tournaments = data.collection as Array<ITournament>;
+					console.log(tournaments);
 				}
-				this.setState({ tournaments: data.collection });
+				//console.log(d);
+				/*if (d.error) {
+					return;
+				}*/
+				//this.setState({ tournaments: d.collection, isLoading: false });
 			}
 		);
 	}
@@ -65,11 +68,6 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 	componentDidMount(): void {
 		this.tournamentDownloader.start();
 	}
-
-	getMatches = (id: number): Array<IMatch> => {
-		const res = binsearch(this.state.tournaments, (x) => x.id - id);
-		return this.state.tournaments[res].matches;
-	};
 
 	handleShow = (tournamentId: number, isEdit: boolean): void => {
 		if (isEdit) {
@@ -131,13 +129,16 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 						</tbody>
 					</Table>
 				</div>
+
+
 				{/* Modal podglądu */}
 				<Modal show={this.state.previewModalVisible} onHide={(): void => this.handleHide(false)} size="xl">
 					<Modal.Header closeButton>
 						<Modal.Title>Podgląd wyników</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						<MatchesTable matches={this.getMatches(this.state.currentTournamentId)} />
+						{/*<MatchesTable matches={this.state.tournaments} />*/}
+						<a>a</a>
 					</Modal.Body>
 				</Modal>
 

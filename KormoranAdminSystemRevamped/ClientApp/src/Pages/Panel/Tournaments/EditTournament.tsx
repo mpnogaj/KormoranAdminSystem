@@ -12,6 +12,7 @@ import { binsearch } from "../../../Helpers/Essentials";
 import { ISingleItemResponse } from "../../../Models/IResponses";
 import { Params } from "react-router";
 import { GET_TOURNAMENTS } from "../../../Helpers/Endpoints";
+import { withParams } from "../../../Helpers/HOC";
 
 export interface IRowData {
 	id: string,
@@ -356,4 +357,4 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 	}
 }
 
-export default EditTournament;
+export default withParams(EditTournament);

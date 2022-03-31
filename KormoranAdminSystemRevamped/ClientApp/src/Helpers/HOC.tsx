@@ -1,16 +1,16 @@
-import React, { ComponentType, ReactElement } from "react";
+import React, { ComponentType } from "react";
 import { Params, useParams, useNavigate, NavigateFunction } from "react-router";
 
 interface IWithParams {
 	params: Readonly<Params<string>>;
 }
 
-export function withParams<T extends IWithParams>(Component: React.ComponentType<T>): (props: T) => JSX.Element {
-	const componentWithParams = (props: T): ReactElement<T> => {
+export function withParams<P extends IWithParams>(WrappedComponent: ComponentType<P>): ComponentType<Omit<P, keyof IWithParams>> {
+	const comp = (props: object): JSX.Element => {
 		const params = useParams();
-		return (<Component {...props} params={params} />);
+		return (<WrappedComponent navigation={params} {...props as any}/>);
 	};
-	return componentWithParams;
+	return comp;
 }
 
 export interface IWithNavigaton {
