@@ -14,9 +14,9 @@ class TournamentRow extends React.Component<IProps>{
 				<td>
 					<Badge bg="success">{this.props.match.state.name}</Badge>
 				</td>
-				<td>{this.props.match.team1 == undefined || null ? "-" : this.props.match.team1.name}</td>
-				<td>{this.props.match.team2 == undefined || null ? "-" : this.props.match.team2.name}</td>
-				<td>{this.props.match.winner == null ? "-" : this.props.match.winner.name}</td>
+				<td>{this.props.match.team1.name}</td>
+				<td>{this.props.match.team2.name}</td>
+				<td>{this.props.match.winner.name}</td>
 				<td>{this.props.match.team1Score}:{this.props.match.team2Score}</td>
 			</tr>
 		);

@@ -9,10 +9,13 @@ import { IBasicResponse, ICollectionResponse } from "../Models/IResponses";
 import { DownloadManager, DEFAULT_TIMEOUT } from "../Helpers/DownloadManager";
 import { GET_DISCIPLINES, GET_STATES, GET_TOURNAMENTS } from "../Helpers/Endpoints";
 import { binsearch } from "../Helpers/Essentials";
+import IMatch from "../Models/IMatch";
+import MatchesTable from "./MatchesTable";
 
 interface ICompState {
 	tournaments: Array<ITournament>,
 	disciplines: Array<IDiscipline>,
+	matches: Array<IMatch>,
 	states: Array<IState>,
 	previewModalVisible: boolean,
 	editModalVisible: boolean,
@@ -37,6 +40,7 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 		super(props);
 		this.state = {
 			tournaments: [],
+			matches: [],
 			previewModalVisible: false,
 			editModalVisible: false,
 			states: [],
@@ -90,13 +94,12 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 		binsearch(this.state.tournaments, (x) => x.id - id);
 
 	handleShow = (tournamentId: number, isEdit: boolean): void => {
+		const tournament = this.getTournament(tournamentId);
+		if (tournament == undefined) {
+			console.error("Nie znaleziono turnieju o takim id");
+			return;
+		}
 		if (isEdit) {
-			const tournament = this.getTournament(tournamentId);
-			if (tournament == undefined) {
-				console.error("Nie znaleziono turnieju o takim id");
-				return;
-			}
-			console.log(tournament);
 			this.setState({
 				editName: tournament.name,
 				editDisc: tournament.discipline.id,
@@ -108,6 +111,7 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 		else {
 			this.setState({
 				previewModalVisible: true,
+				matches: tournament.matches,
 				currentTournamentId: tournamentId
 			});
 		}
@@ -161,8 +165,7 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 						<Modal.Title>Podgląd wyników</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						{/*<MatchesTable matches={this.state.tournaments} />*/}
-						<a>a</a>
+						<MatchesTable matches={this.state.matches}/>
 					</Modal.Body>
 				</Modal>
 
