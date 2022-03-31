@@ -11,11 +11,11 @@ namespace KormoranAdminSystemRevamped.Controllers
 {
 	[Route("api/[controller]/[action]")]
 	[ApiController]
-	public class DisciplineController : ControllerBase
+	public class DisciplinesController : ControllerBase
 	{
 		private readonly KormoranContext _db;
 
-		public DisciplineController(KormoranContext db)
+		public DisciplinesController(KormoranContext db)
 		{
 			_db = db;
 		}

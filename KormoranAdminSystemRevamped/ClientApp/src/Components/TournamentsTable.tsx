@@ -7,7 +7,8 @@ import IState from "../Models/IState";
 import axios from "axios";
 import { IBasicResponse, ICollectionResponse } from "../Models/IResponses";
 import { DownloadManager, DEFAULT_TIMEOUT } from "../Helpers/DownloadManager";
-import { GET_TOURNAMENTS } from "../Helpers/Endpoints";
+import { GET_DISCIPLINES, GET_STATES, GET_TOURNAMENTS } from "../Helpers/Endpoints";
+import { binsearch } from "../Helpers/Essentials";
 
 interface ICompState {
 	tournaments: Array<ITournament>,
@@ -29,7 +30,8 @@ interface ICompProps {
 
 class TournamentsTable extends React.Component<ICompProps, ICompState>{
 	readonly tournamentDownloader: DownloadManager<ICollectionResponse<ITournament>, null>;
-
+	readonly statesDownloader: DownloadManager<ICollectionResponse<IState>, null>;
+	readonly disciplinesDownloader: DownloadManager<ICollectionResponse<IDiscipline>, null>;
 
 	constructor(props: ICompProps) {
 		super(props);
@@ -46,35 +48,59 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 			editState: 0
 		};
 		this.tournamentDownloader = new DownloadManager<ICollectionResponse<ITournament>, null>(
-			GET_TOURNAMENTS, DEFAULT_TIMEOUT, (data: any) => {
-				//console.log(data);
-				if(data.collection){
-					const tournaments = data.collection as Array<ITournament>;
-					console.log(tournaments);
-				}
-				//console.log(d);
-				/*if (d.error) {
-					return;
-				}*/
-				//this.setState({ tournaments: d.collection, isLoading: false });
+			GET_TOURNAMENTS, DEFAULT_TIMEOUT, (data: ICollectionResponse<ITournament>) => {
+				this.setState((prevState) => ({
+					...prevState,
+					isLoading: false,
+					tournaments: data.collection
+				}));
+			}
+		);
+		this.statesDownloader = new DownloadManager<ICollectionResponse<IState>, null>(
+			GET_STATES, DEFAULT_TIMEOUT, (data: ICollectionResponse<IState>) => {
+				this.setState((prevState) => ({
+					...prevState,
+					states: data.collection
+				}));
+			}
+		);
+		this.disciplinesDownloader = new DownloadManager<ICollectionResponse<IDiscipline>, null>(
+			GET_DISCIPLINES, DEFAULT_TIMEOUT, (data: ICollectionResponse<IDiscipline>) => {
+				this.setState((prevState) => ({
+					...prevState,
+					disciplines: data.collection
+				}));
 			}
 		);
 	}
 
 	componentWillUnmount(): void {
 		this.tournamentDownloader.destroy();
+		this.statesDownloader.destroy();
+		this.disciplinesDownloader.destroy();
 	}
 
 	componentDidMount(): void {
 		this.tournamentDownloader.start();
+		this.statesDownloader.start();
+		this.disciplinesDownloader.start();
 	}
+
+	getTournament = (id: number): ITournament | undefined =>
+		binsearch(this.state.tournaments, (x) => x.id - id);
 
 	handleShow = (tournamentId: number, isEdit: boolean): void => {
 		if (isEdit) {
+			const tournament = this.getTournament(tournamentId);
+			if (tournament == undefined) {
+				console.error("Nie znaleziono turnieju o takim id");
+				return;
+			}
+			console.log(tournament);
 			this.setState({
-				editName: this.state.tournaments[tournamentId - 1].name,
-				editDisc: this.state.tournaments[tournamentId - 1].discipline.id,
-				editState: this.state.tournaments[tournamentId - 1].state.id,
+				editName: tournament.name,
+				editDisc: tournament.discipline.id,
+				editState: tournament.state.id,
 				currentTournamentId: tournamentId,
 				editModalVisible: true
 			});
@@ -114,8 +140,6 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 								!this.state.isLoading
 									?
 									this.state.tournaments.map((val) => {
-										val.discipline = this.state.disciplines[val.discipline.id - 1];
-										val.state = this.state.states[val.state.id - 1];
 										return (
 											<TournamentRow key={val.id} tournament={val} showModalCallback={this.handleShow}
 												isEdit={this.props.allowEdit} />

@@ -99,7 +99,7 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 			if (x.id < teamId) return -1;
 			if (x.id == teamId) return 0;
 			return 1;
-		}) == -1;
+		}) != undefined;
 	};
 
 	handleShow = (show: boolean, isEdit: boolean): void => {
@@ -179,7 +179,7 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 		} else {
 			const newName = prompt("Nazwa drużyny");
 			if (newName == null) return;
-			
+
 			const newTeam: ITeam = {
 				id: 0,
 				tournamentId: parseInt(this.props.params.id!),

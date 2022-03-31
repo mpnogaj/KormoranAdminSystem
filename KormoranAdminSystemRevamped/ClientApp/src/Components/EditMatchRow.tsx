@@ -39,8 +39,8 @@ class EditMatchRow extends React.Component<ICompProps>{
 			if (state.id == stateId) return 0;
 			return 1;
 		});
-		if (res == -1) return "-";
-		else return this.props.states[res].name;
+		if (res == undefined) return "-";
+		return res.name;
 	};
 
 	recalculateWinner = (): number => {

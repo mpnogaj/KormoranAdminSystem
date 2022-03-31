@@ -112,4 +112,3 @@ class Login extends React.Component<IWithNavigaton, IState>{
 	}
 }
 export default withNavigation(Login);
-//export default withNavigation<IProps>(Login);

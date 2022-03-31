@@ -21,12 +21,12 @@ render(
 	<BrowserRouter>
 		<Routes>
 			<Route path="/" element={<App />} />
-			<Route path="Login" element={<Login/>} />
+			<Route path="Login" element={<Login />} />
 			<Route path="Guest" element={<Guest />} />
 			<Route path="Panel" element={<ProtectedRoute />}>
 				<Route path="" element={<Panel content={<Overview />} />} />
 				<Route path="Tournaments" element={<Panel content={<Tournaments />} />} />
-				<Route path="EditTournament/:id" element={<Panel content={<EditTournament/>} />} />
+				<Route path="EditTournament/:id" element={<Panel content={<EditTournament />} />} />
 				<Route path="Overview" element={<Panel content={<Overview />} />} />
 				<Route path="Logs" element={<Panel content={<Logs />} />} />
 				<Route path="Users" element={<Panel content={<Users />} />} />

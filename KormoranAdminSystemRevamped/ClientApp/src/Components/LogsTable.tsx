@@ -3,10 +3,10 @@ import ILog from "../Models/ILog";
 import LogRow from "./LogRow";
 import { ArrowLeft, ArrowRight } from "react-bootstrap-icons";
 import { Empty } from "../Helpers/Aliases";
-import { DownloadManager, DEFAULT_TIMEOUT } from "../Helpers/DownloadManager";
+/*import { DownloadManager, DEFAULT_TIMEOUT } from "../Helpers/DownloadManager";
 import { GET_LOGS } from "../Helpers/Endpoints";
 import { ICollectionResponse } from "../Models/IResponses";
-import { ILogsParams } from "../Models/IRequests";
+import { ILogsParams } from "../Models/IRequests";*/
 
 interface IState {
 	isLoading: boolean;
@@ -17,7 +17,7 @@ interface IState {
 }
 
 class LogTable extends React.Component<Empty, IState> {
-	readonly logsDownloader: DownloadManager<ICollectionResponse<ILog>, ILogsParams>;
+	//readonly logsDownloader: DownloadManager<ICollectionResponse<ILog>, ILogsParams>;
 	constructor(props: Empty) {
 		super(props);
 		this.state = {
@@ -27,8 +27,8 @@ class LogTable extends React.Component<Empty, IState> {
 			numberOfPages: 1,
 			pageSize: 10,
 		};
-		this.logsDownloader = new DownloadManager<ICollectionResponse<ILog>, ILogsParams>(
-			GET_LOGS, DEFAULT_TIMEOUT, (data: object): void => {
+		/*this.logsDownloader = new DownloadManager<ICollectionResponse<ILog>, ILogsParams>(
+			GET_LOGS, DEFAULT_TIMEOUT, (data: unknown): void => {
 				console.log(data);
 				/*this.setState({
 					isLoading: false,
@@ -39,19 +39,19 @@ class LogTable extends React.Component<Empty, IState> {
 					currentPage:
 						Math.floor(data.collection.length / this.state.pageSize) +
 							(data.collection.length % this.state.pageSize > 0 ? 1 : 0) == 0 ? 0 : 1
-				});*/
+				});
 			}
 		).setParams({
 			sessionId: sessionStorage.getItem("sessionId") ?? ""
-		});
+		});*/
 	}
 
 	componentDidMount(): void {
-		this.logsDownloader.start();
+		//this.logsDownloader.start();
 	}
 
 	componentWillUnmount(): void {
-		this.logsDownloader.destroy();
+		//this.logsDownloader.destroy();
 	}
 
 	render(): JSX.Element {
