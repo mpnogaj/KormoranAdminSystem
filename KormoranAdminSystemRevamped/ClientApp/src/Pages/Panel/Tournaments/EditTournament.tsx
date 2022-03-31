@@ -1,16 +1,17 @@
 import React from "react";
 import { Button } from "react-bootstrap";
-import IMatch from "../../../Models/IMatch";
+//import IMatch from "../../../Models/IMatch";
 import IState from "../../../Models/IState";
 import IDiscipline from "../../../Models/IDiscipline";
 import ITeam from "../../../Models/ITeam";
 import axios, { AxiosResponse } from "axios";
 import ITournament from "../../../Models/ITournament";
 import { binsearch } from "../../../Helpers/Essentials";
-import EditMatchTable from "../../../Components/EditMatchTable";
-import { nanoid } from "nanoid";
+//import EditMatchTable from "../../../Components/EditMatchTable";
+//import { nanoid } from "nanoid";
 import { ISingleItemResponse } from "../../../Models/IResponses";
 import { Params } from "react-router";
+import { GET_TOURNAMENTS } from "../../../Helpers/Endpoints";
 
 export interface IRowData {
 	id: string,
@@ -32,16 +33,9 @@ interface ICompState {
 	teamModal: boolean,
 	isEditModal: boolean,
 	saveEnabled: boolean,
-	matchesData: Array<IRowData>,
-	tournamentData: ITournamentData;
-}
-
-interface ITournamentData {
-	tournament: ITournament
-	matches: Array<IMatch>,
-	teams: Array<ITeam>,
+	tournament: ITournament,
 	states: Array<IState>,
-	disciplines: Array<IDiscipline>;
+	disciplines: Array<IDiscipline>
 }
 
 class EditTournament extends React.Component<ICompProps, ICompState>{
@@ -53,65 +47,48 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 			selectedIndex: undefined,
 			isEditModal: false,
 			saveEnabled: true,
-			tournamentData: {
-				tournament: {
-					id: 0,
-					name: "Nowy turniej",
-					state: {
-						id: 0,
-						name: "-"
-					},
-					teams: [],
-					discipline: {
-						id: 0,
-						name: "-"
-					}
-				},
+			tournament: {
+				id: 0,
+				name: "Nowy turniej",
 				matches: [],
 				teams: [],
-				states: [],
-				disciplines: []
+				discipline: {
+					id: 0,
+					name: "-"
+				},
+				state: {
+					id: 0,
+					name: "-"
+				}
 			},
-			matchesData: []
+			disciplines: [],
+			states: []
 		};
 	}
 
 	componentDidMount(): void {
-		this.downloadEditTorunament().catch(ex => console.error(ex));
+		this.downloadOtherData()
+			.then(() => this.downloadTournamentData().catch(ex => console.error(ex)))
+			.catch(ex => console.error(ex));
 	}
 
-	downloadEditTorunament = async (): Promise<void> => {
-		const res = await axios.get<ITournamentData>("/api/tournaments/GetAllTournamentData", {
+	downloadTournamentData = async (): Promise<void> => {
+		const res = await axios.get<ITournament>(GET_TOURNAMENTS, {
 			params: {
 				id: this.props.params.id
 			}
 		});
-		const strippedMatches: Array<IRowData> = [];
-		res.data.matches.forEach(match => {
-			strippedMatches.push({
-				id: nanoid(),
-				matchId: match.matchId,
-				stateId: match.state.id,
-				team1: match.team1Id,
-				team2: match.team2Id,
-				team1Score: match.team1Score,
-				team2Score: match.team2Score
-			});
-		});
-		this.setState({ tournamentData: res.data, matchesData: strippedMatches, isLoading: false });
+
+		this.setState({ tournament: res.data, isLoading: false });
 	};
 
-	downloadAddTournament = async (): Promise<void> => {
+	downloadOtherData = async (): Promise<void> => {
 		const disc = (await axios.get<Array<IDiscipline>>("/api/tournaments/GetDisciplines")).data;
 		const stat = (await axios.get<Array<IState>>("/api/tournaments/GetStates")).data;
 		this.setState(prevState => ({
 			...prevState,
-			isLoading: false,
-			tournamentData: {
-				...prevState.tournamentData,
-				disciplines: disc,
-				states: stat
-			}
+			disciplines: disc,
+			states: stat
 		}));
 	};
 
@@ -140,7 +117,7 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 
 	renderStates = (): Array<JSX.Element> => {
 		return (
-			this.state.tournamentData.states.map((state) => {
+			this.state.states.map((state) => {
 				return (
 					<option key={state.id} value={state.id}>
 						{state.name}
@@ -152,7 +129,7 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 
 	renderDisciplines = (): Array<JSX.Element> => {
 		return (
-			this.state.tournamentData.disciplines.map((discipline) => {
+			this.state.disciplines.map((discipline) => {
 				return (
 					<option key={discipline.id} value={discipline.id}>
 						{discipline.name}
@@ -163,27 +140,27 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 	};
 
 	updateTeams = async (operation: number): Promise<void> => {
-		if(this.state.selectedIndex == undefined) return;
-		const newTeams = this.state.tournamentData.teams.slice();
-		const newMatchesData = this.state.matchesData.slice();
-		let shoudlBeDisabled = false;
+		if (this.state.selectedIndex == undefined) return;
+		const newTeams = this.state.tournament.teams.slice();
+		//const newMatchesData = this.state.matchesData.slice();
+		//let shoudlBeDisabled = false;
 		const index = this.state.selectedIndex;
 
 		if (operation == -1) {
 			if (window.confirm("Czy na pewno chcesz usunąć tę drużynę")) {
-				const deletedId = newTeams[index].id;
+				//const deletedId = newTeams[index].id;
 				await axios.delete("/api/teams/DeleteTeam", {
 					params: {
 						teamId: newTeams[index].id
 					}
 				});
 				newTeams.splice(index, 1);
-				newMatchesData.forEach(x => {
+				/*newMatchesData.forEach(x => {
 					if (x.team1 != deletedId && x.team2 != deletedId) return;
 					if (x.team1 == deletedId) x.team1 = 0;
 					if (x.team2 == deletedId) x.team2 = 0;
 					shoudlBeDisabled = true;
-				});
+				});*/
 			}
 			this.setState(prevState => ({
 				...prevState,
@@ -201,9 +178,10 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 		} else {
 			const newName = prompt("Nazwa drużyny");
 			if (newName == null) return;
+			
 			const newTeam: ITeam = {
 				id: 0,
-				tournamentId: this.props.params.id,
+				tournamentId: parseInt(this.props.params.id!),
 				name: newName
 			};
 			const res = await axios.post<
@@ -218,10 +196,10 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 		}
 		this.setState(prevState => ({
 			...prevState,
-			matchesData: newMatchesData,
-			saveEnabled: !shoudlBeDisabled,
-			tournamentData: {
-				...prevState.tournamentData,
+			/*matchesData: newMatchesData,
+			saveEnabled: !shoudlBeDisabled,*/
+			tournament: {
+				...prevState.tournament,
 				teams: newTeams
 			}
 		}));
@@ -239,33 +217,30 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 						<div>
 							<div className="flexbox inline-d">
 								<span>Nazwa: </span>
-								<input type="text" value={this.state.tournamentData.tournament.name}
+								<input type="text" value={this.state.tournament.name}
 									onChange={(event): void => {
 										this.setState(prevState => ({
 											...prevState,
 											saveEnabled: event.target.value != "",
-											tournamentData: {
-												...prevState.tournamentData,
-												tournament: {
-													...prevState.tournamentData.tournament,
-													name: event.target.value
-												}
+											tournament: {
+												...prevState.tournament,
+												name: event.target.value
 											}
 										}));
 									}}></input>
 							</div>
 							<div className="mt-3 flexbox inline-d">
 								<span>Dyscyplina: </span>
-								<select value={this.state.tournamentData.tournament.discipline.id}
+								<select value={this.state.tournament.discipline.id}
 									onChange={(event): void => {
 										this.setState(prevState => ({
 											...prevState,
 											saveEnabled: event.target.value != "0",
-											tournamentData: {
-												...prevState.tournamentData,
-												tournament: {
-													...prevState.tournamentData.tournament,
-													disciplineId: +event.target.value
+											tournament: {
+												...prevState.tournament,
+												discipline: {
+													name: "UNUSED",
+													id: +event.target.value
 												}
 											}
 										}));
@@ -276,16 +251,16 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 							</div>
 							<div className="mt-3 flexbox inline-d">
 								<span>Stan: </span>
-								<select value={this.state.tournamentData.tournament.state.id}
+								<select value={this.state.tournament.state.id}
 									onChange={(event): void => {
 										this.setState(prevState => ({
 											...prevState,
 											saveEnabled: event.target.value != "0",
-											tournamentData: {
-												...prevState.tournamentData,
-												tournament: {
-													...prevState.tournamentData.tournament,
-													stateId: +event.target.value
+											tournament: {
+												...prevState.tournament,
+												state: {
+													name: "UNUSED",
+													id: +event.target.value
 												}
 											}
 										}));
@@ -305,7 +280,7 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 											}));
 										}}>
 										{
-											this.state.tournamentData.teams.map((team, index) => {
+											this.state.tournament.teams.map((team, index) => {
 												return <option key={team.id} value={index}>{team.name}</option>;
 											})
 										}
@@ -330,6 +305,7 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 										onClick={(): Promise<void> => this.updateTeams(0)}>Edytuj zaznaczoną</Button>
 								</div>
 							</div>
+							{/*
 							<div className="mt-3">
 								<EditMatchTable
 									teams={this.state.tournamentData.teams}
@@ -370,6 +346,7 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 
 									});
 								}}>Zapisz zmiany</Button>
+							*/}
 						</div>
 						:
 						<h1>Ładowanie</h1>

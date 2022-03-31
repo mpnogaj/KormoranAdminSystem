@@ -1,7 +1,7 @@
 import React from "react";
 import TournamentsTable from "../../Components/TournamentsTable";
 
-class Guest extends React.Component{
+class Guest extends React.Component {
 	render(): JSX.Element {
 		return (
 			<div className="container mt-3">

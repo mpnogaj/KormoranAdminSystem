@@ -1,7 +1,7 @@
 import React from "react";
 import LogTable from "../../../Components/LogsTable";
 
-class Logs extends React.Component{
+class Logs extends React.Component {
 	render(): JSX.Element {
 		return (
 			<div className="container mt-3">

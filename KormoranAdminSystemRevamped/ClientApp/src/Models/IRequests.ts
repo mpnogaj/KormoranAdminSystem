@@ -1,8 +1,8 @@
-interface IGetMatchesRequest{
+interface IGetMatchesRequest {
 	tornamentId: number;
 }
 
-interface ILogsParams{
+interface ILogsParams {
 	sessionId: string;
 }
 

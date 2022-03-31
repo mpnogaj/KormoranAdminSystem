@@ -16,8 +16,6 @@ interface IState {
 	pageSize: number;
 }
 
-
-
 class LogTable extends React.Component<Empty, IState> {
 	readonly logsDownloader: DownloadManager<ICollectionResponse<ILog>, ILogsParams>;
 	constructor(props: Empty) {
@@ -48,14 +46,11 @@ class LogTable extends React.Component<Empty, IState> {
 	}
 
 	componentDidMount(): void {
-		this.storage.updateParams({
-			sessionId: sessionStorage.getItem("sessionId")
-		}, StorageTarget.LOGS);
-		this.callbacks.forEach(callback => this.storage.subscribe(callback));
+		this.logsDownloader.start();
 	}
 
 	componentWillUnmount(): void {
-		this.callbacks.forEach(callback => this.storage.unsubscribe(callback));
+		this.logsDownloader.destroy();
 	}
 
 	render(): JSX.Element {

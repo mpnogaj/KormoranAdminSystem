@@ -3,11 +3,7 @@ import { Button, Col, Container, FormControl, FormFloating, Row } from "react-bo
 import axios from "axios";
 import "./Login.css";
 import { ILoginResponse } from "../../Models/IResponses";
-import { NavigateFunction } from "react-router";
-
-interface IProps {
-	navigation: NavigateFunction
-}
+import { IWithNavigaton, withNavigation } from "../../Helpers/HOC";
 
 interface IState {
 	username: string,
@@ -16,9 +12,9 @@ interface IState {
 	errorText: string;
 }
 
-class Login extends React.Component<IProps, IState>{
+class Login extends React.Component<IWithNavigaton, IState>{
 
-	constructor(props: IProps) {
+	constructor(props: IWithNavigaton) {
 		super(props);
 		this.state = {
 			username: "",
@@ -115,5 +111,5 @@ class Login extends React.Component<IProps, IState>{
 		);
 	}
 }
-export default Login;
+export default withNavigation(Login);
 //export default withNavigation<IProps>(Login);

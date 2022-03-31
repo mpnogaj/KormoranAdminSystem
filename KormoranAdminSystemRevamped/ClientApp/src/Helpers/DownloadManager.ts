@@ -14,8 +14,7 @@ class DownloadManager<T, Y> {
 	readonly action: (data: T) => void;
 	params: Y | null;
 
-	constructor(endpoint: string, timeout: number, action: (data: T) => void)
-	{
+	constructor(endpoint: string, timeout: number, action: (data: T) => void) {
 		this.endpoint = endpoint;
 		this.action = action;
 		this.timeout = timeout;
@@ -23,17 +22,17 @@ class DownloadManager<T, Y> {
 		this.timerId = -1;
 	}
 
-	setParams(newParams: Y): DownloadManager<T, Y>{
+	setParams(newParams: Y): DownloadManager<T, Y> {
 		this.params = newParams;
 		return this;
 	}
 
-	start(): void{
+	start(): void {
 		window.setInterval(async (): Promise<void> => {
 			const response = await axios.get<T>(this.endpoint, {
 				params: this.params
 			});
-			if(response.status != 200){
+			if (response.status != 200) {
 				console.log("Coś poszło nie tak podczas wykonywania zapytania! Szczegóły:");
 				console.log("Endpoint: %d. Params: ", this.endpoint);
 				return;
@@ -42,8 +41,8 @@ class DownloadManager<T, Y> {
 		}, this.timeout);
 	}
 
-	destroy(): void{
-		if(this.timerId != -1)
+	destroy(): void {
+		if (this.timerId != -1)
 			window.clearInterval(this.timerId);
 	}
 }
