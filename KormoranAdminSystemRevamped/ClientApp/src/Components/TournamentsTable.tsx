@@ -95,10 +95,12 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 
 	handleShow = (tournamentId: number, isEdit: boolean): void => {
 		const tournament = this.getTournament(tournamentId);
+		
 		if (tournament == undefined) {
 			console.error("Nie znaleziono turnieju o takim id");
 			return;
 		}
+		console.log(tournament.matches);
 		if (isEdit) {
 			this.setState({
 				editName: tournament.name,

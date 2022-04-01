@@ -5,5 +5,9 @@ export const GET_STATES = "/api/states/GetStates";
 export const GET_DISCIPLINES = "/api/disciplines/GetDisciplines";
 export const GET_LOGS = "/api/logs/GetLogs";
 
+export const UPDATE_TOURNAMENT = "/api/tournaments/UpdateTournament";
+export const UPDATE_TOURNAMENT_BASIC = "/api/tournaments/UpdateTournamentBasic";
+
 
 export const VALIDATE = "/api/Session/Validate";
+

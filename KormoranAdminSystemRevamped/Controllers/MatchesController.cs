@@ -27,7 +27,9 @@ namespace KormoranAdminSystemRevamped.Controllers
 		{
 			try
 			{
-				var matches = await _db.Matches.ToListAsync();
+				var matches = await _db.Matches
+					.OrderBy(x => x.MatchId)
+					.ToListAsync();
 				if(tournamentId.HasValue)
                 {
 					return new JsonResult(new CollectionResponse<Match>

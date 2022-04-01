@@ -2,29 +2,34 @@ import React from "react";
 import { Table, Button } from "react-bootstrap";
 import ITeam from "../Models/ITeam";
 import EditMatchRow from "./EditMatchRow";
-import { nanoid } from "nanoid";
 import IState from "../Models/IState";
-import { IRowData } from "../Pages/Panel/Tournaments/EditTournament";
+import IMatch from "../Models/IMatch";
+import { binsearchInd } from "../Helpers/Essentials";
+import {customAlphabet} from "nanoid";
 
 interface IProps {
 	teams: Array<ITeam>,
 	states: Array<IState>,
-	matchesData: Array<IRowData>,
-	updateMatches: (newData: Array<IRowData>) => void;
+	matches: Array<IMatch>,
+	tournamentId: number,
+	updateMatches: (newData: Array<IMatch>) => void;
 }
 
 class EditMatchTable extends React.Component<IProps>{
-	private defaultMatchData(): IRowData {
-		return {
-			id: nanoid(),
-			matchId: 0,
-			stateId: 0,
-			team1: 0,
-			team2: 0,
-			team1Score: 0,
-			team2Score: 0
-		};
+	private readonly generator;
+
+	constructor(props: IProps){
+		super(props);
+		this.generator = customAlphabet("123456789", 6);
 	}
+
+	makeTeam = (id: number): ITeam => {
+		return {
+			id: id,
+			name: "UNUSED",
+			tournamentId: this.props.tournamentId
+		};
+	};
 
 	render(): JSX.Element {
 		return (
@@ -32,8 +37,31 @@ class EditMatchTable extends React.Component<IProps>{
 				<span>Mecze turnijowe: </span><br />
 				<span>{ }</span>
 				<Button onClick={(): void => {
-					const newData = this.props.matchesData;
-					newData.push(this.defaultMatchData());
+					const newData = this.props.matches;
+					newData.push({
+						matchId: parseInt(this.generator()),
+						winner: {
+							id: 0,
+							name: "UNUSED",
+							tournamentId: this.props.tournamentId
+						},
+						team1: {
+							id: 0,
+							name: "UNUSED",
+							tournamentId: this.props.tournamentId
+						},
+						team2: {
+							id: 0,
+							name: "UNUSED",
+							tournamentId: this.props.tournamentId
+						},
+						state: {
+							id: 0,
+							name: "UNUSED"
+						},
+						team1Score: 0,
+						team2Score: 0
+					});
 					this.props.updateMatches(newData);
 				}}>Dodaj nowy</Button>
 				<Table className="mt-3" responsive={true} bordered={true}>
@@ -45,43 +73,42 @@ class EditMatchTable extends React.Component<IProps>{
 							<th>Drużyna 2</th>
 							<th>Wynik drużyny 1</th>
 							<th>Wynik drużyny 2</th>
-							<th>Zwyciezca</th>
 							<th></th>
 						</tr>
 					</thead>
 					<tbody>
 						{
-							this.props.matchesData.map((data: IRowData, index) => {
+							this.props.matches.map((data: IMatch) => {
 								return (
 									<EditMatchRow
+										key={data.matchId}
 										match={data}
 										teams={this.props.teams}
 										states={this.props.states}
-										id={index} key={data.id}
-										team1={data.team1}
-										team2={data.team2}
-										team1Pts={data.team1Score} team2Pts={data.team2Score}
-										state={data.stateId}
 										onUpdate={(targetId, targetVal, value): void => {
-											const newData: Array<IRowData> = this.props.matchesData.slice();
+											const newData: Array<IMatch> = this.props.matches.slice();
+											const ind: number = binsearchInd(newData, x => x.matchId - targetId);
 											switch (targetVal) {
 												case 1:
-													newData[targetId].team1 = value;
+													newData[ind].team1 = this.makeTeam(value);
 													break;
 												case 2:
-													newData[targetId].team2 = value;
+													newData[ind].team2 = this.makeTeam(value);
 													break;
 												case 3:
-													newData[targetId].team1Score = value;
+													newData[ind].team1Score = value;
 													break;
 												case 4:
-													newData[targetId].team2Score = value;
+													newData[ind].team2Score = value;
 													break;
 												case 5:
-													newData.splice(targetId, 1);
+													newData.splice(ind, 1);
 													break;
 												case 6:
-													newData[targetId].stateId = value;
+													newData[ind].state = {
+														id: value,
+														name: "UNUSED"
+													};
 													break;
 												default:
 													console.error("Invalid targetVal parameter! Passed: " + targetVal);

@@ -8,7 +8,7 @@ interface IWithParams {
 export function withParams<P extends IWithParams>(WrappedComponent: ComponentType<P>): ComponentType<Omit<P, keyof IWithParams>> {
 	const comp = (props: object): JSX.Element => {
 		const params = useParams();
-		return (<WrappedComponent navigation={params} {...props as any} />);
+		return (<WrappedComponent params={params} {...props as any} />);
 	};
 	return comp;
 }

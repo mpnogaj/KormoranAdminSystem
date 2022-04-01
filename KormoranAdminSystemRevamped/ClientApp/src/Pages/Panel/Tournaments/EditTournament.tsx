@@ -1,18 +1,17 @@
 import React from "react";
 import { Button } from "react-bootstrap";
-//import IMatch from "../../../Models/IMatch";
 import IState from "../../../Models/IState";
 import IDiscipline from "../../../Models/IDiscipline";
 import ITeam from "../../../Models/ITeam";
 import axios, { AxiosResponse } from "axios";
 import ITournament from "../../../Models/ITournament";
 import { binsearch } from "../../../Helpers/Essentials";
-//import EditMatchTable from "../../../Components/EditMatchTable";
-//import { nanoid } from "nanoid";
-import { ISingleItemResponse } from "../../../Models/IResponses";
+import { IBasicResponse, ICollectionResponse, ISingleItemResponse } from "../../../Models/IResponses";
 import { Params } from "react-router";
-import { GET_TOURNAMENTS } from "../../../Helpers/Endpoints";
+import { GET_DISCIPLINES, GET_STATES, GET_TOURNAMENTS, UPDATE_TOURNAMENT } from "../../../Helpers/Endpoints";
 import { withParams } from "../../../Helpers/HOC";
+import EditMatchTable from "../../../Components/EditMatchTable";
+import { IUpdateTournamentRequest } from "../../../Models/IRequests";
 
 export interface IRowData {
 	id: string,
@@ -74,18 +73,19 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 	}
 
 	downloadTournamentData = async (): Promise<void> => {
-		const res = await axios.get<ITournament>(GET_TOURNAMENTS, {
+		console.log(this.props.params);
+		const res = await axios.get<ISingleItemResponse<ITournament>>(GET_TOURNAMENTS, {
 			params: {
 				id: this.props.params.id
 			}
 		});
-
-		this.setState({ tournament: res.data, isLoading: false });
+		console.log(res.data);
+		this.setState({ tournament: res.data.data, isLoading: false });
 	};
 
 	downloadOtherData = async (): Promise<void> => {
-		const disc = (await axios.get<Array<IDiscipline>>("/api/tournaments/GetDisciplines")).data;
-		const stat = (await axios.get<Array<IState>>("/api/tournaments/GetStates")).data;
+		const disc = (await axios.get<ICollectionResponse<IDiscipline>>(GET_DISCIPLINES)).data.collection;
+		const stat = (await axios.get<ICollectionResponse<IState>>(GET_STATES)).data.collection;
 		this.setState(prevState => ({
 			...prevState,
 			disciplines: disc,
@@ -141,35 +141,45 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 	};
 
 	updateTeams = async (operation: number): Promise<void> => {
-		if (this.state.selectedIndex == undefined) return;
 		const newTeams = this.state.tournament.teams.slice();
-		//const newMatchesData = this.state.matchesData.slice();
-		//let shoudlBeDisabled = false;
-		const index = this.state.selectedIndex;
-
+		const newMatchesData = this.state.tournament.matches.slice();
+		let shoudlBeDisabled = false;
+		
 		if (operation == -1) {
+			if (this.state.selectedIndex == undefined) return;
+			const index = this.state.selectedIndex;
 			if (window.confirm("Czy na pewno chcesz usunąć tę drużynę")) {
-				//const deletedId = newTeams[index].id;
+				const deletedId = newTeams[index].id;
 				await axios.delete("/api/teams/DeleteTeam", {
 					params: {
 						teamId: newTeams[index].id
 					}
 				});
 				newTeams.splice(index, 1);
-				/*newMatchesData.forEach(x => {
-					if (x.team1 != deletedId && x.team2 != deletedId) return;
-					if (x.team1 == deletedId) x.team1 = 0;
-					if (x.team2 == deletedId) x.team2 = 0;
+				newMatchesData.forEach(x => {
+					if (x.team1.id != deletedId && x.team2.id != deletedId) return;
+					if (x.team1.id == deletedId) x.team1 = {
+						id: 0,
+						name: "UNUSED",
+						tournamentId: parseInt(this.props.params.id!)
+					};
+					if (x.team2.id == deletedId) x.team2 = {
+						id: 0,
+						name: "UNUSED",
+						tournamentId: parseInt(this.props.params.id!)
+					};
 					shoudlBeDisabled = true;
-				});*/
+				});
 			}
 			this.setState(prevState => ({
 				...prevState,
 				selectedIndex: undefined
 			}));
 		} else if (operation == 0) {
+			if (this.state.selectedIndex == undefined) return;
+			const index = this.state.selectedIndex;
 			const newName = prompt("Nowa nazwa drużyny", newTeams[index].name);
-			if (newName == null) return;
+			if (newName == null || newName) return;
 			newTeams[index].name = newName;
 			await axios.post<
 				ISingleItemResponse<number>,
@@ -178,7 +188,7 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 			>("/api/teams/UpdateTeams", newTeams[index]);
 		} else {
 			const newName = prompt("Nazwa drużyny");
-			if (newName == null) return;
+			if (newName == null || newName == "") return;
 
 			const newTeam: ITeam = {
 				id: 0,
@@ -197,8 +207,8 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 		}
 		this.setState(prevState => ({
 			...prevState,
-			/*matchesData: newMatchesData,
-			saveEnabled: !shoudlBeDisabled,*/
+			matchesData: newMatchesData,
+			saveEnabled: !shoudlBeDisabled,
 			tournament: {
 				...prevState.tournament,
 				teams: newTeams
@@ -297,7 +307,9 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 								</form>
 								<div className="mt-3 flexbox inline-d">
 									<Button className="me-2" variant="success"
-										onClick={(): Promise<void> => this.updateTeams(1)}>Dodaj nową</Button>
+										onClick={():void => { 
+											this.updateTeams(1);
+										}}>Dodaj nową</Button>
 									<Button disabled={this.state.selectedIndex == undefined}
 										className="me-2" variant="success"
 										onClick={(): Promise<void> => this.updateTeams(-1)}>Usuń zaznaczoną</Button>
@@ -306,48 +318,44 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 										onClick={(): Promise<void> => this.updateTeams(0)}>Edytuj zaznaczoną</Button>
 								</div>
 							</div>
-							{/*
-							<div className="mt-3">
-								<EditMatchTable
-									teams={this.state.tournamentData.teams}
-									states={this.state.tournamentData.states}
-									matchesData={this.state.matchesData}
-									updateMatches={(newData): void => {
-										const shouldDisable = newData.some(x =>
-											x.team1 == 0 || x.team2 == 0 || x.stateId == 0
-										);
-										this.setState((prevState) => ({
-											...prevState,
-											saveEnabled: !shouldDisable,
-											matchesData: newData
-										}));
-									}} />
-							</div>
-							<Button className="mt-3" variant="success" disabled={!this.state.saveEnabled}
-								onClick={async (): Promise<void> => {
-									const tournamentData = this.state.tournamentData;
-									const matches: Array<IMatch> = [];
-									this.state.matchesData.forEach(x => {
-										matches.push({
-											matchId: x.matchId,
-											team1: undefined,
-											team2: undefined,
-											winner: undefined,
-											state: undefined,
-											team1Id: x.team1,
-											team2Id: x.team2,
-											winnerId: x.team1Score > x.team2Score ? x.team1 : x.team2,
-											team1Score: x.team1Score,
-											team2Score: x.team2Score,
-											stateId: x.stateId
-										});
-									});
-									tournamentData.matches = matches;
-									await axios.post("/api/tournaments/TournamentFullUpdate", {
-
-									});
-								}}>Zapisz zmiany</Button>
-							*/}
+							{
+								<div>
+									<div className="mt-3">
+										<EditMatchTable
+											teams={this.state.tournament.teams}
+											states={this.state.states}
+											matches={this.state.tournament.matches}
+											tournamentId={parseInt(this.props.params.id!)}
+											updateMatches={(newData): void => {
+												let saveEnabled = true;
+												newData.forEach(row => {
+													if(row.state.id == 0 || row.team1.id == 0 || row.team2.id == 0)
+														saveEnabled = false;
+												});
+												this.setState((prevState) => ({
+													...prevState,
+													saveEnabled: saveEnabled,
+													tournament: {
+														...prevState.tournament,
+														matches: newData
+													}
+												}));
+											}} />
+									</div>
+									<Button className="mt-3" variant="success" disabled={!this.state.saveEnabled}
+										onClick={async (): Promise<void> => {
+											const res = await axios.post<IBasicResponse, AxiosResponse<IBasicResponse> , IUpdateTournamentRequest>(UPDATE_TOURNAMENT, {
+												tournamentId: parseInt(this.props.params.id!),
+												newName: this.state.tournament.name,
+												newStateId: this.state.tournament.state.id,
+												newDisciplineId: this.state.tournament.discipline.id,
+												teams: this.state.tournament.teams,
+												matches: this.state.tournament.matches
+											});
+											console.log(res);
+										}}>ZAPISZ</Button>
+								</div>
+							}
 						</div>
 						:
 						<h1>Ładowanie</h1>

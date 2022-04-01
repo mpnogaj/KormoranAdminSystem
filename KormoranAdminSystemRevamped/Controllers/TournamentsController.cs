@@ -25,7 +25,7 @@ namespace KormoranAdminSystemRevamped.Controllers
 		}
 
 		[HttpGet]
-		public async Task<JsonResult> GetTournaments([FromQuery] TournamentRequestModel model)
+		public async Task<JsonResult> GetTournaments([FromQuery] int? id)
 		{
 			try
 			{
@@ -34,11 +34,28 @@ namespace KormoranAdminSystemRevamped.Controllers
 					.Include(x => x.Matches)
 					.Include(x => x.Discipline)
 					.Include(x => x.State)
+					.OrderBy(x => x.Id)
 					.ToListAsync();
-				if (model.StateId != null)
+				if (id.HasValue)
 				{
-					tournamentList = tournamentList.Where(x => x.State.Id == model.StateId).ToList();
+					var tournament = tournamentList.FirstOrDefault(x => x.Id == id.Value);
+					if (tournament != null)
+					{
+						return new JsonResult(new SingleItemResponse<Tournament>
+						{
+							Data = tournament,
+							Message = Resources.operationSuccessfull,
+							Error = false
+						});
+					}
+					return new JsonResult(new SingleItemResponse<Tournament>
+					{
+						Data = null,
+						Message = Resources.serverError,
+						Error = true
+					});
 				}
+
 
 				return new JsonResult(new CollectionResponse<Tournament>()
 				{
@@ -59,7 +76,7 @@ namespace KormoranAdminSystemRevamped.Controllers
 		}
 
 		[HttpPost]
-		public async Task<JsonResult> UpdateTournament([FromBody] UpdateTournamentRequestModel request)
+		public async Task<JsonResult> UpdateTournamentBasic([FromBody] UpdateTournamentRequestModel request)
 		{
 			try
 			{
@@ -96,6 +113,79 @@ namespace KormoranAdminSystemRevamped.Controllers
 				});
 			}
 		}
+
+		[HttpPost]
+		public async Task<JsonResult> UpdateTournament([FromBody] TournamentFullUpdateRequestModel request)
+		{
+			try
+			{
+				//_db.Teams.UpdateRange(request.Teams);
+				//await _db.SaveChangesAsync();
+				var matchesToAdd = new List<Match>();
+				var matchesToUpdate = new List<Match>();
+				foreach(var match in request.Matches)
+				{
+					if(match.State == null || match.Team1 == null || match.Team2 == null)
+					{
+						throw new ArgumentNullException(nameof(match));
+					}
+					match.StateId = match.State.Id;
+					match.Team1Id = match.Team1.Id;
+					match.Team2Id = match.Team2.Id;
+					match.TournamentId = request.TournamentId;
+
+					//clear unwanted objects
+					match.State = null;
+					match.Team1 = null;
+					match.Team2 = null;
+					//new match
+					if(match.MatchId > 100000)
+					{
+						match.MatchId = 0;
+						_db.Add(match);
+						await _db.SaveChangesAsync();
+					}
+					else
+					{
+						matchesToUpdate.Add(match);
+					}
+				}
+				_db.Matches.UpdateRange(matchesToUpdate);
+				await _db.SaveChangesAsync();
+				var tournament = await _db.Tournaments
+					.FirstOrDefaultAsync(x => x.Id == request.TournamentId);
+
+				tournament.Name = request.NewName;
+				tournament.StateId = request.NewStateId;
+				tournament.DisciplineId = request.NewDisciplineId;
+
+				_db.Tournaments.Update(tournament);
+				await _db.SaveChangesAsync();
+
+				return new JsonResult(new BasicResponse
+				{
+					Error = false,
+					Message = Resources.operationSuccessfull
+				});
+			}
+			catch (NullReferenceException)
+			{
+				return new JsonResult(new BasicResponse()
+				{
+					Error = true,
+					Message = "Turniej nie został znaleziony"
+				});
+			}
+			catch (Exception ex)
+			{
+				return new JsonResult(new BasicResponse
+				{
+					Error = true,
+					Message = $"Błąd serwera! {ex.Message}"
+				});
+			}
+		}
+
 
 		[HttpPost]
 		public async Task<JsonResult> CreateTournament(CreateTournamentRequestModel model)
@@ -153,12 +243,6 @@ namespace KormoranAdminSystemRevamped.Controllers
 		public string Name { get; set; }
 		public string TournamentType { get; set; }
 		public string TournamentTypeShort { get; set; }
-	}
-
-	public record TournamentRequestModel
-	{
-		[FromQuery(Name = "stateId")]
-		public int? StateId { get; set; }
 	}
 
 	public record UpdateTournamentRequestModel
