@@ -1,29 +1,31 @@
-import IMatch from "./IMatch";
 import ITeam from "./ITeam";
 
-interface IGetMatchesRequest {
+export interface IGetMatchesRequest {
 	tornamentId: number;
 }
 
-interface ILogsParams {
+export interface ILogsParams {
 	sessionId: string;
 }
 
-interface IUpdateTournamentBasicRequest {
+export interface IUpdateTournamentBasicRequest {
 	tournamentId: number,
 	newName: string,
 	newStateId: number,
 	newDisciplineId: number
 }
 
-interface IUpdateTournamentRequest extends IUpdateTournamentBasicRequest{
-	teams: Array<ITeam>,
-	matches: Array<IMatch>
+export interface IUpdateMatchBasicRequest {
+	matchId: number,
+	tournamentId: number,
+	stateId: number,
+	team1: number,
+	team2: number,
+	team1Score: number,
+	team2Score: number, 
 }
 
-export type {
-	IGetMatchesRequest,
-	ILogsParams,
-	IUpdateTournamentBasicRequest,
-	IUpdateTournamentRequest
-};
+export interface IUpdateTournamentRequest extends IUpdateTournamentBasicRequest{
+	teams: Array<ITeam>,
+	matches: Array<IUpdateMatchBasicRequest>
+}

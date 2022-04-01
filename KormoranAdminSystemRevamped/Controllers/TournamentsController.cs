@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static KormoranAdminSystemRevamped.Controllers.MatchesController;
 
 namespace KormoranAdminSystemRevamped.Controllers
 {
@@ -119,39 +120,37 @@ namespace KormoranAdminSystemRevamped.Controllers
 		{
 			try
 			{
-				//_db.Teams.UpdateRange(request.Teams);
-				//await _db.SaveChangesAsync();
 				var matchesToAdd = new List<Match>();
 				var matchesToUpdate = new List<Match>();
-				foreach(var match in request.Matches)
+				foreach(var matchData in request.Matches)
 				{
-					if(match.State == null || match.Team1 == null || match.Team2 == null)
+					if (matchData.MatchId > 100000)
 					{
-						throw new ArgumentNullException(nameof(match));
-					}
-					match.StateId = match.State.Id;
-					match.Team1Id = match.Team1.Id;
-					match.Team2Id = match.Team2.Id;
-					match.TournamentId = request.TournamentId;
-
-					//clear unwanted objects
-					match.State = null;
-					match.Team1 = null;
-					match.Team2 = null;
-					//new match
-					if(match.MatchId > 100000)
-					{
-						match.MatchId = 0;
-						_db.Add(match);
+						var newMatch = new Match
+						{
+							TournamentId = matchData.TournamentId,
+							MatchId = 0,
+							StateId = matchData.StateId,
+							Team1Id = matchData.Team1,
+							Team2Id = matchData.Team2,
+							Team1Score = matchData.Team1Score,
+							Team2Score = matchData.Team2Score
+						};
+						_db.Add(newMatch);
 						await _db.SaveChangesAsync();
 					}
 					else
 					{
-						matchesToUpdate.Add(match);
+						var match = await _db.Matches.FirstOrDefaultAsync(x => x.MatchId == matchData.MatchId);
+						match.StateId = matchData.StateId;
+						match.Team1Id = matchData.Team1;
+						match.Team2Id = matchData.Team2;
+						match.Team1Score = matchData.Team1Score;
+						match.Team2Score = matchData.Team2Score;
+						_db.Matches.Update(match);
+						await _db.SaveChangesAsync();
 					}
 				}
-				_db.Matches.UpdateRange(matchesToUpdate);
-				await _db.SaveChangesAsync();
 				var tournament = await _db.Tournaments
 					.FirstOrDefaultAsync(x => x.Id == request.TournamentId);
 
@@ -256,7 +255,7 @@ namespace KormoranAdminSystemRevamped.Controllers
 	public record TournamentFullUpdateRequestModel : UpdateTournamentRequestModel
 	{
 		public List<Team> Teams { get; set; }
-		public List<Match> Matches { get; set; }
+		public List<UpdateMatchRequestModel> Matches { get; set; }
 	}
 
 	public record GetFullTournamentDataResponseModel : BasicResponse

@@ -11,7 +11,7 @@ import { Params } from "react-router";
 import { GET_DISCIPLINES, GET_STATES, GET_TOURNAMENTS, UPDATE_TOURNAMENT } from "../../../Helpers/Endpoints";
 import { withParams } from "../../../Helpers/HOC";
 import EditMatchTable from "../../../Components/EditMatchTable";
-import { IUpdateTournamentRequest } from "../../../Models/IRequests";
+import { IUpdateMatchBasicRequest, IUpdateTournamentRequest } from "../../../Models/IRequests";
 
 export interface IRowData {
 	id: string,
@@ -344,15 +344,36 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 									</div>
 									<Button className="mt-3" variant="success" disabled={!this.state.saveEnabled}
 										onClick={async (): Promise<void> => {
+											const matchesData: Array<IUpdateMatchBasicRequest> = [];
+											this.state.tournament.matches.forEach(x => {
+												matchesData.push({
+													matchId: x.matchId,
+													tournamentId: parseInt(this.props.params.id!),
+													stateId: x.state.id,
+													team1: x.team1.id,
+													team2: x.team2.id,
+													team1Score: x.team1Score,
+													team2Score: x.team2Score
+												});
+											});
+
 											const res = await axios.post<IBasicResponse, AxiosResponse<IBasicResponse> , IUpdateTournamentRequest>(UPDATE_TOURNAMENT, {
 												tournamentId: parseInt(this.props.params.id!),
 												newName: this.state.tournament.name,
 												newStateId: this.state.tournament.state.id,
 												newDisciplineId: this.state.tournament.discipline.id,
 												teams: this.state.tournament.teams,
-												matches: this.state.tournament.matches
+												matches: matchesData
 											});
-											console.log(res);
+											if(res.status != 200 || res.data.error){
+												alert("Cos poszlo nie tak! Zobacz konsole po wiecej szczegolow");
+												console.log(res);
+												console.log(res.statusText);
+												console.log(res.data.message);
+											}
+											else{
+												alert("Zapisano pomyslnie");
+											}
 										}}>ZAPISZ</Button>
 								</div>
 							}

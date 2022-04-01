@@ -53,9 +53,17 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 		};
 		this.tournamentDownloader = new DownloadManager<ICollectionResponse<ITournament>, null>(
 			GET_TOURNAMENTS, DEFAULT_TIMEOUT, (data: ICollectionResponse<ITournament>) => {
+				const tournament = this.getTournament(this.state.currentTournamentId, data.collection);
+				const matches = this.state.previewModalVisible && tournament != undefined
+					?
+					tournament.matches
+					:
+					this.state.matches;
+
 				this.setState((prevState) => ({
 					...prevState,
 					isLoading: false,
+					matches: matches,
 					tournaments: data.collection
 				}));
 			}
@@ -90,11 +98,11 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 		this.disciplinesDownloader.start();
 	}
 
-	getTournament = (id: number): ITournament | undefined =>
-		binsearch(this.state.tournaments, (x) => x.id - id);
+	getTournament = (id: number, array: Array<ITournament>): ITournament | undefined =>
+		binsearch(array, (x) => x.id - id);
 
 	handleShow = (tournamentId: number, isEdit: boolean): void => {
-		const tournament = this.getTournament(tournamentId);
+		const tournament = this.getTournament(tournamentId, this.state.tournaments);
 		
 		if (tournament == undefined) {
 			console.error("Nie znaleziono turnieju o takim id");
