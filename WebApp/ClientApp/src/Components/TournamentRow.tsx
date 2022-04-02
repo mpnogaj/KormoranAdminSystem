@@ -24,19 +24,19 @@ class TournamentRow extends React.Component<IProps>{
 							<div>
 								<Button className="ms-3" variant="success" onClick={
 									(): void => {
-										this.props.showModalCallback(this.props.tournament.id, true);
+										this.props.showModalCallback(this.props.tournament.tournamentId, true);
 									}
 								}>Szybka edycja</Button>
 								<Button className="ms-3" variant="success" onClick={
 									(): void => {
-										window.location.href = "/Panel/EditTournament/" + this.props.tournament.id;
+										window.location.href = "/Panel/EditTournament/" + this.props.tournament.tournamentId;
 									}
 								}>Pełna edycja</Button>
 							</div>
 							:
 							<Button variant="success" onClick={
 								(): void => {
-									this.props.showModalCallback(this.props.tournament.id, false);
+									this.props.showModalCallback(this.props.tournament.tournamentId, false);
 								}
 							}>Podgląd</Button>
 					}

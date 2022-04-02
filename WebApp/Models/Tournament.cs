@@ -12,7 +12,8 @@ namespace KormoranAdminSystemRevamped.Models
 	{
 		[Key]
 		[Column("tournament_id", TypeName = "int(11)")]
-		public int Id { get; set; }
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		public int TournamentId { get; set; }
 
 		[Column("name")]
 		[Required]

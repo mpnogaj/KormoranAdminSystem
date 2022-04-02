@@ -7,10 +7,11 @@ import IState from "../Models/IState";
 import axios from "axios";
 import { IBasicResponse, ICollectionResponse } from "../Models/IResponses";
 import { DownloadManager, DEFAULT_TIMEOUT } from "../Helpers/DownloadManager";
-import { GET_DISCIPLINES, GET_STATES, GET_TOURNAMENTS } from "../Helpers/Endpoints";
+import { GET_DISCIPLINES, GET_STATES, GET_TOURNAMENTS, UPDATE_TOURNAMENT_BASIC } from "../Helpers/Endpoints";
 import { binsearch } from "../Helpers/Essentials";
 import IMatch from "../Models/IMatch";
 import MatchesTable from "./MatchesTable";
+import SelectBox, { ISelectElement } from "./SelectBox";
 
 interface ICompState {
 	tournaments: Array<ITournament>,
@@ -20,15 +21,16 @@ interface ICompState {
 	previewModalVisible: boolean,
 	editModalVisible: boolean,
 	currentTournamentId: number,
-	isLoading: boolean;
+	isLoading: boolean,
 
 	editName: string,
-	editState: number;
-	editDisc: number;
+	editState: number,
+	editDisc: number,
+	editEnabled: boolean
 }
 
 interface ICompProps {
-	allowEdit: boolean;
+	allowEdit: boolean
 }
 
 class TournamentsTable extends React.Component<ICompProps, ICompState>{
@@ -49,7 +51,8 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 			isLoading: true,
 			editDisc: 0,
 			editName: "",
-			editState: 0
+			editState: 0,
+			editEnabled: true
 		};
 		this.tournamentDownloader = new DownloadManager<ICollectionResponse<ITournament>, null>(
 			GET_TOURNAMENTS, DEFAULT_TIMEOUT, (data: ICollectionResponse<ITournament>) => {
@@ -99,16 +102,14 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 	}
 
 	getTournament = (id: number, array: Array<ITournament>): ITournament | undefined =>
-		binsearch(array, (x) => x.id - id);
+		binsearch(array, (x) => x.tournamentId - id);
 
-	handleShow = (tournamentId: number, isEdit: boolean): void => {
+	handleShowEdit = (tournamentId: number, isEdit: boolean): void => {
 		const tournament = this.getTournament(tournamentId, this.state.tournaments);
-		
 		if (tournament == undefined) {
 			console.error("Nie znaleziono turnieju o takim id");
 			return;
 		}
-		console.log(tournament.matches);
 		if (isEdit) {
 			this.setState({
 				editName: tournament.name,
@@ -127,6 +128,17 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 		}
 	};
 
+	handleAddNew = (): void => {
+		this.setState({
+			editModalVisible: true,
+			editName: "",
+			editState: 0,
+			editDisc: 0,
+			editEnabled: false,
+			currentTournamentId: 0
+		});
+	};
+
 	handleHide = (isEdit: boolean): void => {
 		if (isEdit) {
 			this.setState({ editModalVisible: false });
@@ -139,43 +151,40 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 	render(): JSX.Element {
 		return (
 			<div>
-				<div className="table-responsive">
-					<Table hover bordered>
-						<thead>
-							<tr>
-								<th>Nazwa</th>
-								<th>Status</th>
-								<th>Dyscyplina</th>
-								<th>Akcja</th>
-							</tr>
-						</thead>
-						<tbody className="align-middle">
-							{
-								!this.state.isLoading
-									?
-									this.state.tournaments.map((val) => {
-										return (
-											<TournamentRow key={val.id} tournament={val} showModalCallback={this.handleShow}
-												isEdit={this.props.allowEdit} />
-										);
-									})
-									:
-									<tr>
-										<td style={{ textAlign: "center" }} colSpan={5}>Ładowanie...</td>
-									</tr>
-							}
-						</tbody>
-					</Table>
-				</div>
-
-
+				<Table hover bordered responsive>
+					<thead>
+						<tr>
+							<th>Nazwa</th>
+							<th>Status</th>
+							<th>Dyscyplina</th>
+							<th>Akcja</th>
+						</tr>
+					</thead>
+					<tbody className="align-middle">
+						{
+							!this.state.isLoading
+								?
+								this.state.tournaments.map((val) => {
+									return (
+										<TournamentRow key={val.tournamentId} tournament={val} showModalCallback={this.handleShowEdit}
+											isEdit={this.props.allowEdit} />
+									);
+								})
+								:
+								<tr>
+									<td style={{ textAlign: "center" }} colSpan={5}>Ładowanie...</td>
+								</tr>
+						}
+					</tbody>
+				</Table>
+				<Button onClick={(): void => this.handleAddNew()}>Dodaj nowy turniej</Button>
 				{/* Modal podglądu */}
 				<Modal show={this.state.previewModalVisible} onHide={(): void => this.handleHide(false)} size="xl">
 					<Modal.Header closeButton>
 						<Modal.Title>Podgląd wyników</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						<MatchesTable matches={this.state.matches}/>
+						<MatchesTable matches={this.state.matches} />
 					</Modal.Body>
 				</Modal>
 
@@ -185,63 +194,43 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 						<Modal.Title>Edytuj turniej</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						<table>
-							<tbody>
-								<tr>
-									<td>
-										<label htmlFor="newTournamentNameBox" className="me-3">Nazwa turnieju</label>
-									</td>
-									<td>
-										<input value={this.state.editName} id="newTournamentNameBox" type="text"
-											onChange={(e): void => {
-												this.setState({ editName: e.target.value });
-											}} />
-									</td>
-								</tr>
-								<tr className="mt-3">
-									<td>
-										<label htmlFor="newTournamentState" className="me-3 mt-2">Stan</label>
-									</td>
-									<td>
-										<select value={this.state.editState} id="newTournamentState"
-											onChange={(e): void => {
-												this.setState({
-													editState: +e.target.value
-												});
-											}}>
-											{
-												this.state.states.map(state => {
-													return (<option key={state.id} value={state.id}>{state.name}</option>);
-												})
-											}
-										</select>
-									</td>
-								</tr>
-								<tr className="mt-3">
-									<td>
-										<label htmlFor="newTournamentDyscipline" className="me-3">Dyscyplina</label>
-									</td>
-									<td>
-										<select value={this.state.editDisc} id="newTournamentDyscipline"
-											onChange={(e): void => {
-												this.setState({
-													editDisc: +e.target.value
-												});
-											}}>
-											{
-												this.state.disciplines.map(disc => {
-													return (<option key={disc.id} value={disc.id}>{disc.name}</option>);
-												})
-											}
-										</select>
-									</td>
-								</tr>
-							</tbody>
-						</table>
+						<label htmlFor="newTournamentNameBox" className="me-3">Nazwa turnieju</label>
+						<input value={this.state.editName} id="newTournamentNameBox" type="text"
+							onChange={(e): void => {
+								const newName = e.target.value;
+								this.setState({
+									editName: newName,
+									editEnabled: newName != ""
+								});
+							}} />
+						<SelectBox
+							header="Stan"
+							items={this.state.states as Array<ISelectElement>}
+							addNullElement={true}
+							selection={this.state.editState}
+							onSelectionChanged={(newId): void => {
+								this.setState({
+									editState: newId,
+									editEnabled: newId != 0
+								});
+							}}
+						/>
+						<SelectBox
+							header="Dyscyplina"
+							items={this.state.disciplines as Array<ISelectElement>}
+							addNullElement={true}
+							selection={this.state.editDisc}
+							onSelectionChanged={(newId): void => {
+								this.setState({
+									editDisc: newId,
+									editEnabled: newId != 0
+								});
+							}}
+						/>
 					</Modal.Body>
 					<Modal.Footer>
-						<Button onClick={async (): Promise<void> => {
-							const response = await axios.post<IBasicResponse>("/api/Tournaments/UpdateTournament", {
+						<Button disabled={!this.state.editEnabled} onClick={async (): Promise<void> => {
+							const response = await axios.post<IBasicResponse>(UPDATE_TOURNAMENT_BASIC, {
 								tournamentId: this.state.currentTournamentId,
 								newName: this.state.editName,
 								newStateId: this.state.editState,

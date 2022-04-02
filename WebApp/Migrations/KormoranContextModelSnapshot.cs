@@ -150,7 +150,7 @@ namespace KormoranAdminSystemRevamped.Migrations
 
             modelBuilder.Entity("KormoranAdminSystemRevamped.Models.Tournament", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("TournamentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int(11)")
                         .HasColumnName("tournament_id");
@@ -168,7 +168,7 @@ namespace KormoranAdminSystemRevamped.Migrations
                         .HasColumnType("int(11)")
                         .HasColumnName("state_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("TournamentId");
 
                     b.HasIndex("DisciplineId");
 

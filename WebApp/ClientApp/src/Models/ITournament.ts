@@ -4,7 +4,7 @@ import IState from "./IState";
 import ITeam from "./ITeam";
 
 interface ITournament {
-	id: number,
+	tournamentId: number,
 	name: string,
 	discipline: IDiscipline,
 	state: IState,

@@ -48,7 +48,7 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 			isEditModal: false,
 			saveEnabled: true,
 			tournament: {
-				id: 0,
+				tournamentId: 0,
 				name: "Nowy turniej",
 				matches: [],
 				teams: [],

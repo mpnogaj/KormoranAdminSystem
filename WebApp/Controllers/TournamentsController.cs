@@ -35,11 +35,11 @@ namespace KormoranAdminSystemRevamped.Controllers
 					.Include(x => x.Matches)
 					.Include(x => x.Discipline)
 					.Include(x => x.State)
-					.OrderBy(x => x.Id)
+					.OrderBy(x => x.TournamentId)
 					.ToListAsync();
 				if (id.HasValue)
 				{
-					var tournament = tournamentList.FirstOrDefault(x => x.Id == id.Value);
+					var tournament = tournamentList.FirstOrDefault(x => x.TournamentId == id.Value);
 					if (tournament != null)
 					{
 						return new JsonResult(new SingleItemResponse<Tournament>
@@ -82,13 +82,24 @@ namespace KormoranAdminSystemRevamped.Controllers
 			try
 			{
 				var tournament = await _db.Tournaments
-					.FirstOrDefaultAsync(x => x.Id == request.TournamentId);
+					.FirstOrDefaultAsync(x => x.TournamentId == request.TournamentId);
 
-				tournament.Name = request.NewName;
-				tournament.StateId = request.NewStateId;
-				tournament.DisciplineId = request.NewDisciplineId;
-
-				_db.Tournaments.Update(tournament);
+				if (tournament == null)
+				{
+					_db.Tournaments.Add(new Tournament
+					{
+						Name = request.NewName,
+						DisciplineId = request.NewDisciplineId,
+						StateId = request.NewStateId
+					});
+				}
+				else
+				{
+					tournament.Name = request.NewName;
+					tournament.StateId = request.NewStateId;
+					tournament.DisciplineId = request.NewDisciplineId;
+					_db.Tournaments.Update(tournament);
+				}
 				await _db.SaveChangesAsync();
 
 				return new JsonResult(new BasicResponse
@@ -152,7 +163,7 @@ namespace KormoranAdminSystemRevamped.Controllers
 					}
 				}
 				var tournament = await _db.Tournaments
-					.FirstOrDefaultAsync(x => x.Id == request.TournamentId);
+					.FirstOrDefaultAsync(x => x.TournamentId == request.TournamentId);
 
 				tournament.Name = request.NewName;
 				tournament.StateId = request.NewStateId;
@@ -184,64 +195,6 @@ namespace KormoranAdminSystemRevamped.Controllers
 				});
 			}
 		}
-
-
-		[HttpPost]
-		public async Task<JsonResult> CreateTournament(CreateTournamentRequestModel model)
-		{
-			var response = new BasicResponse();
-			if (_sessionManager.GetSession(model.SessionId) == null)
-			{
-				response.Error = true;
-				response.Message = "Sesja wygasła. Zaloguj się ponownie";
-				return new JsonResult(response);
-			}
-
-			response.Error = false;
-			response.Message = Resources.operationSuccessfull;
-			var tournament = new Tournament
-			{
-				Name = model.Name,
-				Discipline = _db.Disciplines.FirstOrDefault(x => x.Id == model.DisciplineId),
-				State = _db.States.FirstOrDefault(x => x.Id == model.StateId)
-			};
-			if (model.Id == -1)
-			{
-				await _db.Tournaments.AddAsync(tournament);
-				await _db.SaveChangesAsync();
-			}
-			else
-			{
-				var toReplace =
-					await _db.Tournaments.FirstOrDefaultAsync(x => x.Id == model.Id);
-				if (toReplace != null)
-				{
-					tournament.Id = model.Id;
-					toReplace.Discipline = tournament.Discipline;
-					toReplace.Name = tournament.Name;
-					toReplace.State = tournament.State;
-					await _db.SaveChangesAsync();
-				}
-				else
-				{
-					response.Error = true;
-					response.Message = "Turniej nie istnieje";
-				}
-			}
-
-			return new JsonResult(response);
-		}
-	}
-
-	public record CreateTournamentRequestModel
-	{
-		public string SessionId { get; set; }
-		public int Id { get; set; }
-		public int StateId { get; set; }
-		public int DisciplineId { get; set; }
-		public string Name { get; set; }
-		public string TournamentType { get; set; }
-		public string TournamentTypeShort { get; set; }
 	}
 
 	public record UpdateTournamentRequestModel
