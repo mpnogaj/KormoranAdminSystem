@@ -2,9 +2,9 @@
 using KormoranAdminSystemRevamped.Models;
 using KormoranAdminSystemRevamped.Models.Responses;
 using KormoranAdminSystemRevamped.Properties;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -129,6 +129,42 @@ namespace KormoranAdminSystemRevamped.Controllers
 			}
 		}
 
+		[HttpPost]
+		public async Task<JsonResult> IncrementScore([FromBody] IncrementScoreRequestModel request)
+        {
+			try
+			{
+				var match = await _db.Matches.FirstOrDefaultAsync(x => x.MatchId == request.MatchId);
+				if (request.Team == 1)
+				{
+					match.Team1Score += request.Value;
+				}
+				else if (request.Team == 2)
+				{
+					match.Team2Score += request.Value;
+				}
+				else
+				{
+					string paramName = $"{nameof(request)}.{nameof(request.Team)}";
+					throw new ArgumentException($"{paramName} should take value 1 or 2!", paramName);
+				}
+				await _db.SaveChangesAsync();
+				return new JsonResult(new BasicResponse
+				{
+					Error = false,
+					Message = Resources.operationSuccessfull
+				});
+			}
+            catch(Exception ex)
+            {
+				return new JsonResult(new BasicResponse
+				{
+					Error = true,
+					Message = $"{Resources.serverError}. Exception: {ex.Message}"
+				});
+            }
+        }
+
 		public record UpdateMatchRequestModel
         {
 			public int MatchId { get; set; }
@@ -139,5 +175,12 @@ namespace KormoranAdminSystemRevamped.Controllers
 			public int Team1Score { get; set; }
 			public int Team2Score { get; set; }
         }
+
+		public record IncrementScoreRequestModel
+        {
+			public int MatchId { get; set; }
+			public int Team { get; set; }
+			public int Value { get; set; }
+		}
 	}
 }
