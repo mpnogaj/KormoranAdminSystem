@@ -146,7 +146,7 @@ namespace KormoranAdminSystemRevamped.Controllers
 				else
 				{
 					string paramName = $"{nameof(request)}.{nameof(request.Team)}";
-					throw new ArgumentException($"{paramName} should take value 1 or 2!", paramName);
+					throw new ArgumentException($"{paramName} should take value 1 or 2!", nameof(request.Team));
 				}
 				await _db.SaveChangesAsync();
 				return new JsonResult(new BasicResponse
