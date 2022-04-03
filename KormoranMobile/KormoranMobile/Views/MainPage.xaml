@@ -15,7 +15,9 @@
         </Frame>
         <StackLayout Padding="10" Orientation="Horizontal">
             <Label FontSize="16" VerticalOptions="Center" Text="Id meczu: "/>
-            <Entry Keyboard="Numeric" Text="{Binding MatchId}">
+            <Entry Keyboard="Numeric" Text="{Binding MatchId}"
+                   HorizontalOptions="FillAndExpand"
+                   VerticalOptions="Start">
                 <Entry.Behaviors>
                     <behaviors:NumericValidationBehavior/>
                 </Entry.Behaviors>
@@ -23,7 +25,9 @@
         </StackLayout>
         <StackLayout Padding="10" Orientation="Horizontal">
             <Label FontSize="16" VerticalOptions="Center" Text="Ilość punktów: "/>
-            <Entry Keyboard="Numeric" Text="{Binding Points}">
+            <Entry Keyboard="Numeric" Text="{Binding Points}"
+                   HorizontalOptions="FillAndExpand"
+                   VerticalOptions="Start">
                 <Entry.Behaviors>
                     <behaviors:NumericValidationBehavior/>
                 </Entry.Behaviors>
