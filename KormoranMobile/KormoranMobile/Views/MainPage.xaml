@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:KormoranMobile.ViewModels"
+             xmlns:behaviors="clr-namespace:KormoranMobile.Behaviors"
+             x:Class="KormoranMobile.MainPage">
+
+    <ContentPage.BindingContext>
+        <viewmodels:MainPageViewModel/>
+    </ContentPage.BindingContext>
+    
+    <StackLayout>
+        <Frame BackgroundColor="#2196F3" Padding="24" CornerRadius="0">
+            <Label Text="Kormoran Admin System" HorizontalTextAlignment="Center" TextColor="White" FontSize="36"/>
+        </Frame>
+        <StackLayout Padding="10" Orientation="Horizontal">
+            <Label FontSize="16" VerticalOptions="Center" Text="Id meczu: "/>
+            <Entry Keyboard="Numeric" Text="{Binding MatchId}">
+                <Entry.Behaviors>
+                    <behaviors:NumericValidationBehavior/>
+                </Entry.Behaviors>
+            </Entry>
+        </StackLayout>
+        <StackLayout Padding="10" Orientation="Horizontal">
+            <Label FontSize="16" VerticalOptions="Center" Text="Ilość punktów: "/>
+            <Entry Keyboard="Numeric" Text="{Binding Points}">
+                <Entry.Behaviors>
+                    <behaviors:NumericValidationBehavior/>
+                </Entry.Behaviors>
+            </Entry>
+        </StackLayout>
+        <StackLayout Padding="10" Orientation="Horizontal">
+            <Button Text="Drużyna 1" Command="{Binding UpdateScore}" CommandParameter="1"/>
+            <Button Text="Drużyna 2" Command="{Binding UpdateScore}" CommandParameter="2"/>
+        </StackLayout>
+    </StackLayout>
+
+</ContentPage>
