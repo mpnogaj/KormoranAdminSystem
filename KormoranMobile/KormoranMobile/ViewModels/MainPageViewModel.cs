@@ -17,6 +17,9 @@ namespace KormoranMobile.ViewModels
         private string _points;
         public string Points { get => _points; set => SetProperty(ref _points, value); }
 
+        private string _address;
+        public string Address { get => _address; set => SetProperty(ref _address, value); }
+
         public MainPageViewModel()
         {
             _requester = DependencyService.Get<IRequesterService>(DependencyFetchTarget.GlobalInstance);
@@ -25,7 +28,7 @@ namespace KormoranMobile.ViewModels
             {
                 try
                 {
-                    var res = await _requester.SendPost<BasicResponse>("/api/matches/IncrementScore", new RequestModel
+                    var res = await _requester.SendPost<BasicResponse>(_address, $"/api/matches/IncrementScore", new RequestModel
                     {
                         MatchId = Convert.ToInt32(_matchId),
                         Value = Convert.ToInt32(_points),

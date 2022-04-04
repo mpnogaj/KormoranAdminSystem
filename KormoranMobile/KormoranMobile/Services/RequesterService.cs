@@ -15,14 +15,12 @@ namespace KormoranMobile.Services
         const string JSON_TYPE = "application/json";
         //http://127.0.0.1/ -> localhost
         const string BASE_URL = "http://127.0.0.1";
-        private HttpClient _httpClient = new HttpClient
-        {
-            BaseAddress = new Uri(BASE_URL)
-        };
+        private HttpClient _httpClient = new HttpClient();
 
-        public async Task<T> SendPost<T>(string endpoint, object data)
+        public async Task<T> SendPost<T>(string address, string endpoint, object data)
         {
             string json = JsonConvert.SerializeObject(data);
+            _httpClient.BaseAddress = new Uri($"http://{address}");
             var content = new StringContent(json, Encoding.UTF8, JSON_TYPE);
             var response = await _httpClient.PostAsync(endpoint, content);
             if (!response.IsSuccessStatusCode)

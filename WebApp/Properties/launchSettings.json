@@ -1,7 +1,7 @@
-﻿{
+{
   "iisSettings": {
-    "windowsAuthentication": false, 
-    "anonymousAuthentication": true, 
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
     "iisExpress": {
       "applicationUrl": "http://localhost:60488",
       "sslPort": 0
@@ -17,11 +17,10 @@
     },
     "KormoranAdminSystemRevamped": {
       "commandName": "Project",
-      "launchBrowser": false,
-      "applicationUrl": "http://localhost:80",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "applicationUrl": "http://192.168.88.123:80"
     }
   }
 }
