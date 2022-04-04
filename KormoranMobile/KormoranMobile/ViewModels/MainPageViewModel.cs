@@ -2,12 +2,14 @@
 using KormoranMobile.ViewModels.Commands;
 using System;
 using Xamarin.Forms;
+using Refit;
+using System.Diagnostics;
 
 namespace KormoranMobile.ViewModels
 {
     internal class MainPageViewModel : ViewModelBase
     {
-        private IRequesterService _requester;
+        private readonly IKormoranServer _kormoranServer;
         private IToastMessageService _toaster;
         public AsyncRelayCommand<string> UpdateScore { get; private set; }
 
@@ -22,26 +24,14 @@ namespace KormoranMobile.ViewModels
 
         public MainPageViewModel()
         {
-            _requester = DependencyService.Get<IRequesterService>(DependencyFetchTarget.GlobalInstance);
+            _kormoranServer = RestService.For<IKormoranServer>("http://www.http2demo.io");
             _toaster = DependencyService.Get<IToastMessageService>(DependencyFetchTarget.GlobalInstance);
             UpdateScore = new AsyncRelayCommand<string>(async (string team) =>
             {
                 try
                 {
-                    var res = await _requester.SendPost<BasicResponse>(_address, $"/api/matches/IncrementScore", new RequestModel
-                    {
-                        MatchId = Convert.ToInt32(_matchId),
-                        Value = Convert.ToInt32(_points),
-                        Team = Convert.ToInt32(team)
-                    });
-                    if (res.Error)
-                    {
-                        _toaster.ShowToast($"Wystapił błąd. Treść: {res.Message}");
-                    }
-                    else
-                    {
-                        _toaster.ShowToast("Operacja zakończona sukcesem");
-                    }
+                    var pingResponse = await _kormoranServer.PingTest();
+                    Debug.WriteLine(pingResponse);
                 }
                 catch (Exception ex)
                 {
