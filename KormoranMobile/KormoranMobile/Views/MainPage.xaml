@@ -15,7 +15,7 @@
         </Frame>
         <StackLayout Padding="10" Orientation="Horizontal">
             <Label FontSize="16" VerticalOptions="Center" Text="Adres IP servera: "/>
-            <Entry Keyboard="Numeric" Text="{Binding Address}"
+            <Entry Text="{Binding Address}"
                    HorizontalOptions="FillAndExpand"
                    VerticalOptions="Start">
             </Entry>
