@@ -135,7 +135,7 @@ namespace KormoranAdminSystemRevamped.Controllers
 				var matchesToUpdate = new List<Match>();
 				foreach(var matchData in request.Matches)
 				{
-					if (matchData.MatchId > 100000)
+					if (matchData.MatchId >= 100000)
 					{
 						var newMatch = new Match
 						{

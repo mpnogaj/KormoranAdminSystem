@@ -5,7 +5,6 @@ import EditMatchRow from "./EditMatchRow";
 import IState from "../Models/IState";
 import IMatch from "../Models/IMatch";
 import { binsearchInd } from "../Helpers/Essentials";
-import {customAlphabet} from "nanoid";
 
 interface IProps {
 	teams: Array<ITeam>,
@@ -16,12 +15,7 @@ interface IProps {
 }
 
 class EditMatchTable extends React.Component<IProps>{
-	private readonly generator;
-
-	constructor(props: IProps){
-		super(props);
-		this.generator = customAlphabet("123456789", 6);
-	}
+	private readonly newIdStep = 100000;
 
 	makeTeam = (id: number): ITeam => {
 		return {
@@ -38,8 +32,9 @@ class EditMatchTable extends React.Component<IProps>{
 				<span>{ }</span>
 				<Button onClick={(): void => {
 					const newData = this.props.matches;
+					const prevMatch = newData[newData.length - 1];
 					newData.push({
-						matchId: parseInt(this.generator()),
+						matchId: (prevMatch.matchId < this.newIdStep ? this.newIdStep : prevMatch.matchId + 1),
 						winner: {
 							id: 0,
 							name: "UNUSED",

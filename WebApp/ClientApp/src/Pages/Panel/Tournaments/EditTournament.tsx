@@ -356,7 +356,7 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 													team2Score: x.team2Score
 												});
 											});
-
+											console.log(this.props.params.id!);
 											const res = await axios.post<IBasicResponse, AxiosResponse<IBasicResponse> , IUpdateTournamentRequest>(UPDATE_TOURNAMENT, {
 												tournamentId: parseInt(this.props.params.id!),
 												newName: this.state.tournament.name,
