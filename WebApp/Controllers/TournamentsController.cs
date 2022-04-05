@@ -195,6 +195,51 @@ namespace KormoranAdminSystemRevamped.Controllers
 				});
 			}
 		}
+
+		[HttpGet]
+		public async Task<JsonResult> GetLeaderboard([FromQuery]int tournamentId)
+        {
+			var matches = await _db.Matches
+				.Include(x => x.Team1)
+				.Include(x => x.Team2)
+				.Where(x => x.TournamentId == tournamentId)
+				.ToListAsync();
+
+			var leaderboardDict = new Dictionary<Team, int>();
+			await _db.Teams
+				.Where(x => x.TournamentId == tournamentId)
+				.ForEachAsync(team => leaderboardDict.Add(team, 0));
+
+			var winners = matches
+				.GroupBy(x => x.Winner)
+				.Select(x => new LeaderboardEntry
+				{
+					Team = x.Key,
+					Wins = x.Count()
+				});
+
+			foreach(var winner in winners)
+            {
+				leaderboardDict[winner.Team!] = winner.Wins;
+            }
+
+			var leaderboard = new List<LeaderboardEntry>();
+			foreach(var leaderboardKV in leaderboardDict)
+            {
+				leaderboard.Add(new LeaderboardEntry
+				{
+					Team = leaderboardKV.Key,
+					Wins = leaderboardKV.Value
+				});
+            }
+			
+            return new JsonResult(new CollectionResponse<LeaderboardEntry>
+			{
+				Error = false,
+				Message = Resources.operationSuccessfull,
+				Collection = leaderboard.OrderByDescending(x => x.Wins).ToList()
+			});
+		}
 	}
 
 	public record UpdateTournamentRequestModel
