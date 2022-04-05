@@ -28,6 +28,9 @@ namespace KormoranAdminSystemRevamped.Controllers
 			try
 			{
 				var matches = await _db.Matches
+					.Include(x => x.State)
+					.Include(x => x.Team1)
+					.Include(x => x.Team2)
 					.OrderBy(x => x.MatchId)
 					.ToListAsync();
 				if(tournamentId.HasValue)

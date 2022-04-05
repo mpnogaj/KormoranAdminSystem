@@ -11,7 +11,7 @@ namespace KormoranMobile.Droid.Impl
     {
         public void ShowToast(string message)
         {
-            Toast.MakeText(Platform.AppContext, message, ToastLength.Long);
+            Toast.MakeText(Platform.AppContext, message, ToastLength.Long).Show();
         }
     }
 }

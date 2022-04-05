@@ -14,20 +14,10 @@
             <Label Text="Kormoran Admin System" HorizontalTextAlignment="Center" TextColor="White" FontSize="36"/>
         </Frame>
         <StackLayout Padding="10" Orientation="Horizontal">
-            <Label FontSize="16" VerticalOptions="Center" Text="Adres IP servera: "/>
-            <Entry Text="{Binding Address}"
-                   HorizontalOptions="FillAndExpand"
-                   VerticalOptions="Start">
-            </Entry>
-        </StackLayout>
-        <StackLayout Padding="10" Orientation="Horizontal">
             <Label FontSize="16" VerticalOptions="Center" Text="Id meczu: "/>
             <Entry Keyboard="Numeric" Text="{Binding MatchId}"
                    HorizontalOptions="FillAndExpand"
                    VerticalOptions="Start">
-                <Entry.Behaviors>
-                    <behaviors:NumericValidationBehavior/>
-                </Entry.Behaviors>
             </Entry>
         </StackLayout>
         <StackLayout Padding="10" Orientation="Horizontal">
@@ -35,9 +25,6 @@
             <Entry Keyboard="Numeric" Text="{Binding Points}"
                    HorizontalOptions="FillAndExpand"
                    VerticalOptions="Start">
-                <Entry.Behaviors>
-                    <behaviors:NumericValidationBehavior/>
-                </Entry.Behaviors>
             </Entry>
         </StackLayout>
         <StackLayout Padding="10" Orientation="Horizontal">

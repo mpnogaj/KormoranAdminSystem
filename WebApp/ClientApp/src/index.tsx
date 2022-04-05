@@ -14,7 +14,6 @@ import Panel from "./Pages/Panel/Panel";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import Tournaments from "./Pages/Panel/Tournaments/Tournaments";
 import Overview from "./Pages/Panel/Overview/Overview";
-import Logs from "./Pages/Panel/Logs/Logs";
 import Users from "./Pages/Panel/Users/Users";
 import EditTournament from "./Pages/Panel/Tournaments/EditTournament";
 render(
@@ -28,7 +27,6 @@ render(
 				<Route path="Tournaments" element={<Panel content={<Tournaments />} />} />
 				<Route path="EditTournament/:id" element={<Panel content={<EditTournament />} />} />
 				<Route path="Overview" element={<Panel content={<Overview />} />} />
-				<Route path="Logs" element={<Panel content={<Logs />} />} />
 				<Route path="Users" element={<Panel content={<Users />} />} />
 			</Route>
 		</Routes>

@@ -1,9 +1,8 @@
 ﻿using KormoranMobile.Services;
 using KormoranMobile.ViewModels.Commands;
+using Refit;
 using System;
 using Xamarin.Forms;
-using Refit;
-using System.Diagnostics;
 
 namespace KormoranMobile.ViewModels
 {
@@ -19,19 +18,22 @@ namespace KormoranMobile.ViewModels
         private string _points;
         public string Points { get => _points; set => SetProperty(ref _points, value); }
 
-        private string _address;
-        public string Address { get => _address; set => SetProperty(ref _address, value); }
-
         public MainPageViewModel()
         {
-            _kormoranServer = RestService.For<IKormoranServer>("http://www.http2demo.io");
+            _kormoranServer = RestService.For<IKormoranServer>("http://172.20.10.6/api");
             _toaster = DependencyService.Get<IToastMessageService>(DependencyFetchTarget.GlobalInstance);
             UpdateScore = new AsyncRelayCommand<string>(async (string team) =>
             {
                 try
                 {
-                    var pingResponse = await _kormoranServer.PingTest();
-                    Debug.WriteLine(pingResponse);
+                    var request = new RequestModel
+                    {
+                        Team = Convert.ToInt32(team),
+                        MatchId = Convert.ToInt32(_matchId),
+                        Value = Convert.ToInt32(_points)
+                    };
+                    var pingResponse = await _kormoranServer.IncrementScore(request);
+                    _toaster.ShowToast(pingResponse.Message);
                 }
                 catch (Exception ex)
                 {
