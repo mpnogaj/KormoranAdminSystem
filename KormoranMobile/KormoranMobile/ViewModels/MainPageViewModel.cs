@@ -1,4 +1,5 @@
-﻿using KormoranMobile.Services;
+﻿using KormoranShared.Models.Requests.Matches;
+using KormoranMobile.Services;
 using KormoranMobile.ViewModels.Commands;
 using Refit;
 using System;
@@ -26,7 +27,7 @@ namespace KormoranMobile.ViewModels
             {
                 try
                 {
-                    var request = new RequestModel
+                    var request = new IncrementScoreRequestModel
                     {
                         Team = Convert.ToInt32(team),
                         MatchId = Convert.ToInt32(_matchId),

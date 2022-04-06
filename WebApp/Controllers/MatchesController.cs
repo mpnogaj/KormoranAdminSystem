@@ -1,6 +1,7 @@
 ﻿using KormoranAdminSystemRevamped.Contexts;
 using KormoranAdminSystemRevamped.Properties;
 using KormoranShared.Models;
+using KormoranShared.Models.Requests.Matches;
 using KormoranShared.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

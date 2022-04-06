@@ -2,6 +2,7 @@
 using KormoranAdminSystemRevamped.Properties;
 using KormoranAdminSystemRevamped.Services;
 using KormoranShared.Models;
+using KormoranShared.Models.Requests.Tournaments;
 using KormoranShared.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
