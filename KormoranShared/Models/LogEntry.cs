@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace KormoranAdminSystemRevamped.Models
+namespace KormoranShared.Models
 {
 	[Table("logs")]
 	public class LogEntry

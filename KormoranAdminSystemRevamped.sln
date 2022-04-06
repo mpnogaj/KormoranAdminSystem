@@ -11,9 +11,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KormoranMobile.Android", "K
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KormoranMobile.iOS", "KormoranMobile\KormoranMobile.iOS\KormoranMobile.iOS.csproj", "{16716260-72F1-48C1-B652-5C1401B4D2C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KormoranMobile", "KormoranMobile\KormoranMobile\KormoranMobile.csproj", "{3AEC98A0-7034-452F-9190-D13AB630520E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KormoranMobile", "KormoranMobile\KormoranMobile\KormoranMobile.csproj", "{3AEC98A0-7034-452F-9190-D13AB630520E}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "KormoranShared", "KormoranShared\KormoranShared.shproj", "{0445529A-4C2D-4247-BB02-68871A5A15E6}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		KormoranShared\KormoranShared.projitems*{0445529a-4c2d-4247-bb02-68871a5a15e6}*SharedItemsImports = 13
+		KormoranShared\KormoranShared.projitems*{125bfeba-2538-407e-9590-dcbd90e964f7}*SharedItemsImports = 5
+		KormoranShared\KormoranShared.projitems*{3aec98a0-7034-452f-9190-d13ab630520e}*SharedItemsImports = 5
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|ARM = Debug|ARM

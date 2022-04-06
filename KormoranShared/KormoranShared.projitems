@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>0445529a-4c2d-4247-bb02-68871a5a15e6</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>KormoranShared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Discipline.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\LeaderboardEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\LogEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Match.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Request\AuthRequiredRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Request\MatchesRequests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Request\TournamentsRequests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Responses\BasicResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Responses\CollectionResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Responses\SingleItemResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\State.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Team.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Tournament.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\User.cs" />
+  </ItemGroup>
+</Project>

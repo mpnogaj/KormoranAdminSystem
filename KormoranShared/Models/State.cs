@@ -1,10 +1,9 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json;
 
-#nullable disable
-
-namespace KormoranAdminSystemRevamped.Models
+namespace KormoranShared.Models
 {
 	[Table("states")]
 	public class State
@@ -15,6 +14,11 @@ namespace KormoranAdminSystemRevamped.Models
 		
 		[Required]
 		[Column("name")]
-		public string Name { get; set; }
-	}
+		public string? Name { get; set; }
+
+        public override string ToString()
+        {
+			return JsonSerializer.Serialize(this);
+        }
+    }
 }

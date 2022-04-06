@@ -1,7 +1,7 @@
 ﻿using KormoranAdminSystemRevamped.Contexts;
-using KormoranAdminSystemRevamped.Models;
-using KormoranAdminSystemRevamped.Models.Responses;
 using KormoranAdminSystemRevamped.Properties;
+using KormoranShared.Models;
+using KormoranShared.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -167,23 +167,5 @@ namespace KormoranAdminSystemRevamped.Controllers
 				});
             }
         }
-
-		public record UpdateMatchRequestModel
-        {
-			public int MatchId { get; set; }
-			public int TournamentId { get; set; }
-			public int StateId { get; set; }
-			public int Team1 { get; set; }
-			public int Team2 { get; set; }
-			public int Team1Score { get; set; }
-			public int Team2Score { get; set; }
-        }
-
-		public record IncrementScoreRequestModel
-        {
-			public int MatchId { get; set; }
-			public int Team { get; set; }
-			public int Value { get; set; }
-		}
 	}
 }

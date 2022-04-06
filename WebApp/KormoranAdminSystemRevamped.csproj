@@ -67,4 +67,6 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
 
+  <Import Project="..\KormoranShared\KormoranShared.projitems" Label="Shared" />
+
 </Project>

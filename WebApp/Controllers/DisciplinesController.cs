@@ -1,8 +1,7 @@
 ﻿using KormoranAdminSystemRevamped.Contexts;
-using KormoranAdminSystemRevamped.Models;
-using KormoranAdminSystemRevamped.Models.Responses;
 using KormoranAdminSystemRevamped.Properties;
-using Microsoft.AspNetCore.Http;
+using KormoranShared.Models;
+using KormoranShared.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;

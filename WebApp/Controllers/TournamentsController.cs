@@ -1,8 +1,8 @@
 ﻿using KormoranAdminSystemRevamped.Contexts;
-using KormoranAdminSystemRevamped.Models;
-using KormoranAdminSystemRevamped.Models.Responses;
 using KormoranAdminSystemRevamped.Properties;
 using KormoranAdminSystemRevamped.Services;
+using KormoranShared.Models;
+using KormoranShared.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -232,7 +232,7 @@ namespace KormoranAdminSystemRevamped.Controllers
 					Wins = leaderboardKV.Value
 				});
             }
-			
+
             return new JsonResult(new CollectionResponse<LeaderboardEntry>
 			{
 				Error = false,
@@ -240,28 +240,5 @@ namespace KormoranAdminSystemRevamped.Controllers
 				Collection = leaderboard.OrderByDescending(x => x.Wins).ToList()
 			});
 		}
-	}
-
-	public record UpdateTournamentRequestModel
-	{
-		public int TournamentId { get; set; }
-		public string? NewName { get; set; }
-		public int NewStateId { get; set; }
-		public int NewDisciplineId { get; set; }
-	}
-
-	public record TournamentFullUpdateRequestModel : UpdateTournamentRequestModel
-	{
-		public List<Team> Teams { get; set; }
-		public List<UpdateMatchRequestModel> Matches { get; set; }
-	}
-
-	public record GetFullTournamentDataResponseModel : BasicResponse
-	{
-		public Tournament? Tournament { get; set; }
-		public List<Match>? Matches { get; set; }
-		public List<Team>? Teams { get; set; }
-		public List<State>? States { get; set; }
-		public List<Discipline>? Disciplines { get; set; }
 	}
 }

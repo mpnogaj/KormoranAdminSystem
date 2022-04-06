@@ -1,5 +1,6 @@
 ﻿using KormoranAdminSystemRevamped.Models;
 using KormoranAdminSystemRevamped.Services;
+using KormoranShared.Models;
 using Microsoft.EntityFrameworkCore;
 
 #nullable disable

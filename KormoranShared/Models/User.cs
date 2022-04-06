@@ -1,9 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-#nullable disable
-
-namespace KormoranAdminSystemRevamped.Models
+namespace KormoranShared.Models
 {
 	[Table("users")]
 	public class User
@@ -13,14 +11,19 @@ namespace KormoranAdminSystemRevamped.Models
 		public int Id { get; set; }
 		[Required]
 		[Column("user")]
-		public string Login { get; set; }
+		public string? Login { get; set; }
 		[Required]
 		[Column("pass")]
-		public string PasswordHash { get; set; }
+		public string? PasswordHash { get; set; }
 		[Required]
 		[Column("fullname")]
-		public string Fullname { get; set; }
+		public string? Fullname { get; set; }
 		[Column("permissions", TypeName = "json")]
-		public string Permissions { get; set; }
-	}
+		public string? Permissions { get; set; }
+
+        public override string ToString()
+        {
+			return $"{Login} - {Fullname}";
+        }
+    }
 }

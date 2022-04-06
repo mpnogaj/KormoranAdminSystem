@@ -1,4 +1,5 @@
 ﻿using KormoranMobile.ViewModels;
+using KormoranShared.Models.Responses;
 using Refit;
 using System.Threading.Tasks;
 

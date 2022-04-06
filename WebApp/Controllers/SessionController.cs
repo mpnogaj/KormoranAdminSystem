@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using KormoranAdminSystemRevamped.Helpers;
 using KormoranAdminSystemRevamped.Services;
-using KormoranAdminSystemRevamped.Models.Responses;
+using KormoranShared.Models.Responses;
 
 namespace KormoranAdminSystemRevamped.Controllers
 {
@@ -105,7 +105,7 @@ namespace KormoranAdminSystemRevamped.Controllers
 		public string SessionId { get; set; } = "";
 	}
 
-	public record LoginResponseModel : BasicResponse
+	public class LoginResponseModel : BasicResponse
 	{
 		public string SessionId { get; set; } = "";
 	}

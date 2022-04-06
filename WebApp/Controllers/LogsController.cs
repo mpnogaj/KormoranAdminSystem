@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using KormoranAdminSystemRevamped.Contexts;
-using KormoranAdminSystemRevamped.Models;
-using KormoranAdminSystemRevamped.Models.Responses;
 using KormoranAdminSystemRevamped.Services;
+using KormoranShared.Models;
+using KormoranShared.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KormoranAdminSystemRevamped.Controllers

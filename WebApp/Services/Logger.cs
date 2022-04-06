@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using KormoranAdminSystemRevamped.Contexts;
-using KormoranAdminSystemRevamped.Models;
+using KormoranShared.Models;
 
 namespace KormoranAdminSystemRevamped.Services
 {

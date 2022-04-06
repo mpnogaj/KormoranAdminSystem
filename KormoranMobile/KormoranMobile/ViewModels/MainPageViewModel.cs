@@ -42,17 +42,4 @@ namespace KormoranMobile.ViewModels
             }, () => true);
         }
     }
-
-    public class RequestModel
-    {
-        public int MatchId { get; set; }
-        public int Team { get; set; }
-        public int Value { get; set; }
-    }
-
-    public class BasicResponse
-    {
-        public bool Error { get; set; }
-        public string Message { get; set; }
-    }
 }
