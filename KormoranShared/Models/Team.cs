@@ -13,13 +13,13 @@ namespace KormoranShared.Models
 
         [Required]
         [Column("name")]
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
         [ForeignKey("Tournament")]
         [Column("tournament_id")]
         public int TournamentId { get; set; }
         [JsonIgnore]
-        public virtual Tournament? Tournament { get; set; }
+        public virtual Tournament Tournament { get; set; }
 
         public override string ToString()
         {

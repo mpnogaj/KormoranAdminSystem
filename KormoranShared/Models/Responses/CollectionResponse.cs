@@ -5,7 +5,7 @@ namespace KormoranShared.Models.Responses
 {
     public class CollectionResponse<T> : BasicResponse
     {
-        public List<T>? Collection { get; set; }
+        public List<T> Collection { get; set; }
 
         public override string ToString()
         {

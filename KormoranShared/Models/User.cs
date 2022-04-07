@@ -11,15 +11,15 @@ namespace KormoranShared.Models
         public int Id { get; set; }
         [Required]
         [Column("user")]
-        public string? Login { get; set; }
+        public string Login { get; set; }
         [Required]
         [Column("pass")]
-        public string? PasswordHash { get; set; }
+        public string PasswordHash { get; set; }
         [Required]
         [Column("fullname")]
-        public string? Fullname { get; set; }
+        public string Fullname { get; set; }
         [Column("permissions", TypeName = "json")]
-        public string? Permissions { get; set; }
+        public string Permissions { get; set; }
 
         public override string ToString()
         {

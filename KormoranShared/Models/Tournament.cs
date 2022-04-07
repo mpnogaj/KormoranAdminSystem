@@ -16,21 +16,21 @@ namespace KormoranShared.Models
 
         [Column("name")]
         [Required]
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
         [Column("discipline_id")]
         [ForeignKey("Discipline")]
         [JsonIgnore]
         public int DisciplineId { get; set; }
-        public virtual Discipline? Discipline { get; set; }
+        public virtual Discipline Discipline { get; set; }
 
         [Column("state_id")]
         [ForeignKey("State")]
         [JsonIgnore]
         public int StateId { get; set; }
-        public virtual State? State { get; set; }
-        public virtual ICollection<Match>? Matches { get; set; }
-        public virtual ICollection<Team>? Teams { get; set; }
+        public virtual State State { get; set; }
+        public virtual ICollection<Match> Matches { get; set; }
+        public virtual ICollection<Team> Teams { get; set; }
 
         public override string ToString()
         {

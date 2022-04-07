@@ -5,7 +5,7 @@ namespace KormoranShared.Models
     [NotMapped]
     public class LeaderboardEntry
     {
-        public Team? Team { get; set; }
+        public Team Team { get; set; }
         public int Wins { get; set; }
 
         public override string ToString()

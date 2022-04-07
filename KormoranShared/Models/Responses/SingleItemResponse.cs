@@ -4,7 +4,7 @@ namespace KormoranShared.Models.Responses
 {
     public class SingleItemResponse<T> : BasicResponse
     {
-        public T? Data { get; set; }
+        public T Data { get; set; }
 
         public override string ToString()
         {
