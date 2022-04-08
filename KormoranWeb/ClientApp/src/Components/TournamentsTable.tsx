@@ -67,6 +67,7 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 		this.tournamentDownloader = new DownloadManager<ICollectionResponse<ITournament>, null>(
 			GET_TOURNAMENTS, DEFAULT_TIMEOUT, (data: ICollectionResponse<ITournament>) => {
 				const tournament = this.getTournament(this.state.currentTournamentId, data.collection);
+				console.log(data.collection);
 				const matches = this.state.previewModalVisible && tournament != undefined
 					?
 					tournament.matches
@@ -211,7 +212,14 @@ class TournamentsTable extends React.Component<ICompProps, ICompState>{
 						}
 					</tbody>
 				</Table>
-				<Button onClick={(): void => this.handleAddNew()}>Dodaj nowy turniej</Button>
+				{
+					this.props.allowEdit
+						?
+						<Button onClick={(): void => this.handleAddNew()}>Dodaj nowy turniej</Button>
+						:
+						null
+				}
+				
 				{/* Modal podglądu */}
 				<Modal show={this.state.previewModalVisible} onHide={(): void => this.handleHide(ModalTarget.MATCHES)} size="xl">
 					<Modal.Header closeButton>

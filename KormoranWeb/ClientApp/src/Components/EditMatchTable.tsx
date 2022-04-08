@@ -34,7 +34,7 @@ class EditMatchTable extends React.Component<IProps>{
 					const newData = this.props.matches;
 					const prevMatch = newData[newData.length - 1];
 					newData.push({
-						matchId: (prevMatch.matchId < this.newIdStep ? this.newIdStep : prevMatch.matchId + 1),
+						matchId: (prevMatch == undefined || prevMatch.matchId < this.newIdStep ? this.newIdStep : prevMatch.matchId + 1),
 						winner: {
 							id: 0,
 							name: "UNUSED",

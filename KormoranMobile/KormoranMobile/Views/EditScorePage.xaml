@@ -3,22 +3,23 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:KormoranMobile.ViewModels"
              xmlns:behaviors="clr-namespace:KormoranMobile.Behaviors"
-             x:Class="KormoranMobile.MainPage">
+             x:Class="KormoranMobile.Views.EditScorePage"
+             Title="Edytuj punkty">
 
     <ContentPage.BindingContext>
-        <viewmodels:MainPageViewModel/>
+        <viewmodels:EditScorePageViewModel/>
     </ContentPage.BindingContext>
-    
+
     <StackLayout>
-        <Frame BackgroundColor="#2196F3" Padding="24" CornerRadius="0">
-            <Label Text="Kormoran Admin System" HorizontalTextAlignment="Center" TextColor="White" FontSize="36"/>
-        </Frame>
-        <StackLayout Padding="10" Orientation="Horizontal">
-            <Label FontSize="16" VerticalOptions="Center" Text="Id meczu: "/>
-            <Entry Keyboard="Numeric" Text="{Binding MatchId}"
-                   HorizontalOptions="FillAndExpand"
-                   VerticalOptions="Start">
-            </Entry>
+        <StackLayout Orientation="Horizontal" Spacing="5" Padding="10">
+            <Label Text="{Binding Match.Team1}"/>
+            <Label Text="-"/>
+            <Label Text="{Binding Match.Team2}"/>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal" Spacing="5" Padding="10">
+            <Label Text="{Binding Match.Team1Score}"/>
+            <Label Text=":"/>
+            <Label Text="{Binding Match.Team2Score}"/>
         </StackLayout>
         <StackLayout Padding="10" Orientation="Horizontal">
             <Label FontSize="16" VerticalOptions="Center" Text="Ilość punktów: "/>

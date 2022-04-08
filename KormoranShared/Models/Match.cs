@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -22,27 +22,31 @@ namespace KormoranShared.Models
         [Column("state_id")]
         [JsonIgnore]
         public int StateId { get; set; }
-        public virtual State State { get; set; }
+        public State State { get; set; }
 
         [ForeignKey("Team1")]
         [Column("team_1_id")]
         [JsonIgnore]
         public int Team1Id { get; set; }
-        public virtual Team Team1 { get; set; }
+        public Team Team1 { get; set; }
 
         [ForeignKey("Team2")]
         [Column("team_2_id")]
         [JsonIgnore]
         public int Team2Id { get; set; }
-        public virtual Team Team2 { get; set; }
+        public Team Team2 { get; set; }
 
         [NotMapped]
-        public virtual Team Winner
+        public Team Winner
         {
             get
             {
                 if (Team2 == null || Team1 == null) return null;
-                return Team1Score >= Team2Score ? Team1 : Team2;
+                return Team1Score > Team2Score ? Team1 : Team1Score < Team2Score ? Team2 : new Team
+                {
+                    Id = 0,
+                    Name = "-"
+                };
             }
         }
 

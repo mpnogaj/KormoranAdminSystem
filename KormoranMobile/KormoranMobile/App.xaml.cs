@@ -1,4 +1,5 @@
 ﻿using KormoranMobile.Services;
+using KormoranMobile.Views;
 using Xamarin.Forms;
 
 namespace KormoranMobile
@@ -8,7 +9,7 @@ namespace KormoranMobile
         public App()
         {
             InitializeComponent();
-            MainPage = new MainPage();
+            MainPage = new NavigationPage(new TournamentsPage());
         }
 
         protected override void OnStart()

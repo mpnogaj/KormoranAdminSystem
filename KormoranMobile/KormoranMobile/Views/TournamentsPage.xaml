@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 xmlns:viewmodels="clr-namespace:KormoranMobile.ViewModels"
+             xmlns:windows="clr-namespace:Xamarin.Forms.PlatformConfiguration.WindowsSpecific;assembly=Xamarin.Forms.Core"
+			 x:Class="KormoranMobile.Views.TournamentsPage"
+             Title="Turnieje"
+             Padding="8">
+    <ContentPage.BindingContext>
+        <viewmodels:TournamentsPageViewModel/>
+    </ContentPage.BindingContext>
+    <StackLayout>
+        <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                     windows:RefreshView.RefreshPullDirection="TopToBottom"
+                     Command="{Binding DownloadTournaments}">
+            <ListView ItemsSource="{Binding Tournaments}"
+                      ItemTapped="Handle_ItemTapped"
+                      CachingStrategy="RecycleElement">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout>
+                                <Label Text="{Binding Name}"
+                                       VerticalOptions="Center"
+                                       VerticalTextAlignment="Center"
+                                       Style="{DynamicResource ListItemTextStyle}" />
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </RefreshView>
+    </StackLayout>
+</ContentPage>

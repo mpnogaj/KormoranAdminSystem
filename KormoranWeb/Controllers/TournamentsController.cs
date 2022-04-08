@@ -30,13 +30,23 @@ namespace KormoranWeb.Controllers
         {
             try
             {
+                _db.ChangeTracker.LazyLoadingEnabled = false;
                 var tournamentList = await _db.Tournaments
                     .Include(x => x.Teams)
-                    .Include(x => x.Matches)
                     .Include(x => x.Discipline)
+                    .Include(x => x.Matches)
                     .Include(x => x.State)
                     .OrderBy(x => x.TournamentId)
                     .ToListAsync();
+
+                foreach(var tournament in tournamentList)
+                {
+                    var matches = await _db.Matches
+                        .Include(x => x.State)
+                        .Where(x => x.TournamentId == tournament.TournamentId)
+                        .ToListAsync();
+                    tournament.Matches = matches;
+                }
                 if (id.HasValue)
                 {
                     var tournament = tournamentList.FirstOrDefault(x => x.TournamentId == id.Value);
@@ -153,7 +163,9 @@ namespace KormoranWeb.Controllers
                     else
                     {
                         var match = await _db.Matches.FirstOrDefaultAsync(x => x.MatchId == matchData.MatchId);
+                        var newState = await _db.States.FirstOrDefaultAsync(x => x.Id == matchData.StateId);
                         match.StateId = matchData.StateId;
+                        match.State = newState;
                         match.Team1Id = matchData.Team1;
                         match.Team2Id = matchData.Team2;
                         match.Team1Score = matchData.Team1Score;
@@ -220,6 +232,7 @@ namespace KormoranWeb.Controllers
 
             foreach (var winner in winners)
             {
+                if (winner.Team.Id == 0) continue;
                 leaderboardDict[winner.Team!] = winner.Wins;
             }
 

@@ -357,14 +357,16 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 												});
 											});
 											console.log(this.props.params.id!);
-											const res = await axios.post<IBasicResponse, AxiosResponse<IBasicResponse> , IUpdateTournamentRequest>(UPDATE_TOURNAMENT, {
+											const body: IUpdateTournamentRequest = {
 												tournamentId: parseInt(this.props.params.id!),
 												newName: this.state.tournament.name,
 												newStateId: this.state.tournament.state.id,
 												newDisciplineId: this.state.tournament.discipline.id,
 												teams: this.state.tournament.teams,
 												matches: matchesData
-											});
+											};
+											console.log(body);
+											const res = await axios.post<IBasicResponse>(UPDATE_TOURNAMENT, body);
 											if(res.status != 200 || res.data.error){
 												alert("Cos poszlo nie tak! Zobacz konsole po wiecej szczegolow");
 												console.log(res);
