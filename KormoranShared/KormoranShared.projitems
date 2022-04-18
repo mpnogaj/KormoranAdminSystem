@@ -16,11 +16,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Request\AuthRequiredRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Request\MatchesRequests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Request\TournamentsRequests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Request\UserRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Responses\AuthenticateResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Responses\BasicResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Responses\CollectionResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Responses\SingleItemResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\State.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Team.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Token.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Tournament.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\User.cs" />
   </ItemGroup>

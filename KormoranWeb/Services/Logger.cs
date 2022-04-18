@@ -1,6 +1,7 @@
-using KormoranShared.Models;
 using KormoranWeb.Contexts;
 using System.Threading.Tasks;
+using KormoranShared.Models;
+using KormoranWeb.Models;
 
 namespace KormoranWeb.Services
 {

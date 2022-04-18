@@ -1,11 +1,11 @@
-﻿using KormoranShared.Models.Responses;
-using KormoranWeb.Contexts;
+﻿using KormoranWeb.Contexts;
 using KormoranWeb.Helpers;
 using KormoranWeb.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
+using KormoranShared.Models.Responses;
 
 namespace KormoranWeb.Controllers
 {

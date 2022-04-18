@@ -1,4 +1,5 @@
 ﻿using KormoranShared.Models;
+using KormoranWeb.Models;
 using Microsoft.EntityFrameworkCore;
 
 #nullable disable

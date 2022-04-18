@@ -1,7 +1,4 @@
-﻿using KormoranShared.Models;
-using KormoranShared.Models.Requests.Matches;
-using KormoranShared.Models.Responses;
-using KormoranWeb.Contexts;
+﻿using KormoranWeb.Contexts;
 using KormoranWeb.Properties;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KormoranShared.Models;
+using KormoranShared.Models.Requests.Matches;
+using KormoranShared.Models.Responses;
+using KormoranWeb.Models;
+using KormoranWeb.Models.Request;
+using KormoranWeb.Models.Responses;
 
 namespace KormoranWeb.Controllers
 {

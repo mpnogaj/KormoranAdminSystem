@@ -1,7 +1,6 @@
 ﻿using KormoranMobile.ViewModels;
-using KormoranShared.Models;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
+using KormoranShared.Models;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

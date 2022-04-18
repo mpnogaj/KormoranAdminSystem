@@ -1,8 +1,8 @@
-﻿using KormoranShared.Models.Responses;
-using KormoranShared.Models.Requests.Matches;
-using Refit;
+﻿using Refit;
 using System.Threading.Tasks;
 using KormoranShared.Models;
+using KormoranShared.Models.Requests.Matches;
+using KormoranShared.Models.Responses;
 
 namespace KormoranMobile.Services
 {

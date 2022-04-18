@@ -1,21 +1,15 @@
 ﻿using KormoranMobile.Services;
 using KormoranMobile.Util;
 using KormoranMobile.ViewModels.Commands;
-using KormoranShared.Models;
 using Refit;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
+using KormoranShared.Models;
 using Xamarin.Forms;
 
 namespace KormoranMobile.ViewModels
 {
     public class MatchesPageViewModel : ViewModelBase
     {
-        private readonly IKormoranServer _kormoranServer;
-        private readonly IToastMessageService _toaster;
-
         private ObservableCollection<Match> _matches;
         public ObservableCollection<Match> Matches 
         { 
@@ -50,14 +44,14 @@ namespace KormoranMobile.ViewModels
         public MatchesPageViewModel()
         {
             Matches = new ObservableCollection<Match>();
-            _kormoranServer = RestService.For<IKormoranServer>(Constants.API_ADDRESS);
-            _toaster = DependencyService.Get<IToastMessageService>(DependencyFetchTarget.GlobalInstance);
+            var kormoranServer = RestService.For<IKormoranServer>(Constants.API_ADDRESS);
+            var toaster = DependencyService.Get<IToastMessageService>(DependencyFetchTarget.GlobalInstance);
             DownloadMatches = new AsyncRelayCommand(async () =>
             {
-                var response = await _kormoranServer.GetMatches(TournamentId);
+                var response = await kormoranServer.GetMatches(TournamentId);
                 if (response.Error)
                 {
-                    _toaster.ShowToast(response.Message);
+                    toaster.ShowToast(response.Message);
                 }
                 else
                 {

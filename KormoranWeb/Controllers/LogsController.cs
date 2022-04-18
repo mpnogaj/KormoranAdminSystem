@@ -1,9 +1,11 @@
-using KormoranShared.Models;
-using KormoranShared.Models.Responses;
 using KormoranWeb.Contexts;
 using KormoranWeb.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using KormoranShared.Models;
+using KormoranShared.Models.Responses;
+using KormoranWeb.Models;
+using KormoranWeb.Models.Responses;
 
 namespace KormoranWeb.Controllers
 {
@@ -27,7 +29,7 @@ namespace KormoranWeb.Controllers
                 return new JsonResult(new CollectionResponse<LogEntry>
                 {
                     Error = true,
-                    Message = "Musisz byæ zalogowany, ¿eby zobaczyæ logi!",
+                    Message = "Musisz byÄ‡ zalogowany, Å¼eby zobaczyÄ‡ logi!",
                     Collection = null
                 });
             }
@@ -36,7 +38,7 @@ namespace KormoranWeb.Controllers
                 return new JsonResult(new CollectionResponse<LogEntry>
                 {
                     Error = false,
-                    Message = "Operacja zakoñczona sukcesem",
+                    Message = "Operacja zakoÅ„czona sukcesem",
                     Collection = _dbContext.Logs.ToList()
                 });
             }
@@ -45,7 +47,7 @@ namespace KormoranWeb.Controllers
                 return new JsonResult(new CollectionResponse<LogEntry>
                 {
                     Error = true,
-                    Message = "B³¹d po stronie serwera. Powiadom administratora",
+                    Message = "BÅ‚Ä…d po stronie serwera. Powiadom administratora",
                     Collection = null
                 });
             }

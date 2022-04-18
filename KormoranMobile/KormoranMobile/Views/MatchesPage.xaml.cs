@@ -1,6 +1,5 @@
 ﻿using KormoranMobile.ViewModels;
 using KormoranShared.Models;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

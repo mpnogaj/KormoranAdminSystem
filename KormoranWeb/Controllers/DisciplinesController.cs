@@ -1,11 +1,10 @@
-﻿using KormoranShared.Models;
-using KormoranShared.Models.Responses;
-using KormoranWeb.Contexts;
+﻿using KormoranWeb.Contexts;
 using KormoranWeb.Properties;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
-
+using KormoranShared.Models;
+using KormoranShared.Models.Responses;
 namespace KormoranWeb.Controllers
 {
     [Route("api/[controller]/[action]")]

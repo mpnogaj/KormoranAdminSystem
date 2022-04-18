@@ -1,19 +1,16 @@
-﻿using KormoranShared.Models.Requests.Matches;
-using KormoranMobile.Services;
+﻿using KormoranMobile.Services;
 using KormoranMobile.ViewModels.Commands;
 using Refit;
 using System;
 using Xamarin.Forms;
-using System.Diagnostics;
-using KormoranShared.Models;
 using KormoranMobile.Util;
+using KormoranShared.Models;
+using KormoranShared.Models.Requests.Matches;
 
 namespace KormoranMobile.ViewModels
 {
     public class EditScorePageViewModel : ViewModelBase
     {
-        private readonly IKormoranServer _kormoranServer;
-        private IToastMessageService _toaster;
         public AsyncRelayCommand<string> UpdateScore { get; private set; }
 
         private Match _match;
@@ -24,8 +21,8 @@ namespace KormoranMobile.ViewModels
 
         public EditScorePageViewModel()
         {
-            _kormoranServer = RestService.For<IKormoranServer>(Constants.API_ADDRESS);
-            _toaster = DependencyService.Get<IToastMessageService>(DependencyFetchTarget.GlobalInstance);
+            var kormoranServer = RestService.For<IKormoranServer>(Constants.API_ADDRESS);
+            var toaster = DependencyService.Get<IToastMessageService>(DependencyFetchTarget.GlobalInstance);
             UpdateScore = new AsyncRelayCommand<string>(async (string team) =>
             {
                 try
@@ -38,7 +35,7 @@ namespace KormoranMobile.ViewModels
                         MatchId = Match.MatchId,
                         Value = pts
                     };
-                    var response = await _kormoranServer.IncrementScore(request);
+                    var response = await kormoranServer.IncrementScore(request);
                     if(!response.Error)
                     {
                         switch (targetTeam)
@@ -52,11 +49,11 @@ namespace KormoranMobile.ViewModels
                         }
                         OnPropertyChanged(nameof(Match));
                     }
-                    _toaster.ShowToast(response.Message);
+                    toaster.ShowToast(response.Message);
                 }
                 catch (Exception ex)
                 {
-                    _toaster.ShowToast($"Wystapił błąd. Treść: {ex.Message}");
+                    toaster.ShowToast($"Wystapił błąd. Treść: {ex.Message}");
                 }
             }, () => true);
         }
