@@ -4,6 +4,7 @@ using KormoranMobile.ViewModels.Commands;
 using KormoranShared.Models;
 using Refit;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using Xamarin.Forms;
 
 namespace KormoranMobile.ViewModels
@@ -40,8 +41,15 @@ namespace KormoranMobile.ViewModels
         public TournamentsPageViewModel()
         {
             Tournaments = new ObservableCollection<Tournament>();
-            _kormoranServer = RestService.For<IKormoranServer>(Constants.API_ADDRESS);
             _toaster = DependencyService.Get<IToastMessageService>(DependencyFetchTarget.GlobalInstance);
+            try
+            {
+                _kormoranServer = RestService.For<IKormoranServer>(Constants.API_ADDRESS);
+            }
+            catch
+            {
+                _toaster.ShowToast("Upewnij się że adres podany w ustawieniach jest poprwany!");
+            }
 
             DownloadTournaments = new AsyncRelayCommand(async () =>
             {
@@ -56,6 +64,11 @@ namespace KormoranMobile.ViewModels
                 }
                 IsRefreshing = false;
             });
+        }
+
+        public void RecreateHttpClient()
+        {
+            
         }
     }
 }

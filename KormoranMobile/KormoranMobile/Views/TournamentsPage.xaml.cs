@@ -1,6 +1,7 @@
 ﻿using KormoranMobile.ViewModels;
 using KormoranShared.Models;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -29,6 +30,11 @@ namespace KormoranMobile.Views
                 }
             };
             await Navigation.PushAsync(matchesPage);
+        }
+
+        private async void NavigateSettings(object sender, System.EventArgs e)
+        {
+            await Navigation.PushAsync(new SettingsPage());
         }
     }
 }

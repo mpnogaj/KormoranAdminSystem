@@ -1,7 +1,14 @@
-﻿namespace KormoranMobile.Util
+﻿using Plugin.Settings;
+using Plugin.Settings.Abstractions;
+
+
+namespace KormoranMobile.Util
 {
     public class Constants
     {
-        public const string API_ADDRESS = "http://192.168.88.122/api";
+        private static ISettings _settings
+            => CrossSettings.Current;
+
+        public static string API_ADDRESS => $"http://{_settings.GetValueOrDefault("ServerAddress", string.Empty)}/api";
     }
 }
