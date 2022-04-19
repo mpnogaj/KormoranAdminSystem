@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="KormoranMobile.Views.LoginPage"
+             Title="Kormoran Mobile">
+    <ContentPage.Content>
+        <StackLayout Spacing="3">
+            <Label Text="KORMORAN MOBILE"
+                   HorizontalOptions="CenterAndExpand"
+                   Style="{DynamicResource TitleStyle}"/>
+            <StackLayout Spacing="2" Margin="10">
+                <Label Text="Nazwa użytkownika"
+                   Style="{DynamicResource BodyStyle}"/>
+                <Entry Text=""
+                   Placeholder="mnogaj"/>
+            </StackLayout>
+
+            <StackLayout Spacing="2" Margin="10">
+                <Label Text="Hasło"
+                   Style="{DynamicResource BodyStyle}"/>
+                <Entry Text=""
+                       IsPassword="True"/>
+            </StackLayout>
+
+            <StackLayout Spacing="10" 
+                         HorizontalOptions="Center"
+                         Orientation="Horizontal">
+                <Button Text="Zaloguj jako gość"/>
+                <Button Text="Zaloguj"/>
+            </StackLayout> 
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -9,7 +9,7 @@ namespace KormoranMobile
         public App()
         {
             InitializeComponent();
-            MainPage = new NavigationPage(new TournamentsPage());
+            MainPage = new NavigationPage(new LoginPage());
         }
 
         protected override void OnStart()
