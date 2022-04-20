@@ -1,23 +1,23 @@
 interface IBasicResponse {
-	message: string,
-	error: boolean;
+    message: string,
+    error: boolean;
 }
 
 interface ICollectionResponse<T> extends IBasicResponse {
-	collection: Array<T>;
+    collection: Array<T>;
 }
 
 interface ILoginResponse extends IBasicResponse {
-	sessionId: string;
+    sessionId: string;
 }
 
 interface ISingleItemResponse<T> extends IBasicResponse {
-	data: T;
+    data: T;
 }
 
 export type {
-	IBasicResponse,
-	ICollectionResponse,
-	ISingleItemResponse,
-	ILoginResponse
+    IBasicResponse,
+    ICollectionResponse,
+    ISingleItemResponse,
+    ILoginResponse
 };

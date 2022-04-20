@@ -4,15 +4,15 @@
              xmlns:viewmodels="clr-namespace:KormoranMobile.ViewModels"
              x:Class="KormoranMobile.Views.SettingsPage">
     <ContentPage.BindingContext>
-        <viewmodels:SettingsPageViewModel/>
+        <viewmodels:SettingsPageViewModel />
     </ContentPage.BindingContext>
-    
+
     <ContentPage.Content>
         <StackLayout Spacing="3" Margin="2">
             <Label Text="Adres serwera"
-                   Style="{DynamicResource TitleStyle}"/>
-            <Entry Text="{Binding ServerAddress}"/>
-            <Button Command="{Binding SaveSettings}" Text="Zapisz"/>
+                   Style="{DynamicResource TitleStyle}" />
+            <Entry Text="{Binding ServerAddress}" />
+            <Button Command="{Binding SaveSettings}" Text="Zapisz" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -13,10 +13,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\LeaderboardEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\LogEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Match.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Request\AuthRequiredRequest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Request\MatchesRequests.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Request\TournamentsRequests.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Request\UserRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\AuthenticateRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\AuthRequiredRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\MatchesRequests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\TournamentsRequests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Responses\AuthenticateResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Responses\BasicResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Responses\CollectionResponse.cs" />

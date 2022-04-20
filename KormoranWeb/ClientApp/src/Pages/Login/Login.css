@@ -1,9 +1,9 @@
-.errorText{
-	color: red;
-	text-align: center;
-	font-size: large;
+.errorText {
+    color: red;
+    text-align: center;
+    font-size: large;
 }
 
-.errorText-hidden{
-	visibility: collapse;
+.errorText-hidden {
+    visibility: collapse;
 }

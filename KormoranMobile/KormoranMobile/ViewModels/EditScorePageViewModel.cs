@@ -1,11 +1,11 @@
 ﻿using KormoranMobile.Services;
+using KormoranMobile.Util;
 using KormoranMobile.ViewModels.Commands;
+using KormoranShared.Models;
+using KormoranShared.Models.Requests.Matches;
 using Refit;
 using System;
 using Xamarin.Forms;
-using KormoranMobile.Util;
-using KormoranShared.Models;
-using KormoranShared.Models.Requests.Matches;
 
 namespace KormoranMobile.ViewModels
 {
@@ -36,13 +36,14 @@ namespace KormoranMobile.ViewModels
                         Value = pts
                     };
                     var response = await kormoranServer.IncrementScore(request);
-                    if(!response.Error)
+                    if (!response.Error)
                     {
                         switch (targetTeam)
                         {
                             case 1:
                                 Match.Team1Score += pts;
                                 break;
+
                             case 2:
                                 Match.Team2Score += pts;
                                 break;

@@ -1,9 +1,9 @@
 ﻿using KormoranMobile.Services;
 using KormoranMobile.Util;
 using KormoranMobile.ViewModels.Commands;
+using KormoranShared.Models;
 using Refit;
 using System.Collections.ObjectModel;
-using KormoranShared.Models;
 using Xamarin.Forms;
 
 namespace KormoranMobile.ViewModels
@@ -13,6 +13,7 @@ namespace KormoranMobile.ViewModels
         private readonly IKormoranServer _kormoranServer;
 
         private ObservableCollection<Tournament> _tournaments;
+
         public ObservableCollection<Tournament> Tournaments
         {
             get => _tournaments;
@@ -20,6 +21,7 @@ namespace KormoranMobile.ViewModels
         }
 
         private AsyncRelayCommand _downloadTournaments;
+
         public AsyncRelayCommand DownloadTournaments
         {
             get => _downloadTournaments;
@@ -27,13 +29,11 @@ namespace KormoranMobile.ViewModels
         }
 
         private bool _isRefreshing;
+
         public bool IsRefreshing
         {
             get => _isRefreshing;
-            set
-            {
-                SetProperty(ref _isRefreshing, value);
-            }
+            set => SetProperty(ref _isRefreshing, value);
         }
 
         public TournamentsPageViewModel()
@@ -66,7 +66,6 @@ namespace KormoranMobile.ViewModels
 
         public void RecreateHttpClient()
         {
-            
         }
     }
 }

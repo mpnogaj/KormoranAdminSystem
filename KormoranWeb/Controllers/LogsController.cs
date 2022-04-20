@@ -1,11 +1,9 @@
+using KormoranShared.Models;
+using KormoranShared.Models.Responses;
 using KormoranWeb.Contexts;
 using KormoranWeb.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
-using KormoranShared.Models;
-using KormoranShared.Models.Responses;
-using KormoranWeb.Models;
-using KormoranWeb.Models.Responses;
 
 namespace KormoranWeb.Controllers
 {
@@ -15,6 +13,7 @@ namespace KormoranWeb.Controllers
     {
         private readonly KormoranContext _dbContext;
         private readonly ISessionManager _sessionManager;
+
         public LogsController(KormoranContext dbContext, ISessionManager sessionManager)
         {
             _dbContext = dbContext;
@@ -51,7 +50,6 @@ namespace KormoranWeb.Controllers
                     Collection = null
                 });
             }
-
         }
     }
 }

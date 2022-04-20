@@ -10,12 +10,16 @@ namespace KormoranShared.Models
         [Key]
         [Column("id")]
         public int Id { get; set; }
+
         [Column("level")]
         public int Level { get; set; }
+
         [Column("date")]
         public DateTime Date { get; set; }
+
         [Column("author")]
         public string Author { get; set; }
+
         [Column("action")]
         public string Action { get; set; }
 

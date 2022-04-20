@@ -1,5 +1,4 @@
-﻿using KormoranMobile.Services;
-using KormoranMobile.Views;
+﻿using KormoranMobile.Views;
 using Xamarin.Forms;
 
 namespace KormoranMobile

@@ -2,9 +2,6 @@
 using KormoranMobile.ViewModels.Commands;
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xamarin.Forms;
 
 namespace KormoranMobile.ViewModels
@@ -13,16 +10,19 @@ namespace KormoranMobile.ViewModels
     {
         private static ISettings AppSettings =>
             CrossSettings.Current;
+
         private IToastMessageService _toaster;
 
         private string _serverAddress;
-        public string ServerAddress 
+
+        public string ServerAddress
         {
             get => _serverAddress;
             set => SetProperty(ref _serverAddress, value);
         }
 
         private RelayCommand _saveSettings;
+
         public RelayCommand SaveSettings
         {
             get => _saveSettings;

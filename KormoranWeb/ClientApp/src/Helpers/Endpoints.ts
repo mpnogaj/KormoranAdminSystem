@@ -9,6 +9,4 @@ export const GET_LEADERBOARDS = "/api/tournaments/GetLeaderboard";
 export const UPDATE_TOURNAMENT = "/api/tournaments/UpdateTournament";
 export const UPDATE_TOURNAMENT_BASIC = "/api/tournaments/UpdateTournamentBasic";
 
-
 export const VALIDATE = "/api/Session/Validate";
-

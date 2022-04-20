@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 namespace KormoranShared.Models.Requests.Tournaments
 {
-
     public class UpdateTournamentRequestModel
     {
         public int TournamentId { get; set; }

@@ -4,12 +4,12 @@ import IState from "./IState";
 import ITeam from "./ITeam";
 
 interface ITournament {
-	tournamentId: number,
-	name: string,
-	discipline: IDiscipline,
-	state: IState,
-	matches: Array<IMatch>
-	teams: Array<ITeam>,
+    tournamentId: number,
+    name: string,
+    discipline: IDiscipline,
+    state: IState,
+    matches: Array<IMatch>
+    teams: Array<ITeam>,
 }
 
 export default ITournament;

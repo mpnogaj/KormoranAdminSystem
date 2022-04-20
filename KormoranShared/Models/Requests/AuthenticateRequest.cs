@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace KormoranWeb.Models.Request
+namespace KormoranShared.Models.Requests
 {
-    public class UserRequest
+    public class AuthenticateRequest
     {
         [Required]
         public string Username { get; set; }
+
         [Required]
         public string Password { get; set; }
-
     }
 }

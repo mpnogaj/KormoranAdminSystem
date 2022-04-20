@@ -2,10 +2,10 @@
 using KormoranMobile.UWP.Impl;
 using Microsoft.Toolkit.Uwp.Notifications;
 using System;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(ToastMessageService))]
+
 namespace KormoranMobile.UWP.Impl
 {
     public class ToastMessageService : IToastMessageService

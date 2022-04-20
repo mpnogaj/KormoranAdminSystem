@@ -1,10 +1,7 @@
-﻿using KormoranShared.Models.Responses;
-
-namespace KormoranWeb.Models.Responses
+﻿namespace KormoranShared.Models.Responses
 {
-	public class AuthenticateResponse : BasicResponse
+    public class AuthenticateResponse : BasicResponse
     {
-    	public string Token { get; set; }
+        public string Token { get; set; }
     }
 }
-

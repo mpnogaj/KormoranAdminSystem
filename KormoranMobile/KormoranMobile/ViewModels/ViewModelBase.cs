@@ -6,7 +6,6 @@ namespace KormoranMobile.ViewModels
 {
     public class ViewModelBase : INotifyPropertyChanged
     {
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -20,6 +19,5 @@ namespace KormoranMobile.ViewModels
             storage = value;
             this.OnPropertyChanged(propertyName);
         }
-
     }
 }

@@ -1,4 +1,7 @@
-﻿using KormoranWeb.Contexts;
+﻿using KormoranShared.Models;
+using KormoranShared.Models.Requests.Tournaments;
+using KormoranShared.Models.Responses;
+using KormoranWeb.Contexts;
 using KormoranWeb.Properties;
 using KormoranWeb.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -7,12 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using KormoranShared.Models;
-using KormoranShared.Models.Requests.Tournaments;
-using KormoranShared.Models.Responses;
-using KormoranWeb.Models;
-using KormoranWeb.Models.Request;
-using KormoranWeb.Models.Responses;
 
 namespace KormoranWeb.Controllers
 {
@@ -22,6 +19,7 @@ namespace KormoranWeb.Controllers
     {
         private readonly KormoranContext _db;
         private readonly ISessionManager _sessionManager;
+
         public TournamentsController(KormoranContext dp, ISessionManager sessionManager)
         {
             _db = dp;
@@ -42,7 +40,7 @@ namespace KormoranWeb.Controllers
                     .OrderBy(x => x.TournamentId)
                     .ToListAsync();
 
-                foreach(var tournament in tournamentList)
+                foreach (var tournament in tournamentList)
                 {
                     var matches = await _db.Matches
                         .Include(x => x.State)
@@ -70,7 +68,6 @@ namespace KormoranWeb.Controllers
                     });
                 }
 
-
                 return new JsonResult(new CollectionResponse<Tournament>()
                 {
                     Message = Resources.operationSuccessfull,
@@ -86,7 +83,7 @@ namespace KormoranWeb.Controllers
                     Error = true,
                     Collection = null
                 });
-            } 
+            }
         }
 
         [HttpPost]

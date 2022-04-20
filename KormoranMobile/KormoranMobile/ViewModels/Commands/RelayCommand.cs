@@ -8,10 +8,11 @@ namespace KormoranMobile.ViewModels.Commands
         #region Fields
 
         public event EventHandler CanExecuteChanged;
+
         private readonly Action<T> _execute;
         private readonly Func<bool> _canExecute;
 
-        #endregion
+        #endregion Fields
 
         #region Constructors
 
@@ -33,7 +34,7 @@ namespace KormoranMobile.ViewModels.Commands
             _canExecute = canExecute;
         }
 
-        #endregion
+        #endregion Constructors
 
         #region ICommand Members
 
@@ -65,7 +66,7 @@ namespace KormoranMobile.ViewModels.Commands
             CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        #endregion
+        #endregion ICommand Members
     }
 
     public class RelayCommand : ICommand
@@ -73,10 +74,11 @@ namespace KormoranMobile.ViewModels.Commands
         #region Fields
 
         public event EventHandler CanExecuteChanged;
+
         private readonly Action _execute;
         private readonly Func<bool> _canExecute;
 
-        #endregion
+        #endregion Fields
 
         #region Constructors
 
@@ -98,7 +100,7 @@ namespace KormoranMobile.ViewModels.Commands
             _canExecute = canExecute;
         }
 
-        #endregion
+        #endregion Constructors
 
         #region ICommand Members
 
@@ -123,12 +125,11 @@ namespace KormoranMobile.ViewModels.Commands
             _execute();
         }
 
-
         public void RaiseCanExecuteChanged()
         {
             CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        #endregion
+        #endregion ICommand Members
     }
 }

@@ -1,20 +1,22 @@
+using KormoranShared.Models;
 using KormoranWeb.Contexts;
 using System.Threading.Tasks;
-using KormoranShared.Models;
-using KormoranWeb.Models;
 
 namespace KormoranWeb.Services
 {
     public interface ILogger
     {
         public Task LogNormal(LogEntry log);
+
         public Task LogMinor(LogEntry log);
+
         public Task LogMajor(LogEntry log);
     }
 
     public class Logger : ILogger
     {
         private readonly KormoranContext _db;
+
         public Logger(KormoranContext db)
         {
             _db = db;

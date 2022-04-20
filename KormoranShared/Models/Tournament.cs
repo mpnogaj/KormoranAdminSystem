@@ -22,12 +22,14 @@ namespace KormoranShared.Models
         [ForeignKey("Discipline")]
         [JsonIgnore]
         public int DisciplineId { get; set; }
+
         public Discipline Discipline { get; set; }
 
         [Column("state_id")]
         [ForeignKey("State")]
         [JsonIgnore]
         public int StateId { get; set; }
+
         public State State { get; set; }
         public virtual ICollection<Match> Matches { get; set; }
         public virtual ICollection<Team> Teams { get; set; }

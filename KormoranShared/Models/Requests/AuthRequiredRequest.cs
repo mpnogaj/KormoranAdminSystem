@@ -1,4 +1,4 @@
-﻿namespace KormoranAdminSystemRevamped.Models.Request
+﻿namespace KormoranAdminSystemRevamped.Models.Requests
 {
     public class AuthRequiredRequest
     {

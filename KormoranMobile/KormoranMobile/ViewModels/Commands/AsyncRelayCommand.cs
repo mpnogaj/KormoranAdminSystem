@@ -4,123 +4,129 @@ using System.Windows.Input;
 
 namespace KormoranMobile.ViewModels.Commands
 {
-	public class AsyncRelayCommand<T> : IAsyncCommand<T>
-	{
-		public event EventHandler CanExecuteChanged;
-		private readonly Func<T, Task> _execute;
-		private readonly Func<bool> _canExecute;
-		private bool _isExecuting = false;
+    public class AsyncRelayCommand<T> : IAsyncCommand<T>
+    {
+        public event EventHandler CanExecuteChanged;
 
-		public AsyncRelayCommand(Func<T, Task> execute) : this(execute, () => true) { }
+        private readonly Func<T, Task> _execute;
+        private readonly Func<bool> _canExecute;
+        private bool _isExecuting = false;
 
-		public AsyncRelayCommand(Func<T, Task> execute, Func<bool> canExecute)
-		{
-			_execute = execute;
-			_canExecute = canExecute;
-		}
+        public AsyncRelayCommand(Func<T, Task> execute) : this(execute, () => true)
+        {
+        }
 
-		public void RaiseCanExecuteChanged()
-		{
-			CanExecuteChanged?.Invoke(this, EventArgs.Empty);
-		}
+        public AsyncRelayCommand(Func<T, Task> execute, Func<bool> canExecute)
+        {
+            _execute = execute;
+            _canExecute = canExecute;
+        }
 
-		public bool CanExecute(T parameter)
-		{
-			if (_isExecuting)
-			{
-				return false;
-			}
-			if (_canExecute == null)
-			{
-				return true;
-			}
+        public void RaiseCanExecuteChanged()
+        {
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        }
 
-			return _canExecute();
-		}
+        public bool CanExecute(T parameter)
+        {
+            if (_isExecuting)
+            {
+                return false;
+            }
+            if (_canExecute == null)
+            {
+                return true;
+            }
 
-		public async Task ExecuteAsync(T parameter)
-		{
-			if (!_isExecuting)
-			{
-				_isExecuting = true;
-				await _execute(parameter);
-				_isExecuting = false;
-			}
-		}
+            return _canExecute();
+        }
 
-		#region ICommand implementation
+        public async Task ExecuteAsync(T parameter)
+        {
+            if (!_isExecuting)
+            {
+                _isExecuting = true;
+                await _execute(parameter);
+                _isExecuting = false;
+            }
+        }
 
-		bool ICommand.CanExecute(object parameter)
-		{
-			if (parameter == null || parameter.GetType() != typeof(T)) return false;
-			return CanExecute((T)parameter);
-		}
+        #region ICommand implementation
 
-		void ICommand.Execute(object parameter)
-		{
-			if (parameter == null || parameter.GetType() != typeof(T)) return;
-			_ = ExecuteAsync((T)parameter);
-		}
+        bool ICommand.CanExecute(object parameter)
+        {
+            if (parameter == null || parameter.GetType() != typeof(T)) return false;
+            return CanExecute((T)parameter);
+        }
 
-		#endregion
-	}
+        void ICommand.Execute(object parameter)
+        {
+            if (parameter == null || parameter.GetType() != typeof(T)) return;
+            _ = ExecuteAsync((T)parameter);
+        }
 
-	public class AsyncRelayCommand : IAsyncCommand
-	{
-		public event EventHandler CanExecuteChanged;
-		private readonly Func<Task> _execute;
-		private readonly Func<bool> _canExecute;
-		private bool _isExecuting = false;
+        #endregion ICommand implementation
+    }
 
-		public AsyncRelayCommand(Func<Task> execute) : this(execute, () => true) { }
+    public class AsyncRelayCommand : IAsyncCommand
+    {
+        public event EventHandler CanExecuteChanged;
 
-		public AsyncRelayCommand(Func<Task> execute, Func<bool> canExecute)
-		{
-			_execute = execute;
-			_canExecute = canExecute;
-		}
+        private readonly Func<Task> _execute;
+        private readonly Func<bool> _canExecute;
+        private bool _isExecuting = false;
 
-		public void RaiseCanExecuteChanged()
-		{
-			CanExecuteChanged?.Invoke(this, EventArgs.Empty);
-		}
+        public AsyncRelayCommand(Func<Task> execute) : this(execute, () => true)
+        {
+        }
 
-		public bool CanExecute()
-		{
-			if (_isExecuting)
-			{
-				return false;
-			}
-			if (_canExecute == null)
-			{
-				return true;
-			}
+        public AsyncRelayCommand(Func<Task> execute, Func<bool> canExecute)
+        {
+            _execute = execute;
+            _canExecute = canExecute;
+        }
 
-			return _canExecute();
-		}
+        public void RaiseCanExecuteChanged()
+        {
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        }
 
-		public async Task ExecuteAsync()
-		{
-			if (!_isExecuting)
-			{
-				_isExecuting = true;
-				await _execute();
-				_isExecuting = false;
-			}
-		}
+        public bool CanExecute()
+        {
+            if (_isExecuting)
+            {
+                return false;
+            }
+            if (_canExecute == null)
+            {
+                return true;
+            }
 
-		#region ICommand implementation
+            return _canExecute();
+        }
 
-		bool ICommand.CanExecute(object parameter)
-		{
-			return CanExecute();
-		}
+        public async Task ExecuteAsync()
+        {
+            if (!_isExecuting)
+            {
+                _isExecuting = true;
+                await _execute();
+                _isExecuting = false;
+            }
+        }
 
-		void ICommand.Execute(object parameter)
-		{
-			_ = ExecuteAsync();
-		}
+        #region ICommand implementation
 
-		#endregion
-	}
+        bool ICommand.CanExecute(object parameter)
+        {
+            return CanExecute();
+        }
+
+        void ICommand.Execute(object parameter)
+        {
+            _ = ExecuteAsync();
+        }
+
+        #endregion ICommand implementation
+    }
 }

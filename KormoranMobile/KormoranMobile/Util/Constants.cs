@@ -1,7 +1,6 @@
 ﻿using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 
-
 namespace KormoranMobile.Util
 {
     public class Constants

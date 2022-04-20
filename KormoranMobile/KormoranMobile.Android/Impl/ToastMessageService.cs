@@ -5,6 +5,7 @@ using Xamarin.Essentials;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(ToastMessageService))]
+
 namespace KormoranMobile.Droid.Impl
 {
     public class ToastMessageService : IToastMessageService

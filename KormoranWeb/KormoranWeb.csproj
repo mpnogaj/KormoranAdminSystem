@@ -71,10 +71,6 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\KormoranMobile\KormoranMobile\KormoranMobile.csproj" />
-  </ItemGroup>
-
   <Import Project="..\KormoranShared\KormoranShared.projitems" Label="Shared" />
 
 </Project>
