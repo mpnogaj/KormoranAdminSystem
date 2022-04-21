@@ -16,9 +16,9 @@
                                WidthRequest="300" />
             <StackLayout Spacing="2">
                 <Label Text="Nazwa użytkownika"
-                   Style="{DynamicResource BodyStyle}" />
+                       Style="{DynamicResource BodyStyle}" />
                 <Entry Text="{Binding Username}"
-                   Placeholder="mnogaj" />
+                       Placeholder="mnogaj" />
             </StackLayout>
 
             <StackLayout Spacing="2">
@@ -32,8 +32,10 @@
             <StackLayout Spacing="10"
                          HorizontalOptions="Center"
                          Orientation="Horizontal">
-                <Button Text="Zaloguj jako gość" />
-                <Button Text="Zaloguj" />
+                <Button Text="Zaloguj jako gość"
+                        Command="{Binding LoginGuestCommand}"/>
+                <Button Text="Zaloguj"
+                        Command="{Binding LoginGuestCommand}"/>
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

@@ -141,6 +141,10 @@ namespace KormoranWeb.Controllers
         {
             try
             {
+                var currMatches = _db.Matches
+                    .Where(x => x.TournamentId == request.TournamentId);
+                _db.Matches.RemoveRange(currMatches);
+
                 var matchesToAdd = new List<Match>();
                 var matchesToUpdate = new List<Match>();
                 foreach (var matchData in request.Matches)
