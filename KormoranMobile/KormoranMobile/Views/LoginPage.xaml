@@ -7,6 +7,17 @@
              x:DataType="viewmodels:LoginPageViewModel"
              Title="Kormoran Mobile">
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Order="Primary"
+                     Priority="1"
+                     Text="Ustawienia"
+                     Command="{Binding SettingsCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="KormoranFont" Glyph="&#xe800;" Size="Medium" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+
     <ContentPage.Content>
         <StackLayout Spacing="3" Margin="10"
                      VerticalOptions="Center">

@@ -9,18 +9,6 @@
     <ContentPage.BindingContext>
         <viewmodels:TournamentsPageViewModel />
     </ContentPage.BindingContext>
-
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Order="Primary"
-                     Priority="1"
-                     Text="Ustawienia"
-                     Clicked="NavigateSettings">
-            <ToolbarItem.IconImageSource>
-                <FontImageSource FontFamily="KormoranFont" Glyph="&#xe800;" Size="Medium" />
-            </ToolbarItem.IconImageSource>
-        </ToolbarItem>
-    </ContentPage.ToolbarItems>
-
     <StackLayout>
         <RefreshView IsRefreshing="{Binding IsRefreshing}"
                      windows:RefreshView.RefreshPullDirection="TopToBottom"
