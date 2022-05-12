@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace KormoranWeb.Properties {
+namespace KormoranMobile.Maui.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace KormoranWeb.Properties {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("KormoranWeb.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("KormoranMobile.Maui.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,20 +61,20 @@ namespace KormoranWeb.Properties {
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Operacja zakończona sukcesem.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Password.
         /// </summary>
-        public static string operationSuccessfull {
+        public static string password {
             get {
-                return ResourceManager.GetString("operationSuccessfull", resourceCulture);
+                return ResourceManager.GetString("password", resourceCulture);
             }
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Błąd po stronie serwera. Skontaktuj się z administratorem.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Username.
         /// </summary>
-        public static string serverError {
+        public static string username {
             get {
-                return ResourceManager.GetString("serverError", resourceCulture);
+                return ResourceManager.GetString("username", resourceCulture);
             }
         }
     }

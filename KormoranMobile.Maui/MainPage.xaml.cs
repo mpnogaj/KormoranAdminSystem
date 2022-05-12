@@ -11,10 +11,13 @@
 
         private void OnCounterClicked(object sender, EventArgs e)
         {
+            /*Task.Run(() => Toast.Make("test123", ToastDuration.Long).Show());
             count++;
             CounterLabel.Text = $"Current count: {count}";
 
-            SemanticScreenReader.Announce(CounterLabel.Text);
+            SemanticScreenReader.Announce(CounterLabel.Text);*/
+
+            Shell.Current.GoToAsync("//LoginPage");
         }
     }
 }
