@@ -75,6 +75,38 @@ public class UserController : ControllerBase
         });
     }
 
+    public async Task<JsonResult> GetUserInfo()
+    {
+        var username = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var user = await _kormoranContext.Users.FirstOrDefaultAsync(x => x.Login == username);
+        if(user == null)
+        {
+            return new JsonResult(new SingleItemResponse<User?>
+            {
+                Message = "Couldn't find user with this username",
+                Error = true,
+                Data = null
+            });
+        }
+        return new JsonResult(new SingleItemResponse<User>
+        {
+            Message = Resources.operationSuccessfull,
+            Error = false,
+            Data = user
+        });
+    }
+
+    public async Task<JsonResult> GetUsers()
+    {
+        var users = await _kormoranContext.Users.ToListAsync();
+        return new JsonResult(new CollectionResponse<User>
+        {
+            Error = false,
+            Message = Resources.operationSuccessfull,
+            Collection = users
+        });
+    }
+
     public async Task<JsonResult> IsAdmin()
     {
         var username = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
