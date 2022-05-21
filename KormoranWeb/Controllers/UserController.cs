@@ -34,7 +34,7 @@ public class UserController : ControllerBase
 
     public IActionResult Ping()
     {
-        return Ok("Pong");
+        return Ok("Ping");
     }
 
     [AllowAnonymous]
@@ -75,10 +75,13 @@ public class UserController : ControllerBase
         });
     }
 
-    [HttpPost]
-    public IActionResult Validate()
+    public async Task<JsonResult> IsAdmin()
     {
-        return Ok();
+        var username = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        return new JsonResult(new AdminCheckResponse
+        {
+            IsAdmin = (await CheckIsAdmin(username))
+        });
     }
 
     private string Generate(User user)
@@ -100,6 +103,12 @@ public class UserController : ControllerBase
             signingCredentials: cred);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    private async Task<bool> CheckIsAdmin(string username)
+    {
+        var user = await _kormoranContext.Users.FirstOrDefaultAsync(x => x.Login == username);
+        return user != null && user.IsAdmin;
     }
 
     private async Task<User?> Authenticate(AuthenticateRequest authRequest)

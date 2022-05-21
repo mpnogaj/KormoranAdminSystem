@@ -12,26 +12,15 @@ namespace KormoranWeb.Controllers
     public class LogsController : ControllerBase
     {
         private readonly KormoranContext _dbContext;
-        private readonly ISessionManager _sessionManager;
 
-        public LogsController(KormoranContext dbContext, ISessionManager sessionManager)
+        public LogsController(KormoranContext dbContext)
         {
             _dbContext = dbContext;
-            _sessionManager = sessionManager;
         }
 
         [HttpGet]
         public JsonResult GetLogs([FromQuery(Name = "sessionId")] string sessionId)
         {
-            if (_sessionManager.GetSession(sessionId) == null)
-            {
-                return new JsonResult(new CollectionResponse<LogEntry>
-                {
-                    Error = true,
-                    Message = "Musisz być zalogowany, żeby zobaczyć logi!",
-                    Collection = null
-                });
-            }
             try
             {
                 return new JsonResult(new CollectionResponse<LogEntry>

@@ -66,7 +66,6 @@ namespace KormoranWeb
                     };
                 });
 
-            services.AddSingleton<ISessionManager, SessionManager>();
             services.AddScoped<ILogger, Logger>();
             services.AddControllersWithViews().AddJsonOptions(options =>
             {

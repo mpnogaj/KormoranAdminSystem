@@ -18,12 +18,10 @@ namespace KormoranWeb.Controllers
     public class TournamentsController : ControllerBase
     {
         private readonly KormoranContext _db;
-        private readonly ISessionManager _sessionManager;
 
-        public TournamentsController(KormoranContext dp, ISessionManager sessionManager)
+        public TournamentsController(KormoranContext dp)
         {
             _db = dp;
-            _sessionManager = sessionManager;
         }
 
         [HttpGet]
