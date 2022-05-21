@@ -5,6 +5,7 @@ using KormoranWeb.Contexts;
 using KormoranWeb.Helpers;
 using KormoranWeb.Properties;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -38,19 +39,34 @@ public class UserController : ControllerBase
 
     [AllowAnonymous]
     [HttpPost]
-    public async Task<JsonResult> Login(AuthenticateRequest user)
+    public async Task<JsonResult> Login(AuthenticateRequest user, bool useCookie = false)
     {
         var u = await Authenticate(user);
         if (u != null)
         {
-            return new JsonResult(new AuthenticateResponse
+            var token = Generate(u);
+            if (useCookie)
             {
-                Error = false,
-                Message = Resources.operationSuccessfull,
-                Token = Generate(u)
-            });
+                Response.Cookies.Append("X-Access-Token", token, new CookieOptions
+                {
+                    HttpOnly = true
+                });
+                return new JsonResult(new BasicResponse
+                {
+                    Error = false,
+                    Message = Resources.operationSuccessfull
+                });
+            }
+            else
+            {
+                return new JsonResult(new AuthenticateResponse
+                {
+                    Error = false,
+                    Message = Resources.operationSuccessfull,
+                    Token = Generate(u)
+                });
+            }
         }
-
         return new JsonResult(new AuthenticateResponse
         {
             Error = true,
