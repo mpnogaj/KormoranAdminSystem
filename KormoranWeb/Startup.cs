@@ -14,6 +14,7 @@ using System.IO;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using System.Threading.Tasks;
 
 namespace KormoranWeb
 {
@@ -50,6 +51,18 @@ namespace KormoranWeb
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
                             Configuration["JWT:Key"])
                         )
+                    };
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = (MessageReceivedContext context) =>
+                        {
+                            if (context.Request.Cookies.ContainsKey("Authorization"))
+                            {
+                                context.Token = context.Request.Cookies["Authorization"];
+                            }
+                            return Task.CompletedTask;
+                        }
                     };
                 });
 

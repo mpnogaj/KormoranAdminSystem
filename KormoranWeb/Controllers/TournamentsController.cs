@@ -87,6 +87,38 @@ namespace KormoranWeb.Controllers
         }
 
         [HttpPost]
+        public async Task<JsonResult> DeleteTournament([FromQuery] int tournamentId)
+        {
+            try
+            {
+                var toDelete = await _db.Tournaments.FirstOrDefaultAsync(x => x.TournamentId == tournamentId);
+                if (toDelete == null)
+                {
+                    return new JsonResult(new BasicResponse
+                    {
+                        Error = true,
+                        Message = "This tournament doesn't exist!"
+                    });
+                }
+                _db.Tournaments.Remove(toDelete);
+                await _db.SaveChangesAsync();
+                return new JsonResult(new BasicResponse
+                {
+                    Error = false,
+                    Message = Resources.operationSuccessfull
+                });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new BasicResponse
+                {
+                    Error = true,
+                    Message = ex.Message
+                });
+            }
+        }
+
+        [HttpPost]
         public async Task<JsonResult> UpdateTournamentBasic([FromBody] UpdateTournamentRequestModel request)
         {
             try

@@ -47,7 +47,7 @@ public class UserController : ControllerBase
             var token = Generate(u);
             if (useCookie)
             {
-                Response.Cookies.Append("X-Access-Token", token, new CookieOptions
+                Response.Cookies.Append("Authorization", token, new CookieOptions
                 {
                     HttpOnly = true
                 });
@@ -73,6 +73,12 @@ public class UserController : ControllerBase
             Message = "Użytkownik nie został znaleziony",
             Token = string.Empty
         });
+    }
+
+    [HttpPost]
+    public IActionResult Validate()
+    {
+        return Ok();
     }
 
     private string Generate(User user)
