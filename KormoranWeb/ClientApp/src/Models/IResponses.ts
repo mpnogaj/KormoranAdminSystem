@@ -16,8 +16,8 @@ interface ISingleItemResponse<T> extends IBasicResponse {
 }
 
 export type {
-    IBasicResponse,
-    ICollectionResponse,
-    ISingleItemResponse,
-    ILoginResponse
+	IBasicResponse,
+	ICollectionResponse,
+	ISingleItemResponse,
+	ILoginResponse
 };
