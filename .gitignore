@@ -367,3 +367,4 @@ KormoranAdminSystemRevamped/appsettings.json
 .vscode/
 KormoranAdminSystemRevamped/ClientApp/package-lock.json
 KormoranWeb/Properties/launchSettings.json
+KormoranWeb/appsettings.json
