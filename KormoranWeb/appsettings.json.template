@@ -1,12 +1,17 @@
 {
-  "Logging": {
-    "LogLevel": {
-      "Default": "Information",
-      "Microsoft": "Warning",
-      "Microsoft.Hosting.Lifetime": "Information"
-    }
-  },
-  "ConnectionStrings": {
-    "DefaultConnection": "${CONNECTION_STRING}"
-  }
+	"Logging": {
+		"LogLevel": {
+			"Default": "Information",
+			"Microsoft": "Warning",
+			"Microsoft.Hosting.Lifetime": "Information"
+		}
+	},
+	"ConnectionStrings": {
+		"DefaultConnection": "${CONNECTION_STRING}"
+	},
+	"JWT": {
+		"Issuer": "KormoranAdminSystem",
+		"Audience": "KormoranAdminSystem",
+		"Key": "jdowefgewjfjiorjgeitjvnwojriwfiwogjwiofjwfvioem"
+	}
 }
