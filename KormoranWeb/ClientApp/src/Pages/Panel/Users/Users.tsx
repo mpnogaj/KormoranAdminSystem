@@ -6,7 +6,7 @@ class Users extends React.Component {
 		return (
 			<div className="container mt-3">
 				<div className="logo-container">
-					<p>Zarządzanie turniejami</p>
+					<p>Zarządzanie użytkownikami</p>
 				</div>
 				<UsersTable/>
 			</div>
