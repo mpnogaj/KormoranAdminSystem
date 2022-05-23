@@ -3,7 +3,7 @@ import React from "react";
 import { Badge, Button, Modal, Table } from "react-bootstrap";
 import { Empty } from "../Helpers/Aliases";
 import { DEFAULT_TIMEOUT, DownloadManager } from "../Helpers/DownloadManager";
-import { GET_USERS } from "../Helpers/Endpoints";
+import { ADD_EDIT_USER, DELETE_USER, GET_USERS } from "../Helpers/Endpoints";
 import { binsearch } from "../Helpers/Essentials";
 import { IAdminCheckResponse, ICollectionResponse } from "../Models/IResponses";
 import IconButton from "../Components/IconButton";
@@ -13,6 +13,7 @@ import IUser, { DEFAULT_USER } from "../Models/IUser";
 interface IState {
 	isAdmin: boolean,
 	isLoading: boolean,
+	saveEnabled: boolean,
 	user: IUser,
 	addEditModalShowed: boolean,
 	users: Array<IUser>;
@@ -33,6 +34,7 @@ class UsersTable extends React.Component<Empty, IState> {
 			isLoading: false,
 			isAdmin: false,
 			user: DEFAULT_USER,
+			saveEnabled: false,
 			addEditModalShowed: false,
 			users: []
 		};
@@ -55,7 +57,25 @@ class UsersTable extends React.Component<Empty, IState> {
 	showAddEditModal = (userId: number): void => {
 		const bsRes: IUser | undefined = binsearch<IUser>(this.state.users, (x) => x.id - userId);
 		const user: IUser = bsRes == undefined ? DEFAULT_USER : bsRes;
-		this.setState({addEditModalShowed: true, user: user});
+		this.setState({
+			addEditModalShowed: true, 
+			user: user,
+			saveEnabled: user.fullname != "" && user.login != "" && user.password != ""
+		});
+	};
+
+	saveChanges = async (): Promise<void> => {
+		const res = await axios.post(ADD_EDIT_USER, this.state.user);
+		console.log(res);
+	};
+
+	deleteUser = async (userId: number): Promise<void> => {
+		const res = await axios.delete(DELETE_USER, {
+			params: {
+				userId: userId
+			}
+		});
+		console.log(res);
 	};
 
 	render(): JSX.Element {
@@ -124,33 +144,39 @@ class UsersTable extends React.Component<Empty, IState> {
 						<label htmlFor="loginBox" className="me-3">Login</label>
 						<input value={this.state.user.login} id="loginBox" type="text"
 							onChange={(e): void => {
+								const newUser: IUser = {
+									...this.state.user,
+									login: e.target.value
+								};
 								this.setState({
-									user: {
-										...this.state.user,
-										login: e.target.value
-									},
+									user: newUser,
+									saveEnabled: newUser.fullname != "" && newUser.login != "" && newUser.password != ""
 								});
 							}} />
 						<br/>
 						<label htmlFor="nameBox" className="me-3 mt-2">Imię i nazwisko</label>
 						<input value={this.state.user.fullname} id="nameBox" type="text"
 							onChange={(e): void => {
+								const newUser: IUser = {
+									...this.state.user,
+									fullname: e.target.value
+								};
 								this.setState({
-									user: {
-										...this.state.user,
-										fullname: e.target.value
-									},
+									user: newUser,
+									saveEnabled: newUser.fullname != "" && newUser.login != "" && newUser.password != ""
 								});
 							}} />
 						<br/>
 						<label htmlFor="passwordBox" className="me-3 mt-2">Hasło</label>
 						<input value={this.state.user.password} id="passwordBox" type="password"
 							onChange={(e): void => {
+								const newUser: IUser = {
+									...this.state.user,
+									password: e.target.value
+								};
 								this.setState({
-									user: {
-										...this.state.user,
-										password: e.target.value
-									},
+									user: newUser,
+									saveEnabled: newUser.fullname != "" && newUser.login != "" && newUser.password != ""
 								});
 							}} />
 						<br/>
@@ -166,7 +192,7 @@ class UsersTable extends React.Component<Empty, IState> {
 							}} />
 					</Modal.Body>
 					<Modal.Footer>
-						<Button>Ok</Button>
+						<Button disabled={!this.state.saveEnabled} onClick={this.saveChanges}>Ok</Button>
 						<Button onClick={(): void => this.setState({addEditModalShowed: false})}>Anuluj</Button>
 					</Modal.Footer>
 				</Modal>

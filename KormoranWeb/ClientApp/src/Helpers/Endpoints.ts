@@ -10,4 +10,8 @@ export const GET_USERS = "/api/User/GetUsers";
 export const UPDATE_TOURNAMENT = "/api/tournaments/UpdateTournament";
 export const UPDATE_TOURNAMENT_BASIC = "/api/tournaments/UpdateTournamentBasic";
 
+export const ADD_EDIT_USER = "/api/user/AddEditUser";
+
+export const DELETE_USER = "/api/user/DeleteUser";
+
 export const VALIDATE = "/api/Session/Validate";
