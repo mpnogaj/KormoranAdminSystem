@@ -1,14 +1,13 @@
 import axios, { AxiosResponse } from "axios";
 import React from "react";
-import { Badge, Button, Modal, Table } from "react-bootstrap";
+import { Button, Modal, Table } from "react-bootstrap";
 import { Empty } from "../Helpers/Aliases";
 import { DEFAULT_TIMEOUT, DownloadManager } from "../Helpers/DownloadManager";
 import { ADD_EDIT_USER, DELETE_USER, GET_USERS } from "../Helpers/Endpoints";
 import { binsearch } from "../Helpers/Essentials";
 import { IAdminCheckResponse, ICollectionResponse } from "../Models/IResponses";
-import IconButton from "../Components/IconButton";
-import { Pencil, Trash } from "react-bootstrap-icons";
 import IUser, { DEFAULT_USER } from "../Models/IUser";
+import UserRow from "./UserRow";
 
 interface IState {
 	isAdmin: boolean,
@@ -67,6 +66,7 @@ class UsersTable extends React.Component<Empty, IState> {
 	saveChanges = async (): Promise<void> => {
 		const res = await axios.post(ADD_EDIT_USER, this.state.user);
 		console.log(res);
+		this.setState({addEditModalShowed: false});
 	};
 
 	deleteUser = async (userId: number): Promise<void> => {
@@ -101,32 +101,9 @@ class UsersTable extends React.Component<Empty, IState> {
 								:
 								this.state.users.map(u => {
 									return (
-										<tr key={u.id}>
-											<td>{u.id}</td>
-											<td>{u.login}</td>
-											<td>{u.fullname}</td>
-											<td>{
-												u.isAdmin
-													? <Badge bg="warning">Administrator</Badge>
-													: <Badge bg="success">Sędzia</Badge>
-											}</td>
-											{
-												this.state.isAdmin
-													?
-													<td>
-														<div>
-															<IconButton icon={<Pencil height={24} width={24} />} onClick={async (): Promise<void> => {
-																console.log("tba");
-															}}/>
-															<IconButton icon={<Trash height={24} width={24} />} onClick={async (): Promise<void> => {
-																console.log("tba");
-															}} />
-														</div>
-													</td>
-													:
-													null
-											}
-										</tr>
+										<UserRow key={u.id} user={u} showEdit={this.state.isAdmin} 
+											onDeleteClicked={async (): Promise<void> => this.deleteUser(u.id)} 
+											onEditClicked={(): void => this.showAddEditModal(u.id)}/>
 									);
 								})
 						}
