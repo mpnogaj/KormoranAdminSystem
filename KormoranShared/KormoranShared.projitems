@@ -17,6 +17,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\AuthRequiredRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\MatchesRequests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\TournamentsRequests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\UsersRequests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Responses\AdminCheckResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Responses\AuthenticateResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Responses\BasicResponse.cs" />

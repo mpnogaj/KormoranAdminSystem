@@ -36,10 +36,6 @@ class TournamentRow extends React.Component<IProps>{
 										window.location.href = "/Panel/EditTournament/" + this.props.tournament.tournamentId;
 									}
 								}>Pełna edycja</Button>
-								<IconButton icon={<Trash height={24} width={24} />} onClick={async (): Promise<void> => {
-									const tournamentId = this.props.tournament.tournamentId;
-									await axios.post("/api/Tournaments/DeleteTournament", {}, { params: { tournamentId }});
-								}} />
 							</div>
 							:
 							<div>
@@ -56,6 +52,16 @@ class TournamentRow extends React.Component<IProps>{
 							</div>
 					}
 				</td>
+				{
+					this.props.isEdit
+						?
+						<IconButton icon={<Trash height={24} width={24} />} onClick={async (): Promise<void> => {
+							const tournamentId = this.props.tournament.tournamentId;
+							await axios.post("/api/Tournaments/DeleteTournament", {}, { params: { tournamentId }});
+						}} />
+						:
+						null
+				}
 			</tr>
 		);
 	}

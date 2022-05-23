@@ -75,6 +75,7 @@ public class UserController : ControllerBase
         });
     }
 
+    [HttpGet]
     public async Task<JsonResult> GetUserInfo()
     {
         var username = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -96,6 +97,7 @@ public class UserController : ControllerBase
         });
     }
 
+    [HttpGet]
     public async Task<JsonResult> GetUsers()
     {
         var users = await _kormoranContext.Users.ToListAsync();
@@ -107,12 +109,71 @@ public class UserController : ControllerBase
         });
     }
 
+    [HttpGet]
     public async Task<JsonResult> IsAdmin()
     {
         var username = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
         return new JsonResult(new AdminCheckResponse
         {
             IsAdmin = (await CheckIsAdmin(username))
+        });
+    }
+
+    [HttpDelete] //such innovation, much wow
+    public async Task<JsonResult> DeleteUser([FromQuery] int userId)
+    {
+        var user = await _kormoranContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
+        if(user == null)
+        {
+            return new JsonResult(new BasicResponse
+            {
+                Error = true,
+                Message = "Couldn't find user with this id"
+            });
+        }
+        _kormoranContext.Users.Remove(user);
+        await _kormoranContext.SaveChangesAsync();
+        return new JsonResult(new BasicResponse
+        {
+            Error = false,
+            Message = Resources.operationSuccessfull
+        });
+    }
+
+    [HttpPost]
+    public async Task<JsonResult> AddEditUser([FromBody] AddUserRequestModel model)
+    {
+        var newUser = new User
+        {
+            Id = model.Id,
+            Fullname = model.Fullname,
+            Login = model.Login,
+            PasswordHash = model.Password.Sha256(),
+            IsAdmin = model.IsAdmin
+        };
+        if(model.Id == 0)
+        {
+            _kormoranContext.Users.Add(newUser);
+        }
+        else
+        {
+            if(await _kormoranContext.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == model.Id) == null)
+            {
+                return new JsonResult(new SingleItemResponse<int>
+                {
+                    Error = true,
+                    Message = "Couldn't find user with this id",
+                    Data = -1
+                });
+            }
+            _kormoranContext.Update(newUser);
+        }
+        await _kormoranContext.SaveChangesAsync();
+        return new JsonResult(new SingleItemResponse<int>
+        {
+            Error = false,
+            Message = Resources.operationSuccessfull,
+            Data = newUser.Id
         });
     }
 
