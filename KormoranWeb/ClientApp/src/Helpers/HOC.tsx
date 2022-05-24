@@ -6,11 +6,11 @@ interface IWithParams {
 }
 
 export function withParams<P extends IWithParams>(WrappedComponent: ComponentType<P>): ComponentType<Omit<P, keyof IWithParams>> {
-    const comp = (props: object): JSX.Element => {
-        const params = useParams();
-        return (<WrappedComponent params={params} {...props as any} />);
-    };
-    return comp;
+	const comp = (props: object): JSX.Element => {
+		const params = useParams();
+		return (<WrappedComponent params={params} {...props as any} />);
+	};
+	return comp;
 }
 
 export interface IWithNavigaton {
@@ -18,9 +18,9 @@ export interface IWithNavigaton {
 }
 
 export function withNavigation<P extends IWithNavigaton>(WrappedComponent: ComponentType<P>): ComponentType<Omit<P, keyof IWithNavigaton>> {
-    const comp = (props: object): JSX.Element => {
-        const nav = useNavigate();
-        return (<WrappedComponent navigation={nav} {...props as any} />);
-    };
-    return comp;
+	const comp = (props: object): JSX.Element => {
+		const nav = useNavigate();
+		return (<WrappedComponent navigation={nav} {...props as any} />);
+	};
+	return comp;
 }

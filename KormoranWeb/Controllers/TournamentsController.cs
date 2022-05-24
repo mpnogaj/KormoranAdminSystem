@@ -18,12 +18,10 @@ namespace KormoranWeb.Controllers
     public class TournamentsController : ControllerBase
     {
         private readonly KormoranContext _db;
-        private readonly ISessionManager _sessionManager;
 
-        public TournamentsController(KormoranContext dp, ISessionManager sessionManager)
+        public TournamentsController(KormoranContext dp)
         {
             _db = dp;
-            _sessionManager = sessionManager;
         }
 
         [HttpGet]
@@ -87,6 +85,38 @@ namespace KormoranWeb.Controllers
         }
 
         [HttpPost]
+        public async Task<JsonResult> DeleteTournament([FromQuery] int tournamentId)
+        {
+            try
+            {
+                var toDelete = await _db.Tournaments.FirstOrDefaultAsync(x => x.TournamentId == tournamentId);
+                if (toDelete == null)
+                {
+                    return new JsonResult(new BasicResponse
+                    {
+                        Error = true,
+                        Message = "This tournament doesn't exist!"
+                    });
+                }
+                _db.Tournaments.Remove(toDelete);
+                await _db.SaveChangesAsync();
+                return new JsonResult(new BasicResponse
+                {
+                    Error = false,
+                    Message = Resources.operationSuccessfull
+                });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new BasicResponse
+                {
+                    Error = true,
+                    Message = ex.Message
+                });
+            }
+        }
+
+        [HttpPost]
         public async Task<JsonResult> UpdateTournamentBasic([FromBody] UpdateTournamentRequestModel request)
         {
             try
@@ -141,6 +171,10 @@ namespace KormoranWeb.Controllers
         {
             try
             {
+                var currMatches = _db.Matches
+                    .Where(x => x.TournamentId == request.TournamentId);
+                _db.Matches.RemoveRange(currMatches);
+
                 var matchesToAdd = new List<Match>();
                 var matchesToUpdate = new List<Match>();
                 foreach (var matchData in request.Matches)

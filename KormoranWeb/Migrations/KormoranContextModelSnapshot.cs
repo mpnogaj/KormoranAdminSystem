@@ -17,7 +17,7 @@ namespace KormoranWeb.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
                 .HasAnnotation("ProductVersion", "5.0.12");
 
-            modelBuilder.Entity("KormoranAdminSystemRevamped.Models.Discipline", b =>
+            modelBuilder.Entity("KormoranShared.Models.Discipline", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -34,7 +34,7 @@ namespace KormoranWeb.Migrations
                     b.ToTable("disciplines");
                 });
 
-            modelBuilder.Entity("KormoranAdminSystemRevamped.Models.LogEntry", b =>
+            modelBuilder.Entity("KormoranShared.Models.LogEntry", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -64,7 +64,7 @@ namespace KormoranWeb.Migrations
                     b.ToTable("logs");
                 });
 
-            modelBuilder.Entity("KormoranAdminSystemRevamped.Models.Match", b =>
+            modelBuilder.Entity("KormoranShared.Models.Match", b =>
                 {
                     b.Property<int>("MatchId")
                         .ValueGeneratedOnAdd()
@@ -108,7 +108,7 @@ namespace KormoranWeb.Migrations
                     b.ToTable("matches");
                 });
 
-            modelBuilder.Entity("KormoranAdminSystemRevamped.Models.State", b =>
+            modelBuilder.Entity("KormoranShared.Models.State", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -125,7 +125,7 @@ namespace KormoranWeb.Migrations
                     b.ToTable("states");
                 });
 
-            modelBuilder.Entity("KormoranAdminSystemRevamped.Models.Team", b =>
+            modelBuilder.Entity("KormoranShared.Models.Team", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -148,7 +148,7 @@ namespace KormoranWeb.Migrations
                     b.ToTable("teams");
                 });
 
-            modelBuilder.Entity("KormoranAdminSystemRevamped.Models.Tournament", b =>
+            modelBuilder.Entity("KormoranShared.Models.Tournament", b =>
                 {
                     b.Property<int>("TournamentId")
                         .ValueGeneratedOnAdd()
@@ -177,7 +177,7 @@ namespace KormoranWeb.Migrations
                     b.ToTable("tournaments");
                 });
 
-            modelBuilder.Entity("KormoranAdminSystemRevamped.Models.User", b =>
+            modelBuilder.Entity("KormoranShared.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -189,6 +189,10 @@ namespace KormoranWeb.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("fullname");
 
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_admin");
+
                     b.Property<string>("Login")
                         .IsRequired()
                         .HasColumnType("longtext")
@@ -199,36 +203,32 @@ namespace KormoranWeb.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("pass");
 
-                    b.Property<string>("Permissions")
-                        .HasColumnType("json")
-                        .HasColumnName("permissions");
-
                     b.HasKey("Id");
 
                     b.ToTable("users");
                 });
 
-            modelBuilder.Entity("KormoranAdminSystemRevamped.Models.Match", b =>
+            modelBuilder.Entity("KormoranShared.Models.Match", b =>
                 {
-                    b.HasOne("KormoranAdminSystemRevamped.Models.State", "State")
+                    b.HasOne("KormoranShared.Models.State", "State")
                         .WithMany()
                         .HasForeignKey("StateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("KormoranAdminSystemRevamped.Models.Team", "Team1")
+                    b.HasOne("KormoranShared.Models.Team", "Team1")
                         .WithMany()
                         .HasForeignKey("Team1Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("KormoranAdminSystemRevamped.Models.Team", "Team2")
+                    b.HasOne("KormoranShared.Models.Team", "Team2")
                         .WithMany()
                         .HasForeignKey("Team2Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("KormoranAdminSystemRevamped.Models.Tournament", "Tournament")
+                    b.HasOne("KormoranShared.Models.Tournament", "Tournament")
                         .WithMany("Matches")
                         .HasForeignKey("TournamentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -243,26 +243,24 @@ namespace KormoranWeb.Migrations
                     b.Navigation("Tournament");
                 });
 
-            modelBuilder.Entity("KormoranAdminSystemRevamped.Models.Team", b =>
+            modelBuilder.Entity("KormoranShared.Models.Team", b =>
                 {
-                    b.HasOne("KormoranAdminSystemRevamped.Models.Tournament", "Tournament")
+                    b.HasOne("KormoranShared.Models.Tournament", null)
                         .WithMany("Teams")
                         .HasForeignKey("TournamentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Tournament");
                 });
 
-            modelBuilder.Entity("KormoranAdminSystemRevamped.Models.Tournament", b =>
+            modelBuilder.Entity("KormoranShared.Models.Tournament", b =>
                 {
-                    b.HasOne("KormoranAdminSystemRevamped.Models.Discipline", "Discipline")
+                    b.HasOne("KormoranShared.Models.Discipline", "Discipline")
                         .WithMany()
                         .HasForeignKey("DisciplineId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("KormoranAdminSystemRevamped.Models.State", "State")
+                    b.HasOne("KormoranShared.Models.State", "State")
                         .WithMany()
                         .HasForeignKey("StateId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -273,7 +271,7 @@ namespace KormoranWeb.Migrations
                     b.Navigation("State");
                 });
 
-            modelBuilder.Entity("KormoranAdminSystemRevamped.Models.Tournament", b =>
+            modelBuilder.Entity("KormoranShared.Models.Tournament", b =>
                 {
                     b.Navigation("Matches");
 

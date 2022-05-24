@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace KormoranShared.Models
 {
@@ -16,14 +17,16 @@ namespace KormoranShared.Models
 
         [Required]
         [Column("pass")]
+        [JsonIgnore]
         public string PasswordHash { get; set; }
 
         [Required]
         [Column("fullname")]
         public string Fullname { get; set; }
 
-        [Column("permissions", TypeName = "json")]
-        public string Permissions { get; set; }
+        [Required]
+        [Column("is_admin")]
+        public bool IsAdmin { get; set; }
 
         public override string ToString()
         {

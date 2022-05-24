@@ -7,11 +7,11 @@ interface IProps {
 }
 
 const IconButton = (props: IProps): JSX.Element => {
-    return (
-        <a className="btn iconButton" onClick={(): void => props.onClick()}>
-            {props.icon}
-        </a>
-    );
+	return (
+		<a className="btn iconButton" onClick={(): void => props.onClick()}>
+			{props.icon}
+		</a>
+	);
 };
 
 export default IconButton;

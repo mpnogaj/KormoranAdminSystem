@@ -47,23 +47,37 @@ namespace KormoranMobile.ViewModels
             private set => SetProperty(ref _loginCommand, value);
         }
 
+        private AsyncRelayCommand _settingsCommand;
+
+        public AsyncRelayCommand SettingsCommand
+        {
+            get => _settingsCommand;
+            private set => SetProperty(ref _settingsCommand, value);
+        }
+
         #endregion MVVM Props
 
         public LoginPageViewModel(INavigation navigation)
         {
             _navigation = navigation;
-            _kormoranServer = RestService.For<IKormoranServer>(Constants.API_ADDRESS);
-            _loginGuestCommand = new AsyncRelayCommand(async () => await Navigate());
+            //_kormoranServer = RestService.For<IKormoranServer>(Constants.API_ADDRESS);
+            _loginGuestCommand = new AsyncRelayCommand(Navigate);
             _loginCommand = new AsyncRelayCommand(async () =>
             {
                 //get token
                 await Navigate();
             }, () => !(string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password)));
+            _settingsCommand = new AsyncRelayCommand(NavigateSettings);
         }
 
         private async Task Navigate()
         {
             await _navigation.PushAsync(new TournamentsPage());
+        }
+
+        private async Task NavigateSettings()
+        {
+            await _navigation.PushAsync(new SettingsPage());
         }
     }
 }
