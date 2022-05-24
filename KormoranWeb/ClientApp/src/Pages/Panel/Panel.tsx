@@ -4,13 +4,33 @@ import { Container } from "react-bootstrap";
 import { ReactComponent as Logo } from "../../Icons/LogoNoText.svg";
 import { ReactComponent as Avatar } from "../../Icons/DefaultAvatar.svg";
 import { Speedometer2, JournalText, PersonCheck, Tv, Gear } from "react-bootstrap-icons";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
+import { Empty } from "../../Helpers/Aliases";
+import {ISingleItemResponse} from "../../Models/IResponses";
 
 interface IProps {
-    content: JSX.Element;
+  content: JSX.Element;
 }
 
-class Panel extends React.Component<IProps>{
+interface IState {
+	fullName: string;
+}
+
+class Panel extends React.Component<IProps, IState>{
+	
+	constructor(props: IProps){
+		super(props);
+		this.state = {
+			fullName: ""
+		};
+	}
+
+	async componentDidMount(): Promise<void>{
+		const res = await axios.get<Empty, AxiosResponse<ISingleItemResponse<string>>>("/api/user/GetFullName");
+		console.log(res);
+		this.setState({fullName: res.data.data});
+	}
+
 	render(): JSX.Element {
 		return (
 			<div>
@@ -35,7 +55,7 @@ class Panel extends React.Component<IProps>{
 										<a className="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 											<div className="d-inline">
 												<Avatar height={50} width={50} />
-												<span className="ms-3 h5">Marcin Nogaj</span>
+												<span className="ms-3 h5">{this.state.fullName}</span>
 											</div>
 										</a>
 										<ul className="dropdown-menu" aria-labelledby="userDropdown">
@@ -44,10 +64,8 @@ class Panel extends React.Component<IProps>{
 											<li><a className="dropdown-item" href="#">Ustawienia</a></li>
 											<li><hr className="dropdown-divider" /></li>
 											<li><a className="dropdown-item" onClick={async (): Promise<void> => {
-												await axios.post("/api/Session/Logout", {
-													sessionId: sessionStorage.getItem("sessionId")
-												});
-												sessionStorage.removeItem("sessionId");
+												const res = await axios.post("/api/user/Logout");
+												console.log(res);
 												window.location.href = "/Login";
 											}}>Wyloguj</a></li>
 										</ul>

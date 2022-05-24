@@ -26,6 +26,8 @@ public class UserController : ControllerBase
     private readonly KormoranContext _kormoranContext;
     private readonly IConfiguration _configuration;
 
+    private const string AUTH_COOKIE = "Authorization";
+
     public UserController(KormoranContext kormoranContext, IConfiguration configuration)
     {
         _kormoranContext = kormoranContext;
@@ -47,7 +49,7 @@ public class UserController : ControllerBase
             var token = Generate(u);
             if (useCookie)
             {
-                Response.Cookies.Append("Authorization", token, new CookieOptions
+                Response.Cookies.Append(AUTH_COOKIE, token, new CookieOptions
                 {
                     HttpOnly = true
                 });
@@ -157,7 +159,8 @@ public class UserController : ControllerBase
         }
         else
         {
-            if(await _kormoranContext.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == model.Id) == null)
+            var oldUser = await _kormoranContext.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == model.Id);
+            if(oldUser == null)
             {
                 return new JsonResult(new SingleItemResponse<int>
                 {
@@ -166,6 +169,8 @@ public class UserController : ControllerBase
                     Data = -1
                 });
             }
+            //copy over new password if needed
+            newUser.PasswordHash = model.Password == string.Empty ? oldUser.PasswordHash : newUser.PasswordHash;
             _kormoranContext.Update(newUser);
         }
         await _kormoranContext.SaveChangesAsync();
@@ -175,6 +180,39 @@ public class UserController : ControllerBase
             Message = Resources.operationSuccessfull,
             Data = newUser.Id
         });
+    }
+
+    [HttpGet]
+    public JsonResult GetFullName()
+    {
+        return new JsonResult(new SingleItemResponse<string>
+        {
+            Error = false,
+            Message = Resources.operationSuccessfull,
+            Data = HttpContext.User.Identity.Name
+        });
+    }
+
+    [HttpPost]
+    public JsonResult Logout()
+    {
+        try
+        {
+            Response.Cookies.Delete(AUTH_COOKIE);
+            return new JsonResult(new BasicResponse
+            {
+                Error = false,
+                Message = Resources.operationSuccessfull
+            });
+        }
+        catch
+        {
+            return new JsonResult(new BasicResponse
+            {
+                Error = true,
+                Message = Resources.serverError
+            });
+        }
     }
 
     private string Generate(User user)
