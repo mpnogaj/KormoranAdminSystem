@@ -25,7 +25,7 @@
                          HorizontalOptions="Center"
                          Orientation="Horizontal">
                 <Button Text="Zaloguj jako gość" />
-                <Button Text="Zaloguj" />
+                <Button Text="Zaloguj" Command="{Binding LoginCommand}" />
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

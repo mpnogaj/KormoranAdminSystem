@@ -72,7 +72,7 @@ public class UserController : ControllerBase
         return new JsonResult(new AuthenticateResponse
         {
             Error = true,
-            Message = "Użytkownik nie został znaleziony",
+            Message = "Bledny login lub haslo",
             Token = string.Empty
         });
     }

@@ -1,11 +1,16 @@
 ﻿using CommunityToolkit.Maui.Alerts;
+using KormoranMobile.Maui.Services;
 using KormoranMobile.Maui.ViewModels.Abstraction;
 using KormoranMobile.Maui.ViewModels.Commands;
+using KormoranShared.Models.Requests;
+using Refit;
 
 namespace KormoranMobile.Maui.ViewModels
 {
     internal class LoginPageViewModel : ViewModelBase
     {
+        private IKormoranServer _kormoranServer;
+
         #region MVVM Props
         private string _login = string.Empty;
         public string Login 
@@ -37,9 +42,22 @@ namespace KormoranMobile.Maui.ViewModels
 
         public LoginPageViewModel()
         {
+            _kormoranServer = RestService.For<IKormoranServer>("http://192.168.88.122/api");
             _loginCommand = new AsyncRelayCommand(async () =>
             {
-                await Toast.Make("Logowanie123").Show();
+                var res = await _kormoranServer.Authenticate(new AuthenticateRequest
+                {
+                    Username = Login,
+                    Password = Password
+                });
+                if (res.Error)
+                {
+                    await Toast.Make(res.Message).Show();
+                }
+                else
+                {
+                    await Toast.Make(res.Token).Show();
+                }
             }, () => !(string.IsNullOrWhiteSpace(Login) || string.IsNullOrWhiteSpace(Password)));
         }
     }
