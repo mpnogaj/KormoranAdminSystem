@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:KormoranMobile.Maui.ViewModels"
+             xmlns:models="clr-namespace:KormoranShared.Models"
+             x:Class="KormoranMobile.Maui.Views.TournamentsPage"
+             x:DataType="viewmodels:TournamentsPageViewModel">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding ShowServerPopupCommand}"
+                     Text="Ustawienia"
+                     Priority="1">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="KormoranFont" 
+                                 Color="{AppThemeBinding Light=Black, Dark=White}"
+                                 Glyph="&#xe800;" 
+                                 Size="Medium" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+
+    <RefreshView Command="{Binding RefreshTournamentsListCommand}"
+                 IsRefreshing="{Binding IsRefreshing, Mode=TwoWay}">
+        <ListView ItemsSource="{Binding Tournaments}"
+                  CachingStrategy="RecycleElement">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="models:Tournament">
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal"
+                                     Spacing="5"
+                                     Margin="10, 0, 0, 0"
+                                     VerticalOptions="Center">
+                            <StackLayout.Resources>
+                                <Style TargetType="Label" BasedOn="{StaticResource BodyStyle}">
+                                    <Setter Property="VerticalOptions" Value="Center" />
+                                    <Setter Property="VerticalTextAlignment" Value="Center" />
+                                </Style>
+                            </StackLayout.Resources>
+                            
+                            <Label Text="{Binding Name}"/>
+                            <Label Text="-" />
+                            <Label Text="{Binding Discipline.Name}"/>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </RefreshView>
+</ContentPage>

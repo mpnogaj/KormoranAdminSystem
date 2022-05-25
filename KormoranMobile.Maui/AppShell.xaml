@@ -8,13 +8,17 @@
     Shell.FlyoutBehavior="Disabled">
 
     <ShellContent
-        Title="Hello, World!"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        Title="Turnieje"
+        ContentTemplate="{DataTemplate views:TournamentsPage}"
+        Route="TournamentsPage"/>
 
     <ShellContent
-        Title="Login Page"
+        Title="Zaloguj"
         ContentTemplate="{DataTemplate views:LoginPage}"
         Route="LoginPage" />
+    <ShellContent
+        Title="Ustawienia"
+        ContentTemplate="{DataTemplate views:SettingsPage}"
+        Route="SettingsPage" />
 
 </Shell>
