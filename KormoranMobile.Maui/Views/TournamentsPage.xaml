@@ -9,12 +9,20 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Command="{Binding ShowServerPopupCommand}"
                      Text="Ustawienia"
+                     Priority="2">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource Glyph="{StaticResource SettingsGlyph}"
+                                 Size="Large"
+                                 FontFamily="{StaticResource IconFont}"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+        <ToolbarItem Command="{Binding ShowServerPopupCommand}"
+                     Text="Zaloguj"
                      Priority="1">
             <ToolbarItem.IconImageSource>
-                <FontImageSource FontFamily="KormoranFont" 
-                                 Color="{AppThemeBinding Light=Black, Dark=White}"
-                                 Glyph="&#xe800;" 
-                                 Size="Medium" />
+                <FontImageSource Glyph="{StaticResource LoginGlyph}"
+                                 Size="Large"
+                                 FontFamily="{StaticResource IconFont}"/>
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
     </ContentPage.ToolbarItems>
