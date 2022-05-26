@@ -8,18 +8,7 @@
     Shell.FlyoutBehavior="Flyout">
 
     <ShellContent
-        Title="Turnieje"
-        ContentTemplate="{DataTemplate views:TournamentsPage}"
-        Route="TournamentsPage">
-    </ShellContent>
-
-    <ShellContent
-        Title="Zaloguj"
-        ContentTemplate="{DataTemplate views:LoginPage}"
-        Route="TournamentsPage/LoginPage" />
-    <ShellContent
-        Title="Ustawienia"
-        ContentTemplate="{DataTemplate views:SettingsPage}"
-        Route="SettingsPage" />
+        Route="TournamentsPage"
+        ContentTemplate="{DataTemplate views:TournamentsPage}"/>
 
 </Shell>

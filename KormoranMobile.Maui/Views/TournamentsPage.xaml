@@ -4,7 +4,8 @@
              xmlns:viewmodels="clr-namespace:KormoranMobile.Maui.ViewModels"
              xmlns:models="clr-namespace:KormoranShared.Models"
              x:Class="KormoranMobile.Maui.Views.TournamentsPage"
-             x:DataType="viewmodels:TournamentsPageViewModel">
+             x:DataType="viewmodels:TournamentsPageViewModel"
+             Title="Turnieje">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Command="{Binding ShowServerPopupCommand}"
@@ -16,7 +17,7 @@
                                  FontFamily="{StaticResource IconFont}"/>
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
-        <ToolbarItem Command="{Binding ShowServerPopupCommand}"
+        <ToolbarItem Command="{Binding ShowLoginPageCommand}"
                      Text="Zaloguj"
                      Priority="1">
             <ToolbarItem.IconImageSource>

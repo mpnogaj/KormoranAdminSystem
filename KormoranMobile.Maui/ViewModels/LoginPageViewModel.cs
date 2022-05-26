@@ -38,7 +38,9 @@ namespace KormoranMobile.Maui.ViewModels
 
         #region Commands
         private readonly AsyncRelayCommand _loginCommand;
-        public AsyncRelayCommand LoginCommand { get => _loginCommand; }
+        private readonly AsyncRelayCommand _goBack;
+        public AsyncRelayCommand LoginCommand => _loginCommand;
+        public AsyncRelayCommand GoBack => _goBack;
         #endregion
 
         public LoginPageViewModel()
@@ -60,6 +62,8 @@ namespace KormoranMobile.Maui.ViewModels
                     await Toast.Make(res.Token).Show();
                 }
             }, () => !(string.IsNullOrWhiteSpace(Login) || string.IsNullOrWhiteSpace(Password)));
+
+            _goBack = new AsyncRelayCommand(async () => await Shell.Current.GoToAsync(".."));
         }
     }
 }

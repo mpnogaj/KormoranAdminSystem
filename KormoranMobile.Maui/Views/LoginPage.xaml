@@ -4,7 +4,12 @@
              xmlns:viewmodels="clr-namespace:KormoranMobile.Maui.ViewModels"
              xmlns:properties="clr-namespace:KormoranMobile.Maui.Properties"
              x:Class="KormoranMobile.Maui.Views.LoginPage"
-             x:DataType="viewmodels:LoginPageViewModel">
+             x:DataType="viewmodels:LoginPageViewModel"
+             Title="Zaloguj się">
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding GoBack}" />
+    </Shell.BackButtonBehavior>
+    
     <ContentPage.Content>
         <StackLayout Spacing="3" Margin="10"
                      VerticalOptions="Center">

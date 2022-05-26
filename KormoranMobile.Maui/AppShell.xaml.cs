@@ -1,4 +1,5 @@
 ﻿using KormoranMobile.Maui.Helpers;
+using KormoranMobile.Maui.Views;
 
 namespace KormoranMobile.Maui
 {
@@ -7,6 +8,7 @@ namespace KormoranMobile.Maui
         public AppShell()
         {
             InitializeComponent();
+            Routing.RegisterRoute($"{nameof(TournamentsPage)}/{nameof(LoginPage)}", typeof(LoginPage));
         }
     }
 }

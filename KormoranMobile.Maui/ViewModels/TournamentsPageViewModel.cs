@@ -2,6 +2,7 @@
 using CommunityToolkit.Maui.Core;
 using KormoranMobile.Maui.Helpers;
 using KormoranMobile.Maui.Services;
+using KormoranMobile.Maui.Views;
 using KormoranMobile.Maui.ViewModels.Abstraction;
 using KormoranMobile.Maui.ViewModels.Commands;
 using KormoranShared.Models;
@@ -17,6 +18,7 @@ namespace KormoranMobile.Maui.ViewModels
         private ObservableCollection<Tournament> _tournaments;
         private bool _isRefreshing;
         private AsyncRelayCommand _showServerPopupCommand;
+        private AsyncRelayCommand _showLoginPageCommand;
         private AsyncRelayCommand _refreshTournamentsListCommand;
 
 
@@ -33,6 +35,7 @@ namespace KormoranMobile.Maui.ViewModels
         }
 
         public AsyncRelayCommand ShowServerPopupCommand => _showServerPopupCommand;
+        public AsyncRelayCommand ShowLoginPageCommand => _showLoginPageCommand;
         public AsyncRelayCommand RefreshTournamentsListCommand => _refreshTournamentsListCommand;
 
         public TournamentsPageViewModel()
@@ -49,6 +52,9 @@ namespace KormoranMobile.Maui.ViewModels
                 Preferences.Set(ServerHelper.AddressKey, res);
                 await SetupServer();
             });
+
+            _showLoginPageCommand = new(async () =>
+                await Shell.Current.GoToAsync(nameof(LoginPage)));
 
             _refreshTournamentsListCommand = new(RefreshTournamentsList);
 
