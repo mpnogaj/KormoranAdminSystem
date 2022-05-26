@@ -61,11 +61,56 @@ namespace KormoranMobile.Maui.Properties {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Login.
+        /// </summary>
+        public static string login {
+            get {
+                return ResourceManager.GetString("login", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu mnogaj.
+        /// </summary>
+        public static string loginPlaceholder {
+            get {
+                return ResourceManager.GetString("loginPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Password.
         /// </summary>
         public static string password {
             get {
                 return ResourceManager.GetString("password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu admin123.
+        /// </summary>
+        public static string passwordPlaceholder {
+            get {
+                return ResourceManager.GetString("passwordPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Settings.
+        /// </summary>
+        public static string settings {
+            get {
+                return ResourceManager.GetString("settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Tournaments.
+        /// </summary>
+        public static string tournaments {
+            get {
+                return ResourceManager.GetString("tournaments", resourceCulture);
             }
         }
         

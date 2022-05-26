@@ -3,13 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:KormoranMobile.Maui.ViewModels"
              xmlns:models="clr-namespace:KormoranShared.Models"
+             xmlns:properties="clr-namespace:KormoranMobile.Maui.Properties"
              x:Class="KormoranMobile.Maui.Views.TournamentsPage"
              x:DataType="viewmodels:TournamentsPageViewModel"
-             Title="Turnieje">
+             Title="{x:Static properties:Resources.tournaments}">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Command="{Binding ShowServerPopupCommand}"
-                     Text="Ustawienia"
+                     Text="{x:Static properties:Resources.settings}"
                      Priority="2">
             <ToolbarItem.IconImageSource>
                 <FontImageSource Glyph="{StaticResource SettingsGlyph}"
@@ -18,7 +19,7 @@
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
         <ToolbarItem Command="{Binding ShowLoginPageCommand}"
-                     Text="Zaloguj"
+                     Text="{x:Static properties:Resources.login}"
                      Priority="1">
             <ToolbarItem.IconImageSource>
                 <FontImageSource Glyph="{StaticResource LoginGlyph}"

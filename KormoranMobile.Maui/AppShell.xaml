@@ -5,7 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:KormoranMobile.Maui"
     xmlns:views="clr-namespace:KormoranMobile.Maui.Views"
-    Shell.FlyoutBehavior="Flyout">
+    Shell.FlyoutBehavior="Disabled">
 
     <ShellContent
         Route="TournamentsPage"

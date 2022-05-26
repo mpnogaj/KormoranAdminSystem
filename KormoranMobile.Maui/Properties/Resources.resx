@@ -123,4 +123,19 @@
   <data name="password" xml:space="preserve">
     <value>Password</value>
   </data>
+  <data name="tournaments" xml:space="preserve">
+    <value>Tournaments</value>
+  </data>
+  <data name="settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="loginPlaceholder" xml:space="preserve">
+    <value>mnogaj</value>
+  </data>
+  <data name="passwordPlaceholder" xml:space="preserve">
+    <value>admin123</value>
+  </data>
 </root>

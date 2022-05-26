@@ -5,12 +5,13 @@ using KormoranMobile.Maui.ViewModels.Abstraction;
 using KormoranMobile.Maui.ViewModels.Commands;
 using KormoranShared.Models.Requests;
 using Refit;
+using System.Diagnostics;
 
 namespace KormoranMobile.Maui.ViewModels
 {
     internal class LoginPageViewModel : ViewModelBase
     {
-        private IKormoranServer _kormoranServer;
+        private readonly IKormoranServer _kormoranServer;
 
         #region MVVM Props
         private string _login = string.Empty;
@@ -38,13 +39,14 @@ namespace KormoranMobile.Maui.ViewModels
 
         #region Commands
         private readonly AsyncRelayCommand _loginCommand;
-        private readonly AsyncRelayCommand _goBack;
+        private readonly AsyncRelayCommand _goBackCommand;
         public AsyncRelayCommand LoginCommand => _loginCommand;
-        public AsyncRelayCommand GoBack => _goBack;
+        public AsyncRelayCommand GoBackCommand => _goBackCommand;
         #endregion
 
         public LoginPageViewModel()
         {
+            Debug.WriteLine("LoginPageCtor");
             _kormoranServer = RestService.For<IKormoranServer>("http://192.168.88.122/api");
             _loginCommand = new AsyncRelayCommand(async () =>
             {
@@ -62,8 +64,7 @@ namespace KormoranMobile.Maui.ViewModels
                     await Toast.Make(res.Token).Show();
                 }
             }, () => !(string.IsNullOrWhiteSpace(Login) || string.IsNullOrWhiteSpace(Password)));
-
-            _goBack = new AsyncRelayCommand(async () => await Shell.Current.GoToAsync(".."));
+            _goBackCommand = new AsyncRelayCommand(async () => await Shell.Current.GoToAsync(".."));
         }
     }
 }
