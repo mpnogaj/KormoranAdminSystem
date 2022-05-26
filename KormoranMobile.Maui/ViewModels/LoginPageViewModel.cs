@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 using KormoranMobile.Maui.Helpers;
 using KormoranMobile.Maui.Services;
 using KormoranMobile.Maui.ViewModels.Abstraction;
@@ -57,11 +58,11 @@ namespace KormoranMobile.Maui.ViewModels
                 });
                 if (res.Error)
                 {
-                    await Toast.Make(res.Message).Show();
+                    await Toast.Make(res.Message, ToastDuration.Long).Show();
                 }
                 else
                 {
-                    await Toast.Make(res.Token).Show();
+                    await Toast.Make("Zalogowano pomyślnie", ToastDuration.Long).Show();
                 }
             }, () => !(string.IsNullOrWhiteSpace(Login) || string.IsNullOrWhiteSpace(Password)));
             _goBackCommand = new AsyncRelayCommand(async () => await Shell.Current.GoToAsync(".."));
