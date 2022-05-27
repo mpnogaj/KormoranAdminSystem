@@ -4,21 +4,43 @@
 			 xmlns:viewmodels="clr-namespace:KormoranMobile.Maui.ViewModels"
 			 xmlns:models="clr-namespace:KormoranShared.Models"
 			 xmlns:properties="clr-namespace:KormoranMobile.Maui.Properties"
+             xmlns:maui="clr-namespace:Microsoft.Maui.Controls"
 			 x:Class="KormoranMobile.Maui.Views.TournamentsPage"
 			 x:DataType="viewmodels:TournamentsPageViewModel"
 			 Title="{x:Static properties:Resources.tournaments}">
 
+
+    <ContentPage.Resources>
+        <DataTemplate x:Key="TournamentRow" x:DataType="models:Tournament">
+            <ViewCell>
+                <StackLayout Orientation="Horizontal"
+										 Spacing="5"
+										 VerticalOptions="Center">
+                    <StackLayout.Resources>
+                        <Style TargetType="Label">
+                            <Setter Property="VerticalOptions" Value="Center" />
+                            <Setter Property="VerticalTextAlignment" Value="Center" />
+                            <Setter Property="FontSize" Value="Small"/>
+                        </Style>
+                    </StackLayout.Resources>
+
+                    <Label Text="{Binding Name}" Margin="10, 0, 0, 0"/>
+                    <Label Text="-" />
+                    <Label Text="{Binding Discipline.Name}"/>
+                </StackLayout>
+            </ViewCell>
+        </DataTemplate>
+    </ContentPage.Resources>
     
-    
-	<ContentPage.ToolbarItems>
-		<ToolbarItem Command="{Binding ShowServerPopupCommand}"
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding ShowServerPopupCommand}"
 					 Text="{x:Static properties:Resources.settings}">
-			<ToolbarItem.IconImageSource>
-				<FontImageSource Glyph="{StaticResource SettingsGlyph}"
+            <ToolbarItem.IconImageSource>
+                <FontImageSource Glyph="{StaticResource SettingsGlyph}"
 								 Size="Large"
 								 FontFamily="{StaticResource IconFont}"/>
-			</ToolbarItem.IconImageSource>
-		</ToolbarItem>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
         <ToolbarItem Command="{Binding ShowLoginPageCommand}"
 					 Text="{x:Static properties:Resources.login}">
             <ToolbarItem.IconImageSource>
@@ -31,33 +53,23 @@
         <ToolbarItem Command="{Binding RefreshTournamentsListCommand}"
                      Text="Odśwież"/>
     </ContentPage.ToolbarItems>
-
-	<RefreshView Command="{Binding RefreshTournamentsListCommand}"
-				 IsRefreshing="{Binding IsRefreshing, Mode=TwoWay}">
-        <!--Doesnt work on windows. Don't know why...-->
-		<ListView ItemsSource="{Binding Tournaments}"
-				  CachingStrategy="RecycleElement">
-			<ListView.ItemTemplate>
-				<DataTemplate x:DataType="models:Tournament">
-					<ViewCell>
-						<StackLayout Orientation="Horizontal"
-									 Spacing="5"
-									 Margin="10, 0, 0, 0"
-									 VerticalOptions="Center">
-							<StackLayout.Resources>
-								<Style TargetType="Label" BasedOn="{StaticResource BodyStyle}">
-									<Setter Property="VerticalOptions" Value="Center" />
-									<Setter Property="VerticalTextAlignment" Value="Center" />
-								</Style>
-							</StackLayout.Resources>
-							
-							<Label Text="{Binding Name}"/>
-							<Label Text="-" />
-							<Label Text="{Binding Discipline.Name}"/>
-						</StackLayout>
-					</ViewCell>
-				</DataTemplate>
-			</ListView.ItemTemplate>
-		</ListView>
-	</RefreshView>
+    
+    <ContentView>
+        <OnPlatform x:TypeArguments="View">
+            <On Platform="WinUI, MacCatalyst, Tizen">
+                <ListView ItemsSource="{Binding Tournaments}"
+                          CachingStrategy="RecycleElement"
+                          RowHeight="50"
+                          ItemTemplate="{StaticResource TournamentRow}"/>
+            </On>
+            <On Platform="iOS, Android">
+                <RefreshView Command="{Binding RefreshTournamentsListCommand}"
+                             IsRefreshing="{Binding IsRefreshing, Mode=TwoWay}">
+                    <ListView ItemsSource="{Binding Tournaments}"
+                              CachingStrategy="RecycleElement"
+                              ItemTemplate="{StaticResource TournamentRow}"/>
+                </RefreshView>
+            </On>
+        </OnPlatform>
+    </ContentView>
 </ContentPage>
