@@ -19,6 +19,7 @@ namespace KormoranMobile.Maui.ViewModels
         private bool _isRefreshing;
         private AsyncRelayCommand _showServerPopupCommand;
         private AsyncRelayCommand _showLoginPageCommand;
+        private AsyncRelayCommand<Tournament> _itemTappedCommand;
         private AsyncRelayCommand _refreshTournamentsListCommand;
 
 
@@ -36,6 +37,7 @@ namespace KormoranMobile.Maui.ViewModels
 
         public AsyncRelayCommand ShowServerPopupCommand => _showServerPopupCommand;
         public AsyncRelayCommand ShowLoginPageCommand => _showLoginPageCommand;
+        public AsyncRelayCommand<Tournament> ItemTappedCommand => _itemTappedCommand;
         public AsyncRelayCommand RefreshTournamentsListCommand => _refreshTournamentsListCommand;
 
         public TournamentsPageViewModel()
@@ -55,6 +57,11 @@ namespace KormoranMobile.Maui.ViewModels
 
             _showLoginPageCommand = new(async () =>
                 await Shell.Current.GoToAsync(nameof(LoginPage)));
+
+            _itemTappedCommand = new(async (Tournament tournament) =>
+            {
+                await Toast.Make(tournament.Name).Show();
+            });
 
             _refreshTournamentsListCommand = new(RefreshTournamentsList);
 

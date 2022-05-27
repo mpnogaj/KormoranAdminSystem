@@ -4,72 +4,53 @@
 			 xmlns:viewmodels="clr-namespace:KormoranMobile.Maui.ViewModels"
 			 xmlns:models="clr-namespace:KormoranShared.Models"
 			 xmlns:properties="clr-namespace:KormoranMobile.Maui.Properties"
-             xmlns:maui="clr-namespace:Microsoft.Maui.Controls"
+			 xmlns:maui="clr-namespace:Microsoft.Maui.Controls"
 			 x:Class="KormoranMobile.Maui.Views.TournamentsPage"
 			 x:DataType="viewmodels:TournamentsPageViewModel"
 			 Title="{x:Static properties:Resources.tournaments}">
 
-
-    <ContentPage.Resources>
-        <DataTemplate x:Key="TournamentRow" x:DataType="models:Tournament">
-            <ViewCell>
-                <StackLayout Orientation="Horizontal"
-										 Spacing="5"
-										 VerticalOptions="Center">
-                    <StackLayout.Resources>
-                        <Style TargetType="Label">
-                            <Setter Property="VerticalOptions" Value="Center" />
-                            <Setter Property="VerticalTextAlignment" Value="Center" />
-                            <Setter Property="FontSize" Value="Small"/>
-                        </Style>
-                    </StackLayout.Resources>
-
-                    <Label Text="{Binding Name}" Margin="10, 0, 0, 0"/>
-                    <Label Text="-" />
-                    <Label Text="{Binding Discipline.Name}"/>
-                </StackLayout>
-            </ViewCell>
-        </DataTemplate>
-    </ContentPage.Resources>
-    
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Command="{Binding ShowServerPopupCommand}"
+	<ContentPage.ToolbarItems>
+		<ToolbarItem Command="{Binding ShowServerPopupCommand}"
 					 Text="{x:Static properties:Resources.settings}">
-            <ToolbarItem.IconImageSource>
-                <FontImageSource Glyph="{StaticResource SettingsGlyph}"
+			<ToolbarItem.IconImageSource>
+				<FontImageSource Glyph="{StaticResource SettingsGlyph}"
 								 Size="Large"
 								 FontFamily="{StaticResource IconFont}"/>
-            </ToolbarItem.IconImageSource>
-        </ToolbarItem>
-        <ToolbarItem Command="{Binding ShowLoginPageCommand}"
+			</ToolbarItem.IconImageSource>
+		</ToolbarItem>
+		<ToolbarItem Command="{Binding ShowLoginPageCommand}"
 					 Text="{x:Static properties:Resources.login}">
-            <ToolbarItem.IconImageSource>
-                <FontImageSource Glyph="{StaticResource LoginGlyph}"
+			<ToolbarItem.IconImageSource>
+				<FontImageSource Glyph="{StaticResource LoginGlyph}"
 								 Size="Large"
 								 FontFamily="{StaticResource IconFont}"/>
-            </ToolbarItem.IconImageSource>
-        </ToolbarItem>
+			</ToolbarItem.IconImageSource>
+		</ToolbarItem>
 
-        <ToolbarItem Command="{Binding RefreshTournamentsListCommand}"
-                     Text="Odśwież"/>
-    </ContentPage.ToolbarItems>
-    
-    <ContentView>
-        <OnPlatform x:TypeArguments="View">
-            <On Platform="WinUI, MacCatalyst, Tizen">
-                <ListView ItemsSource="{Binding Tournaments}"
-                          CachingStrategy="RecycleElement"
-                          RowHeight="50"
-                          ItemTemplate="{StaticResource TournamentRow}"/>
-            </On>
-            <On Platform="iOS, Android">
-                <RefreshView Command="{Binding RefreshTournamentsListCommand}"
-                             IsRefreshing="{Binding IsRefreshing, Mode=TwoWay}">
-                    <ListView ItemsSource="{Binding Tournaments}"
-                              CachingStrategy="RecycleElement"
-                              ItemTemplate="{StaticResource TournamentRow}"/>
-                </RefreshView>
-            </On>
-        </OnPlatform>
-    </ContentView>
+		<ToolbarItem Command="{Binding RefreshTournamentsListCommand}"
+					 Text="Odśwież"/>
+	</ContentPage.ToolbarItems>
+
+    <ListView x:Name="TournamentsList"
+              ItemsSource="{Binding Tournaments}"
+			  CachingStrategy="RecycleElement"
+              RowHeight="45"
+              IsPullToRefreshEnabled="True"
+              RefreshCommand="{Binding RefreshTournamentsListCommand}"
+              IsRefreshing="{Binding IsRefreshing, Mode=TwoWay}">
+        <ListView.ItemTemplate>
+            <DataTemplate x:DataType="models:Tournament">
+                <TextCell Detail="{Binding State.Name}"
+                          Command="{Binding Path=BindingContext.ItemTappedCommand, Source={x:Reference Name=TournamentsList}}"
+                          CommandParameter="{Binding .}">
+                    <TextCell.Text>
+                        <MultiBinding StringFormat="{}{0} | {1}">
+                            <Binding Path="Name"/>
+                            <Binding Path="Discipline.Name"/>
+                        </MultiBinding>
+                    </TextCell.Text>
+                </TextCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
 </ContentPage>
