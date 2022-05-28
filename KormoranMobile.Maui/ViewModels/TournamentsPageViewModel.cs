@@ -9,6 +9,8 @@ using KormoranShared.Models;
 using KormoranShared.Models.Responses;
 using Refit;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Text.Json;
 
 namespace KormoranMobile.Maui.ViewModels
 {
@@ -60,8 +62,17 @@ namespace KormoranMobile.Maui.ViewModels
 
             _itemTappedCommand = new(async (Tournament tournament) =>
             {
-                await Toast.Make(tournament.Name).Show();
+                try
+                {
+                    await Shell.Current.GoToAsync($"{nameof(MatchesPage)}?tournamentId={tournament}");
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                }
             });
+            
+                
 
             _refreshTournamentsListCommand = new(RefreshTournamentsList);
 

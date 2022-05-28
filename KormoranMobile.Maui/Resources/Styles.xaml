@@ -9,6 +9,7 @@
 
     <x:String x:Key="SettingsGlyph">&#xe800;</x:String>
     <x:String x:Key="LoginGlyph">&#xe801;</x:String>
+    <x:String x:Key="RefreshGlyph">&#xe802;</x:String>
 
     <Color x:Key="Primary">#512BD4</Color>
     <Color x:Key="Light">#DFD8F7</Color>

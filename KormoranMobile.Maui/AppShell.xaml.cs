@@ -9,6 +9,7 @@ namespace KormoranMobile.Maui
         {
             InitializeComponent();
             Routing.RegisterRoute($"{nameof(TournamentsPage)}/{nameof(LoginPage)}", typeof(LoginPage));
+            Routing.RegisterRoute($"{nameof(TournamentsPage)}/{nameof(MatchesPage)}", typeof(MatchesPage));
         }
     }
 }

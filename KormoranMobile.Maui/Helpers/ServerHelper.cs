@@ -8,5 +8,11 @@
             Preferences.ContainsKey(AddressKey);
         public static string ServerAddress =>
             AddressSet ? $"http://{Preferences.Get(AddressKey, string.Empty)}/api" : string.Empty;
+
+        public static HttpClient DefaultHttpClient => new HttpClient
+        {
+            BaseAddress = new Uri(ServerAddress),
+            Timeout = TimeSpan.FromSeconds(10)
+        };
     }
 }

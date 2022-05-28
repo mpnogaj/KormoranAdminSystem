@@ -27,9 +27,15 @@
 			</ToolbarItem.IconImageSource>
 		</ToolbarItem>
 
-		<ToolbarItem Command="{Binding RefreshTournamentsListCommand}"
-					 Text="Odśwież"/>
-	</ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding RefreshTournamentsListCommand}"
+					 Text="Odśwież">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource Glyph="{StaticResource RefreshGlyph}"
+                                 Size="Large"
+                                 FontFamily="{StaticResource IconFont}"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
 
     <ListView x:Name="TournamentsList"
               ItemsSource="{Binding Tournaments}"
