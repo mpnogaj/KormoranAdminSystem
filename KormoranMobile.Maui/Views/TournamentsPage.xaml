@@ -39,8 +39,7 @@
 
 	<ListView x:Name="TournamentsList"
 			  ItemsSource="{Binding Tournaments}"
-			  CachingStrategy="RecycleElement"
-			  RowHeight="45"
+              CachingStrategy="RecycleElement"
 			  IsPullToRefreshEnabled="True"
 			  RefreshCommand="{Binding RefreshTournamentsListCommand}"
 			  IsRefreshing="{Binding IsRefreshing, Mode=TwoWay}">

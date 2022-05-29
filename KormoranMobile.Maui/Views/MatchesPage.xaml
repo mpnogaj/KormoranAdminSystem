@@ -4,27 +4,39 @@
              xmlns:viewmodels="clr-namespace:KormoranMobile.Maui.ViewModels"
              xmlns:models="clr-namespace:KormoranShared.Models"
              x:Class="KormoranMobile.Maui.MatchesPage"
-             x:DataType="viewmodels:MatchesPageViewModel"
-             Title="Mecze">
-    <StackLayout Orientation="Vertical"
-                 VerticalOptions="StartAndExpand">
-        <Label Text="{Binding Tournament.Name}"
-               HorizontalOptions="Center" />
-        <ListView ItemsSource="{Binding Tournament.Matches}">
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="models:Match">
-                    <TextCell Detail="{Binding State.Name}">
-                        <TextCell.Text>
-                            <MultiBinding StringFormat="{}{0} - {1} | {2}:{3}">
-                                <Binding Path="Team1.Name"/>
-                                <Binding Path="Team2.Name"/>
-                                <Binding Path="Team1Score"/>
-                                <Binding Path="Team2Score"/>
-                            </MultiBinding>
-                        </TextCell.Text>
-                    </TextCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-    </StackLayout>
+             x:DataType="viewmodels:MatchesPageViewModel">
+    <ContentPage.Title>
+        <MultiBinding StringFormat="{}Mecze: {0} | {1} | {2}">
+            <Binding Path="Tournament.Name"/>
+            <Binding Path="Tournament.Discipline.Name"/>
+            <Binding Path="Tournament.State.Name"/>
+        </MultiBinding>
+    </ContentPage.Title>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Odśwież">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource Glyph="{StaticResource RefreshGlyph}"
+                                 Size="Large"
+                                 FontFamily="{StaticResource IconFont}"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+
+    <ListView ItemsSource="{Binding Tournament.Matches}"
+              CachingStrategy="RecycleElement">
+        <ListView.ItemTemplate>
+            <DataTemplate x:DataType="models:Match">
+                <TextCell Detail="{Binding State.Name}">
+                    <TextCell.Text>
+                        <MultiBinding StringFormat="{}{0} - {1} | {2}:{3}">
+                            <Binding Path="Team1.Name"/>
+                            <Binding Path="Team2.Name"/>
+                            <Binding Path="Team1Score"/>
+                            <Binding Path="Team2Score"/>
+                        </MultiBinding>
+                    </TextCell.Text>
+                </TextCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
 </ContentPage>
