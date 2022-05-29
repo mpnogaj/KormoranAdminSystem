@@ -3,28 +3,31 @@ using KormoranMobile.Maui.Services;
 using KormoranMobile.Maui.ViewModels.Abstraction;
 using KormoranShared.Models;
 using Refit;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace KormoranMobile.Maui.ViewModels
 {
-	[QueryProperty(nameof(Tournament), "tournamentId")]
-	public class MatchesPageViewModel : ViewModelBase
-	{
-		private readonly IKormoranServer _kormoranServer;
+    [QueryProperty(nameof(TournamentReceiver), "tournamentId")]
+    public class MatchesPageViewModel : ViewModelBase
+    {
+        private readonly IKormoranServer _kormoranServer;
 
-		public int TournamentId { get; set; }
+        public string TournamentReceiver
+        {
+            set => Tournament = JsonSerializer.Deserialize<Tournament>(value);
+        }
 
-		private Tournament _tournament;
-		public Tournament Tournament;
+        private Tournament _tournament;
+        public Tournament Tournament
+        {
+            get => _tournament;
+            set => SetProperty(ref _tournament, value);
+        }
 
-		public MatchesPageViewModel()
-		{
-			_kormoranServer = RestService.For<IKormoranServer>(ServerHelper.DefaultHttpClient);
-		}
+        public MatchesPageViewModel()
+        {
+            _kormoranServer = RestService.For<IKormoranServer>(ServerHelper.DefaultHttpClient);
+        }
 
-	}
+    }
 }

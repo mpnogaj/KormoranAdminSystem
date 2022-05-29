@@ -27,36 +27,36 @@
 			</ToolbarItem.IconImageSource>
 		</ToolbarItem>
 
-        <ToolbarItem Command="{Binding RefreshTournamentsListCommand}"
+		<ToolbarItem Command="{Binding RefreshTournamentsListCommand}"
 					 Text="Odśwież">
-            <ToolbarItem.IconImageSource>
-                <FontImageSource Glyph="{StaticResource RefreshGlyph}"
-                                 Size="Large"
-                                 FontFamily="{StaticResource IconFont}"/>
-            </ToolbarItem.IconImageSource>
-        </ToolbarItem>
-    </ContentPage.ToolbarItems>
+			<ToolbarItem.IconImageSource>
+				<FontImageSource Glyph="{StaticResource RefreshGlyph}"
+								 Size="Large"
+								 FontFamily="{StaticResource IconFont}"/>
+			</ToolbarItem.IconImageSource>
+		</ToolbarItem>
+	</ContentPage.ToolbarItems>
 
-    <ListView x:Name="TournamentsList"
-              ItemsSource="{Binding Tournaments}"
+	<ListView x:Name="TournamentsList"
+			  ItemsSource="{Binding Tournaments}"
 			  CachingStrategy="RecycleElement"
-              RowHeight="45"
-              IsPullToRefreshEnabled="True"
-              RefreshCommand="{Binding RefreshTournamentsListCommand}"
-              IsRefreshing="{Binding IsRefreshing, Mode=TwoWay}">
-        <ListView.ItemTemplate>
-            <DataTemplate x:DataType="models:Tournament">
-                <TextCell Detail="{Binding State.Name}"
-                          Command="{Binding Path=BindingContext.ItemTappedCommand, Source={x:Reference Name=TournamentsList}}"
-                          CommandParameter="{Binding .}">
-                    <TextCell.Text>
-                        <MultiBinding StringFormat="{}{0} | {1}">
-                            <Binding Path="Name"/>
-                            <Binding Path="Discipline.Name"/>
-                        </MultiBinding>
-                    </TextCell.Text>
-                </TextCell>
-            </DataTemplate>
-        </ListView.ItemTemplate>
-    </ListView>
+			  RowHeight="45"
+			  IsPullToRefreshEnabled="True"
+			  RefreshCommand="{Binding RefreshTournamentsListCommand}"
+			  IsRefreshing="{Binding IsRefreshing, Mode=TwoWay}">
+		<ListView.ItemTemplate>
+			<DataTemplate x:DataType="models:Tournament">
+				<TextCell Detail="{Binding State.Name}"
+						  Command="{Binding Path=BindingContext.ItemTappedCommand, Source={x:Reference Name=TournamentsList}}"
+						  CommandParameter="{Binding .}">
+					<TextCell.Text>
+						<MultiBinding StringFormat="{}{0} | {1}">
+							<Binding Path="Name"/>
+							<Binding Path="Discipline.Name"/>
+						</MultiBinding>
+					</TextCell.Text>
+				</TextCell>
+			</DataTemplate>
+		</ListView.ItemTemplate>
+	</ListView>
 </ContentPage>

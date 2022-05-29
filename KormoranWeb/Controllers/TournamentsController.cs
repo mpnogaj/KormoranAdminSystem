@@ -29,23 +29,14 @@ namespace KormoranWeb.Controllers
         {
             try
             {
-                _db.ChangeTracker.LazyLoadingEnabled = false;
+                //_db.ChangeTracker.LazyLoadingEnabled = false;
                 var tournamentList = await _db.Tournaments
                     .Include(x => x.Teams)
                     .Include(x => x.Discipline)
-                    .Include(x => x.Matches)
+                    .Include(x => x.Matches).ThenInclude(x => x.State)
                     .Include(x => x.State)
                     .OrderBy(x => x.TournamentId)
                     .ToListAsync();
-
-                foreach (var tournament in tournamentList)
-                {
-                    var matches = await _db.Matches
-                        .Include(x => x.State)
-                        .Where(x => x.TournamentId == tournament.TournamentId)
-                        .ToListAsync();
-                    tournament.Matches = matches;
-                }
                 if (id.HasValue)
                 {
                     var tournament = tournamentList.FirstOrDefault(x => x.TournamentId == id.Value);
