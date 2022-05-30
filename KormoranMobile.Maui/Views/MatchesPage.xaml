@@ -13,7 +13,8 @@
         </MultiBinding>
     </ContentPage.Title>
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Odśwież">
+        <ToolbarItem Command="{Binding RefreshMatchesCommand}"
+                     Text="Odśwież">
             <ToolbarItem.IconImageSource>
                 <FontImageSource Glyph="{StaticResource RefreshGlyph}"
                                  Size="Large"
@@ -23,7 +24,10 @@
     </ContentPage.ToolbarItems>
 
     <ListView ItemsSource="{Binding Tournament.Matches}"
-              CachingStrategy="RecycleElement">
+              CachingStrategy="RecycleElement"
+              IsPullToRefreshEnabled="True"
+              IsRefreshing="{Binding IsRefreshing}"
+              RefreshCommand="{Binding RefreshMatchesCommand}">
         <ListView.ItemTemplate>
             <DataTemplate x:DataType="models:Match">
                 <TextCell Detail="{Binding State.Name}">

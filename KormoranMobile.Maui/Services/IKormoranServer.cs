@@ -17,9 +17,15 @@ namespace KormoranMobile.Maui.Services
         public Task<AuthenticateResponse> Authenticate([Body] AuthenticateRequest request);
         #endregion
 
-        #region
+        #region Touranaments
         [Get("/tournaments/GetTournaments")]
         public Task<CollectionResponse<Tournament>> GetTournaments();
+        #endregion
+
+        #region Matches
+
+        [Get("/matches/GetMatches")]
+        public Task<CollectionResponse<Match>> GetMatches([Query]int tournamentId);
         #endregion
     }
 }

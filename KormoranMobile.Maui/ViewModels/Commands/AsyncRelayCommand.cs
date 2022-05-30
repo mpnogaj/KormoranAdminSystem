@@ -44,6 +44,7 @@ namespace KormoranMobile.Maui.ViewModels.Commands
                 _isExecuting = true;
                 await _execute(parameter);
                 _isExecuting = false;
+                RaiseCanExecuteChanged();
             }
         }
 
@@ -108,6 +109,7 @@ namespace KormoranMobile.Maui.ViewModels.Commands
                 _isExecuting = true;
                 await _execute();
                 _isExecuting = false;
+                RaiseCanExecuteChanged();
             }
         }
 

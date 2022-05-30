@@ -9,10 +9,10 @@
         public static string ServerAddress =>
             AddressSet ? $"http://{Preferences.Get(AddressKey, string.Empty)}/api" : string.Empty;
 
-        public static HttpClient DefaultHttpClient => new HttpClient
+        public static HttpClient DefaultHttpClient => AddressSet ? new HttpClient
         {
             BaseAddress = new Uri(ServerAddress),
             Timeout = TimeSpan.FromSeconds(10)
-        };
+        } : throw new Exception("Server address was empty when creating HttpClient!");
     }
 }

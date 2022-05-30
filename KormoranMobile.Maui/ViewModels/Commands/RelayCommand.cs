@@ -40,7 +40,7 @@ namespace KormoranMobile.Maui.ViewModels.Commands
         ///<summary>
         ///Defines the method that determines whether the command can execute in its current state.
         ///</summary>
-        ///<param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
+        ///<param name="parameter">Data used by the command.</param>
         ///<returns>
         ///true if this command can be executed; otherwise, false.
         ///</returns>
@@ -52,12 +52,13 @@ namespace KormoranMobile.Maui.ViewModels.Commands
         ///<summary>
         ///Defines the method to be called when the command is invoked.
         ///</summary>
-        ///<param name="parameter">Data used by the command. If the command does not require data to be passed, this object can be set to <see langword="null" />.</param>
+        ///<param name="parameter">Data used by the command./>.</param>
         public void Execute(object parameter)
         {
             if (parameter == null)
                 throw new InvalidOperationException();
             _execute((T)parameter);
+            RaiseCanExecuteChanged();
         }
 
         public void RaiseCanExecuteChanged()
@@ -122,6 +123,7 @@ namespace KormoranMobile.Maui.ViewModels.Commands
         public void Execute(object parameter)
         {
             _execute();
+            RaiseCanExecuteChanged();
         }
 
         public void RaiseCanExecuteChanged()
