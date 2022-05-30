@@ -23,14 +23,17 @@
         </ToolbarItem>
     </ContentPage.ToolbarItems>
 
-    <ListView ItemsSource="{Binding Tournament.Matches}"
+    <ListView x:Name="MatchesList" 
+              ItemsSource="{Binding Tournament.Matches}"
               CachingStrategy="RecycleElement"
               IsPullToRefreshEnabled="True"
               IsRefreshing="{Binding IsRefreshing}"
               RefreshCommand="{Binding RefreshMatchesCommand}">
         <ListView.ItemTemplate>
             <DataTemplate x:DataType="models:Match">
-                <TextCell Detail="{Binding State.Name}">
+                <TextCell Detail="{Binding State.Name}"
+                          Command="{Binding Path=BindingContext.ItemTappedCommand, Source={x:Reference Name=MatchesList}}"
+                          CommandParameter="{Binding .}">
                     <TextCell.Text>
                         <MultiBinding StringFormat="{}{0} - {1} | {2}:{3}">
                             <Binding Path="Team1.Name"/>

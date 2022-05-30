@@ -3,6 +3,7 @@ using KormoranMobile.Maui.Helpers;
 using KormoranMobile.Maui.Services;
 using KormoranMobile.Maui.ViewModels.Abstraction;
 using KormoranMobile.Maui.ViewModels.Commands;
+using KormoranMobile.Maui.Views;
 using KormoranShared.Models;
 using Refit;
 using System.Diagnostics;
@@ -10,7 +11,7 @@ using System.Text.Json;
 
 namespace KormoranMobile.Maui.ViewModels
 {
-	[QueryProperty(nameof(TournamentReceiver), "tournamentId")]
+	[QueryProperty(nameof(TournamentReceiver), "tournament")]
 	public class MatchesPageViewModel : ViewModelBase
 	{
 		private readonly IKormoranServer _kormoranServer;
@@ -19,9 +20,14 @@ namespace KormoranMobile.Maui.ViewModels
 		public AsyncRelayCommand RefreshMatchesCommand
 			=> _refreshMatchesCommand;
 
+		private readonly AsyncRelayCommand<Match> _itemTappedCommand;
+		public AsyncRelayCommand<Match> ItemTappedCommand 
+			=> _itemTappedCommand;
+
 		public string TournamentReceiver
 		{
-			set => Tournament = JsonSerializer.Deserialize<Tournament>(value);
+			set => Tournament = 
+				JsonSerializer.Deserialize<Tournament>(value) ?? throw new Exception("Tournament cannot be null!");
 		}
 
 		private Tournament _tournament;
@@ -66,6 +72,11 @@ namespace KormoranMobile.Maui.ViewModels
 					IsRefreshing = false;
 				}
 			}, () => IsRefreshing == false);
+
+			_itemTappedCommand = new AsyncRelayCommand<Match>(async (Match m) =>
+			{
+				await Shell.Current.GoToAsync($"{nameof(EditScoresPage)}?match={m}");
+			}, () => AuthHelper.IsLoggedIn);
 		}
 	}
 }

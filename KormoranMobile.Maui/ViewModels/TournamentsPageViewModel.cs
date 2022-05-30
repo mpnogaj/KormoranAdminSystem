@@ -65,7 +65,7 @@ namespace KormoranMobile.Maui.ViewModels
 			{
 				try
 				{
-					await Shell.Current.GoToAsync($"{nameof(MatchesPage)}?tournamentId={tournament}");
+					await Shell.Current.GoToAsync($"{nameof(MatchesPage)}?tournament={tournament}");
 				}
 				catch (Exception ex)
 				{
