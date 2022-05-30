@@ -63,6 +63,7 @@ namespace KormoranMobile.Maui.ViewModels
                 else
                 {
                     await Toast.Make("Zalogowano pomyślnie", ToastDuration.Long).Show();
+                    AuthHelper.Token = res.Token;
                 }
             }, () => !(string.IsNullOrWhiteSpace(Login) || string.IsNullOrWhiteSpace(Password)));
             _goBackCommand = new AsyncRelayCommand(async () => await Shell.Current.GoToAsync(".."));
