@@ -140,8 +140,8 @@ namespace KormoranMobile.Maui.ViewModels.Pages
 					await Toast.Make("Ustawiony adres jest nie poprawny!").Show();
 				}
 			}
-			_refreshTournamentsListCommand.RaiseCanExecuteChanged();
 			_showLoginPageCommand.RaiseCanExecuteChanged();
+			_refreshTournamentsListCommand.RaiseCanExecuteChanged();
 			return _kormoranServer != null;
 		}
 	}

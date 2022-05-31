@@ -101,4 +101,6 @@
 
 	<Import Project="..\KormoranShared\KormoranShared.projitems" Label="Shared" />
 
+	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionKormoranMobileMauiHideInfoBar="True" /></VisualStudio></ProjectExtensions>
+
 </Project>
