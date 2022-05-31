@@ -23,7 +23,7 @@
 			<StackLayout Spacing="2">
 				<Label Text="{x:Static properties:Resources.password}" />
 				<Entry Text="{Binding Password}"
-					   IsPassword="True"
+					   IsPassword="{OnPlatform Default=True, WinUI=False}"
 					   Placeholder="{x:Static properties:Resources.passwordPlaceholder}" />
 			</StackLayout>
 

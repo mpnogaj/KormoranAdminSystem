@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Views;
 using KormoranMobile.Maui.Helpers;
 using KormoranMobile.Maui.Services;
 using KormoranMobile.Maui.ViewModels.Abstraction;
@@ -74,7 +75,11 @@ namespace KormoranMobile.Maui.ViewModels
 
 			_itemTappedCommand = new AsyncRelayCommand<Match>(async (Match m) =>
 			{
-				await Shell.Current.GoToAsync($"{nameof(EditScoresPage)}?match={m}");
+				var popup = new EditScoresPage
+				{
+					BindingContext = new EditScoresPageViewModel(m)
+				};
+				await PopupExtensions.ShowPopupAsync(Application.Current.MainPage, popup);
 			}, () => AuthHelper.IsLoggedIn);
 		}
 	}

@@ -48,7 +48,7 @@ namespace KormoranMobile.Maui.ViewModels
 		public LoginPageViewModel()
 		{
 			Debug.WriteLine("LoginPageCtor");
-			_kormoranServer = RestService.For<IKormoranServer>("http://192.168.88.122/api");
+			_kormoranServer = RestService.For<IKormoranServer>(ServerHelper.DefaultHttpClient);
 			_loginCommand = new AsyncRelayCommand(async () =>
 			{
 				var res = await _kormoranServer.Authenticate(new AuthenticateRequest

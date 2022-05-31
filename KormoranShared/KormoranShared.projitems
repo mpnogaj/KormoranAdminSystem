@@ -9,6 +9,7 @@
     <Import_RootNamespace>KormoranShared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\JsonHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Discipline.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\LeaderboardEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\LogEntry.cs" />
