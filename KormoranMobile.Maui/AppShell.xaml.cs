@@ -1,5 +1,4 @@
-﻿using KormoranMobile.Maui.Helpers;
-using KormoranMobile.Maui.Views;
+﻿using KormoranMobile.Maui.Views;
 
 namespace KormoranMobile.Maui
 {
@@ -10,19 +9,19 @@ namespace KormoranMobile.Maui
 			InitializeComponent();
 
 			Routing.RegisterRoute(
-				string.Join('/', 
-					nameof(TournamentsPage), 
+				string.Join('/',
+					nameof(TournamentsPage),
 					nameof(LoginPage)), typeof(LoginPage));
 
 			Routing.RegisterRoute(
 				string.Join('/',
 					nameof(TournamentsPage),
 					nameof(MatchesPage)), typeof(MatchesPage));
-			
+
 			Routing.RegisterRoute(
-				string.Join('/', 
-					nameof(TournamentsPage), 
-					nameof(MatchesPage), 
+				string.Join('/',
+					nameof(TournamentsPage),
+					nameof(MatchesPage),
 					nameof(EditScoresPage)), typeof(EditScoresPage));
 		}
 	}

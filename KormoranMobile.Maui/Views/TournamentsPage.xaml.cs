@@ -10,11 +10,11 @@ public partial class TournamentsPage : ContentPage
 		this.BindingContext = new TournamentsPageViewModel();
 	}
 
-    protected override void OnAppearing()
-    {
-        base.OnAppearing();
-		Task.Run(() => 
+	protected override void OnAppearing()
+	{
+		base.OnAppearing();
+		Task.Run(() =>
 			((TournamentsPageViewModel)this.BindingContext).RefreshTournamentsListCommand.ExecuteAsync()
 		);
-    }
+	}
 }

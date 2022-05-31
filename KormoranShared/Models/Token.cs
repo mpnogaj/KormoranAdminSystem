@@ -1,8 +1,8 @@
 ﻿namespace KormoranWeb.Models
 {
-    public class Token
-    {
-        public string JwtToken { get; set; }
-        public string RefreshToken { get; set; }
-    }
+	public class Token
+	{
+		public string JwtToken { get; set; }
+		public string RefreshToken { get; set; }
+	}
 }

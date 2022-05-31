@@ -6,7 +6,6 @@ using KormoranMobile.Maui.ViewModels.Commands;
 using KormoranMobile.Maui.Views;
 using KormoranShared.Models;
 using Refit;
-using System.Diagnostics;
 using System.Text.Json;
 
 namespace KormoranMobile.Maui.ViewModels
@@ -21,12 +20,12 @@ namespace KormoranMobile.Maui.ViewModels
 			=> _refreshMatchesCommand;
 
 		private readonly AsyncRelayCommand<Match> _itemTappedCommand;
-		public AsyncRelayCommand<Match> ItemTappedCommand 
+		public AsyncRelayCommand<Match> ItemTappedCommand
 			=> _itemTappedCommand;
 
 		public string TournamentReceiver
 		{
-			set => Tournament = 
+			set => Tournament =
 				JsonSerializer.Deserialize<Tournament>(value) ?? throw new Exception("Tournament cannot be null!");
 		}
 
@@ -39,10 +38,10 @@ namespace KormoranMobile.Maui.ViewModels
 
 		private bool _isRefreshing;
 		public bool IsRefreshing
-        {
+		{
 			get => _isRefreshing;
 			set => SetProperty(ref _isRefreshing, value);
-        }
+		}
 
 		public MatchesPageViewModel()
 		{

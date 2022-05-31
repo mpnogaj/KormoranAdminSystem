@@ -1,5 +1,4 @@
-﻿using KormoranMobile.Maui.Services;
-using CommunityToolkit.Maui;
+﻿using CommunityToolkit.Maui;
 #if __ANDROID__
 using KormoranMobile.Maui.Platforms.Android.Impl;
 #elif WINDOWS

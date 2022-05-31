@@ -2,15 +2,14 @@
 using CommunityToolkit.Maui.Core;
 using KormoranMobile.Maui.Helpers;
 using KormoranMobile.Maui.Services;
-using KormoranMobile.Maui.Views;
 using KormoranMobile.Maui.ViewModels.Abstraction;
 using KormoranMobile.Maui.ViewModels.Commands;
+using KormoranMobile.Maui.Views;
 using KormoranShared.Models;
 using KormoranShared.Models.Responses;
 using Refit;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Text.Json;
 
 namespace KormoranMobile.Maui.ViewModels
 {
@@ -58,7 +57,7 @@ namespace KormoranMobile.Maui.ViewModels
 			});
 
 			_showLoginPageCommand = new(async () =>
-				await Shell.Current.GoToAsync(nameof(LoginPage)), 
+				await Shell.Current.GoToAsync(nameof(LoginPage)),
 				() => _kormoranServer != null);
 
 			_itemTappedCommand = new(async (Tournament tournament) =>
@@ -72,7 +71,7 @@ namespace KormoranMobile.Maui.ViewModels
 					Debug.WriteLine(ex.Message);
 				}
 			});
-			_refreshTournamentsListCommand = new(RefreshTournamentsList, 
+			_refreshTournamentsListCommand = new(RefreshTournamentsList,
 				() => IsRefreshing == false && _kormoranServer != null);
 
 			try
