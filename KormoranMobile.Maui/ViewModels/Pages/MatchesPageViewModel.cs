@@ -4,13 +4,14 @@ using KormoranMobile.Maui.Helpers;
 using KormoranMobile.Maui.Services;
 using KormoranMobile.Maui.ViewModels.Abstraction;
 using KormoranMobile.Maui.ViewModels.Commands;
+using KormoranMobile.Maui.ViewModels.Popups;
 using KormoranMobile.Maui.Views;
 using KormoranMobile.Maui.Views.Popups;
 using KormoranShared.Models;
 using Refit;
 using System.Text.Json;
 
-namespace KormoranMobile.Maui.ViewModels
+namespace KormoranMobile.Maui.ViewModels.Pages
 {
 	[QueryProperty(nameof(TournamentReceiver), "tournament")]
 	public class MatchesPageViewModel : ViewModelBase
@@ -74,13 +75,13 @@ namespace KormoranMobile.Maui.ViewModels
 				}
 			}, () => IsRefreshing == false);
 
-			_itemTappedCommand = new AsyncRelayCommand<Match>(async (Match m) =>
+			_itemTappedCommand = new AsyncRelayCommand<Match>(async (m) =>
 			{
 				var popup = new EditScoresPopup
 				{
-					BindingContext = new EditScoresPageViewModel(m)
+					BindingContext = new EditScoresPopupViewModel(m)
 				};
-				await PopupExtensions.ShowPopupAsync(Application.Current.MainPage, popup);
+				await Application.Current.MainPage.ShowPopupAsync(popup);
 			}, () => AuthHelper.IsLoggedIn);
 		}
 	}

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-			 xmlns:viewmodels="clr-namespace:KormoranMobile.Maui.ViewModels"
+			 xmlns:viewmodels="clr-namespace:KormoranMobile.Maui.ViewModels.Pages"
 			 xmlns:models="clr-namespace:KormoranShared.Models"
 			 x:Class="KormoranMobile.Maui.Views.Pages.MatchesPage"
 			 x:DataType="viewmodels:MatchesPageViewModel">

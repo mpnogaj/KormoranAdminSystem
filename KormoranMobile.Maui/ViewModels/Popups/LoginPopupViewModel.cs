@@ -8,9 +8,9 @@ using KormoranShared.Models.Requests;
 using Refit;
 using System.Diagnostics;
 
-namespace KormoranMobile.Maui.ViewModels
+namespace KormoranMobile.Maui.ViewModels.Popups
 {
-	internal class LoginPageViewModel : ViewModelBase
+	internal class LoginPopupViewModel : ViewModelBase
 	{
 		private readonly IKormoranServer _kormoranServer;
 
@@ -49,7 +49,7 @@ namespace KormoranMobile.Maui.ViewModels
 
 		public Action? ClosePopup { private get; set; }
 
-		public LoginPageViewModel()
+		public LoginPopupViewModel()
 		{
 			Debug.WriteLine("LoginPageCtor");
 			_kormoranServer = RestService.For<IKormoranServer>(ServerHelper.DefaultHttpClient);

@@ -14,7 +14,7 @@ using Refit;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
-namespace KormoranMobile.Maui.ViewModels
+namespace KormoranMobile.Maui.ViewModels.Pages
 {
 	public class TournamentsPageViewModel : ViewModelBase
 	{
@@ -61,10 +61,10 @@ namespace KormoranMobile.Maui.ViewModels
 
 			_showLoginPageCommand = new(async () =>
 			{
-				await PopupExtensions.ShowPopupAsync(Application.Current.MainPage, new LoginPopup());
+				await Application.Current.MainPage.ShowPopupAsync(new LoginPopup());
 			}, () => _kormoranServer != null);
 
-			_itemTappedCommand = new(async (Tournament tournament) =>
+			_itemTappedCommand = new(async (tournament) =>
 			{
 				try
 				{

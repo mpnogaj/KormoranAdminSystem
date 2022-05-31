@@ -1,9 +1,9 @@
 ﻿using KormoranMobile.Maui.ViewModels.Abstraction;
 using KormoranShared.Models;
 
-namespace KormoranMobile.Maui.ViewModels
+namespace KormoranMobile.Maui.ViewModels.Popups
 {
-	public class EditScoresPageViewModel : ViewModelBase
+	public class EditScoresPopupViewModel : ViewModelBase
 	{
 		private Match _match;
 		public Match Match
@@ -12,7 +12,7 @@ namespace KormoranMobile.Maui.ViewModels
 			set => SetProperty(ref _match, value);
 		}
 
-		public EditScoresPageViewModel(Match match)
+		public EditScoresPopupViewModel(Match match)
 		{
 			_match = match;
 		}

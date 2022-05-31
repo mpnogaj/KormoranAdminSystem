@@ -1,4 +1,4 @@
-using KormoranMobile.Maui.ViewModels;
+using KormoranMobile.Maui.ViewModels.Pages;
 
 namespace KormoranMobile.Maui.Views.Pages;
 
