@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+			   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			   xmlns:viewmodels="clr-namespace:KormoranMobile.Maui.ViewModels"
+			   xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+			   x:Class="KormoranMobile.Maui.Views.Popups.EditScoresPopup"
+			   x:DataType="viewmodels:EditScoresPageViewModel"
+			   CanBeDismissedByTappingOutsideOfPopup="False"
+			   Color="{StaticResource DarkDarkGray}">
+	<Grid>
+		<StackLayout VerticalOptions="Center"
+					 HorizontalOptions="Center">
+			<Label VerticalOptions="Center"
+				   HorizontalOptions="Center">
+				<Label.Text>
+					<MultiBinding StringFormat="{}{0} - {1}">
+						<Binding Path="Match.Team1.Name"/>
+						<Binding Path="Match.Team2.Name"/>
+					</MultiBinding>
+				</Label.Text>
+			</Label>
+		</StackLayout>
+	</Grid>
+</toolkit:Popup>

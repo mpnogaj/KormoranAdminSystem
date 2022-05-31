@@ -1,10 +1,13 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Maui.Views;
 using KormoranMobile.Maui.Helpers;
 using KormoranMobile.Maui.Services;
 using KormoranMobile.Maui.ViewModels.Abstraction;
 using KormoranMobile.Maui.ViewModels.Commands;
 using KormoranMobile.Maui.Views;
+using KormoranMobile.Maui.Views.Pages;
+using KormoranMobile.Maui.Views.Popups;
 using KormoranShared.Models;
 using KormoranShared.Models.Responses;
 using Refit;
@@ -57,8 +60,9 @@ namespace KormoranMobile.Maui.ViewModels
 			});
 
 			_showLoginPageCommand = new(async () =>
-				await Shell.Current.GoToAsync(nameof(LoginPage)),
-				() => _kormoranServer != null);
+			{
+				await PopupExtensions.ShowPopupAsync(Application.Current.MainPage, new LoginPopup());
+			}, () => _kormoranServer != null);
 
 			_itemTappedCommand = new(async (Tournament tournament) =>
 			{

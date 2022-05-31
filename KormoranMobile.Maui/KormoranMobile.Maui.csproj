@@ -69,6 +69,12 @@
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>Resources.resx</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\Popups\EditScoresPopup.xaml.cs">
+	    <DependentUpon>EditScoresPopup.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Popups\LoginPopup.xaml.cs">
+	    <DependentUpon>LoginPopup.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -79,16 +85,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Views\EditScoresPage.xaml">
+	  <MauiXaml Update="Views\Popups\EditScoresPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\LoginPage.xaml">
+	  <MauiXaml Update="Views\Popups\LoginPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\MatchesPage.xaml">
+	  <MauiXaml Update="Views\Pages\MatchesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\TournamentsPage.xaml">
+	  <MauiXaml Update="Views\Pages\TournamentsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

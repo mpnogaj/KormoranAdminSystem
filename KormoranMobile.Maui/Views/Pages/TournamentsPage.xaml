@@ -5,7 +5,7 @@
 			 xmlns:models="clr-namespace:KormoranShared.Models"
 			 xmlns:properties="clr-namespace:KormoranMobile.Maui.Properties"
 			 xmlns:maui="clr-namespace:Microsoft.Maui.Controls"
-			 x:Class="KormoranMobile.Maui.Views.TournamentsPage"
+			 x:Class="KormoranMobile.Maui.Views.Pages.TournamentsPage"
 			 x:DataType="viewmodels:TournamentsPageViewModel"
 			 Title="{x:Static properties:Resources.tournaments}">
 

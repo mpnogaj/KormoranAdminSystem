@@ -5,6 +5,7 @@ using KormoranMobile.Maui.Services;
 using KormoranMobile.Maui.ViewModels.Abstraction;
 using KormoranMobile.Maui.ViewModels.Commands;
 using KormoranMobile.Maui.Views;
+using KormoranMobile.Maui.Views.Popups;
 using KormoranShared.Models;
 using Refit;
 using System.Text.Json;
@@ -75,7 +76,7 @@ namespace KormoranMobile.Maui.ViewModels
 
 			_itemTappedCommand = new AsyncRelayCommand<Match>(async (Match m) =>
 			{
-				var popup = new EditScoresPage
+				var popup = new EditScoresPopup
 				{
 					BindingContext = new EditScoresPageViewModel(m)
 				};

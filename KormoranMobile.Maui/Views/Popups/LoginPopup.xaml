@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+			   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			   xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+			   xmlns:viewmodels="clr-namespace:KormoranMobile.Maui.ViewModels"
+			   xmlns:properties="clr-namespace:KormoranMobile.Maui.Properties"
+			   x:Class="KormoranMobile.Maui.Views.Popups.LoginPopup"
+			   x:DataType="viewmodels:LoginPageViewModel"
+			   Color="{StaticResource DarkDarkGray}"
+			   CanBeDismissedByTappingOutsideOfPopup="False">
+
+	<Grid>
+		<StackLayout Spacing="7" Margin="10"
+					 VerticalOptions="Center">
+			<StackLayout Spacing="2">
+				<Label Text="{x:Static properties:Resources.username}" />
+				<Entry Text="{Binding Login}"
+					   Placeholder="{x:Static properties:Resources.loginPlaceholder}" />
+			</StackLayout>
+
+			<StackLayout Spacing="2">
+				<Label Text="{x:Static properties:Resources.password}" />
+				<!--IsPassword is false on windows due to bug-->
+				<Entry Text="{Binding Password}"
+					   IsPassword="{OnPlatform Default=True, WinUI=False}"
+					   Placeholder="{x:Static properties:Resources.passwordPlaceholder}" />
+			</StackLayout>
+			<StackLayout Orientation="Horizontal"
+						 HorizontalOptions="Center"
+						 Spacing="15">
+				<Button Text="{x:Static properties:Resources.login}"
+						Command="{Binding LoginCommand}"/>
+				<Button Text="Anuluj"
+						Command="{Binding ClosePopupCommand}"/>
+			</StackLayout>
+			
+		</StackLayout>
+	</Grid>
+</toolkit:Popup>

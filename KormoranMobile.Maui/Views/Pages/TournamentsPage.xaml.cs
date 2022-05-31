@@ -1,6 +1,6 @@
 using KormoranMobile.Maui.ViewModels;
 
-namespace KormoranMobile.Maui.Views;
+namespace KormoranMobile.Maui.Views.Pages;
 
 public partial class TournamentsPage : ContentPage
 {

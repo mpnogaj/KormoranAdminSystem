@@ -41,9 +41,13 @@ namespace KormoranMobile.Maui.ViewModels
 		#region Commands
 		private readonly AsyncRelayCommand _loginCommand;
 		private readonly AsyncRelayCommand _goBackCommand;
+		private readonly RelayCommand _closePopupCommand;
 		public AsyncRelayCommand LoginCommand => _loginCommand;
 		public AsyncRelayCommand GoBackCommand => _goBackCommand;
+		public RelayCommand ClosePopupCommand => _closePopupCommand;
 		#endregion
+
+		public Action? ClosePopup { private get; set; }
 
 		public LoginPageViewModel()
 		{
@@ -64,8 +68,10 @@ namespace KormoranMobile.Maui.ViewModels
 				{
 					await Toast.Make("Zalogowano pomyślnie", ToastDuration.Long).Show();
 					AuthHelper.Token = res.Token;
+					ClosePopup!();
 				}
 			}, () => !(string.IsNullOrWhiteSpace(Login) || string.IsNullOrWhiteSpace(Password)));
+			_closePopupCommand = new RelayCommand(() => ClosePopup!());
 			_goBackCommand = new AsyncRelayCommand(async () => await Shell.Current.GoToAsync(".."));
 		}
 	}

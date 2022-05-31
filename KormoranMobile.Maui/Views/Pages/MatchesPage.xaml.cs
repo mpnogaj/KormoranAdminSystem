@@ -1,6 +1,6 @@
 using KormoranMobile.Maui.ViewModels;
 
-namespace KormoranMobile.Maui;
+namespace KormoranMobile.Maui.Views.Pages;
 
 public partial class MatchesPage : ContentPage
 {

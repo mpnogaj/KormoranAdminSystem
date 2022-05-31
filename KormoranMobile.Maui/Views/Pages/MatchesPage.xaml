@@ -3,7 +3,7 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 			 xmlns:viewmodels="clr-namespace:KormoranMobile.Maui.ViewModels"
 			 xmlns:models="clr-namespace:KormoranShared.Models"
-			 x:Class="KormoranMobile.Maui.MatchesPage"
+			 x:Class="KormoranMobile.Maui.Views.Pages.MatchesPage"
 			 x:DataType="viewmodels:MatchesPageViewModel">
 	<ContentPage.Title>
 		<MultiBinding StringFormat="{}Mecze: {0} | {1} | {2}">
