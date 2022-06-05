@@ -51,12 +51,12 @@ namespace KormoranMobile.Maui.ViewModels.Pages
 
 			_showServerPopupCommand = new(async () =>
 			{
-				var res = await Application.Current.MainPage.DisplayPromptAsync(
-					"Ustawienia", "Adres serwera",
-					initialValue: Preferences.Get(ServerHelper.AddressKey, string.Empty));
-				if (res == null) return;
-				Preferences.Set(ServerHelper.AddressKey, res);
-				await SetupServer();
+				var res = await Application.Current.MainPage.ShowPopupAsync(new SettingsPopup());
+				if(res != null)
+				{
+					Preferences.Set(ServerHelper.AddressKey, (string)res);
+					await SetupServer();
+				}
 			});
 
 			_showLoginPageCommand = new(async () =>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+			   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			   xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+			   xmlns:viewmodels="clr-namespace:KormoranMobile.Maui.ViewModels.Popups"
+			   x:Class="KormoranMobile.Maui.Views.Popups.SettingsPopup"
+			   x:DataType="viewmodels:SettingsPopupViewModel"
+			   CanBeDismissedByTappingOutsideOfPopup="False"
+			   Color="{StaticResource DarkDarkGray}">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="15"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="15"/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="15"/>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="15"/>
+		</Grid.ColumnDefinitions>
+		
+		<StackLayout Grid.Row="1" Grid.Column="1"
+					 Spacing="10"
+					 VerticalOptions="Center"
+					 Orientation="Vertical">
+			<Label Text="Adres serwera"
+				   FontSize="Large"
+				   VerticalOptions="Center" 
+				   HorizontalOptions="Center" />
+			<Entry Text="{Binding ServerAddress}" 
+				   ClearButtonVisibility="WhileEditing"/>
+		</StackLayout>
+
+		<StackLayout Grid.Row="2" Grid.Column="1"
+					 Spacing="20"
+					 Orientation="Horizontal"
+					 HorizontalOptions="End" 
+					 VerticalOptions="Center">
+			<Button Text="Anuluj"
+					Command="{Binding CancelCommand}" />
+			<Button Text="Zapisz" 
+					Command="{Binding SaveCommand}" />
+		</StackLayout>
+
+	</Grid>
+</toolkit:Popup>
