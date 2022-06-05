@@ -1,16 +1,33 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
 			   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-			   xmlns:viewmodels="clr-namespace:KormoranMobile.Maui.ViewModels"
+			   xmlns:viewmodels="clr-namespace:KormoranMobile.Maui.ViewModels.Popups"
 			   xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+			   xmlns:properties="clr-namespace:KormoranMobile.Maui.Properties"
 			   x:Class="KormoranMobile.Maui.Views.Popups.EditScoresPopup"
-			   x:DataType="viewmodels:EditScoresPageViewModel"
+			   x:DataType="viewmodels:EditScoresPopupViewModel"
 			   CanBeDismissedByTappingOutsideOfPopup="False"
-			   Color="{StaticResource DarkDarkGray}">
+			   Color="{AppThemeBinding Light={StaticResource LightPopupBackground}, Dark={StaticResource DarkPopupBackground}}">
 	<Grid>
-		<StackLayout VerticalOptions="Center"
-					 HorizontalOptions="Center">
-			<Label VerticalOptions="Center"
+		<Grid.RowDefinitions>
+			<RowDefinition Height="15"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="15"/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="15"/>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="15"/>
+		</Grid.ColumnDefinitions>
+
+		<StackLayout Grid.Row="1" Grid.Column="1"
+					 Spacing="7"
+					 VerticalOptions="Center">
+			<Label Text="Edytuj wynik"
+				   FontSize="Large"
+				   HorizontalOptions="Center" />
+			<Label FontSize="Medium"
 				   HorizontalOptions="Center">
 				<Label.Text>
 					<MultiBinding StringFormat="{}{0} - {1}">
@@ -19,6 +36,24 @@
 					</MultiBinding>
 				</Label.Text>
 			</Label>
+			<StackLayout Spacing="2">
+				<Label Text="{Binding Match.Team1.Name, StringFormat='{}Punkty {0}'}" />
+				<Entry Text="{Binding Match.Team1Score}" />
+			</StackLayout>
+
+			<StackLayout Spacing="2">
+				<Label Text="{Binding Match.Team2.Name, StringFormat='{}Punkty {0}'}" />
+				<Entry Text="{Binding Match.Team2Score}" />
+			</StackLayout>
+		</StackLayout>
+		<StackLayout Grid.Column="1" Grid.Row="2"
+					 Orientation="Horizontal"
+					 HorizontalOptions="End"
+					 Spacing="15">
+			<Button Text="Anuluj"
+					Command="{Binding CancelCommand}"/>
+			<Button Text="Zapisz"
+					Command="{Binding SaveCommand}"/>
 		</StackLayout>
 	</Grid>
 </toolkit:Popup>

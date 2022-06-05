@@ -6,7 +6,7 @@
 			   x:Class="KormoranMobile.Maui.Views.Popups.SettingsPopup"
 			   x:DataType="viewmodels:SettingsPopupViewModel"
 			   CanBeDismissedByTappingOutsideOfPopup="False"
-			   Color="{StaticResource DarkDarkGray}">
+			   Color="{AppThemeBinding Light={StaticResource LightPopupBackground}, Dark={StaticResource DarkPopupBackground}}">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="15"/>
@@ -21,15 +21,18 @@
 		</Grid.ColumnDefinitions>
 		
 		<StackLayout Grid.Row="1" Grid.Column="1"
-					 Spacing="10"
+					 Spacing="7"
 					 VerticalOptions="Center"
 					 Orientation="Vertical">
-			<Label Text="Adres serwera"
+			<Label Text="Ustawienia"
 				   FontSize="Large"
 				   VerticalOptions="Center" 
 				   HorizontalOptions="Center" />
-			<Entry Text="{Binding ServerAddress}" 
-				   ClearButtonVisibility="WhileEditing"/>
+			<StackLayout Spacing="2">
+				<Label Text="Adres serwera" />
+				<Entry Text="{Binding ServerAddress}"
+					   Placeholder="192.168.88.123" />
+			</StackLayout>
 		</StackLayout>
 
 		<StackLayout Grid.Row="2" Grid.Column="1"

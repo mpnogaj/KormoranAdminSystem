@@ -1,5 +1,6 @@
 ﻿using KormoranShared.Models;
 using KormoranShared.Models.Requests;
+using KormoranShared.Models.Requests.Matches;
 using KormoranShared.Models.Responses;
 using Refit;
 
@@ -26,6 +27,9 @@ namespace KormoranMobile.Maui.Services
 
 		[Get("/matches/GetMatches")]
 		public Task<CollectionResponse<Match>> GetMatches([Query] int tournamentId);
+
+		[Post("/matches/UpdateScore")]
+		public Task<BasicResponse> UpdateScore([Body] UpdateScoreRequestModel updateScoreRequestModel);
 		#endregion
 	}
 }

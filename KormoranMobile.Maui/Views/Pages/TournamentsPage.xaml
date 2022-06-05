@@ -15,7 +15,8 @@
 			<ToolbarItem.IconImageSource>
 				<FontImageSource Glyph="{StaticResource SettingsGlyph}"
 								 Size="Large"
-								 FontFamily="{StaticResource IconFont}"/>
+								 FontFamily="{StaticResource IconFont}"
+								 Color="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
 			</ToolbarItem.IconImageSource>
 		</ToolbarItem>
 		<ToolbarItem Command="{Binding ShowLoginPageCommand}"
@@ -23,7 +24,8 @@
 			<ToolbarItem.IconImageSource>
 				<FontImageSource Glyph="{StaticResource LoginGlyph}"
 								 Size="Large"
-								 FontFamily="{StaticResource IconFont}"/>
+								 FontFamily="{StaticResource IconFont}"
+								 Color="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
 			</ToolbarItem.IconImageSource>
 		</ToolbarItem>
 
@@ -32,7 +34,8 @@
 			<ToolbarItem.IconImageSource>
 				<FontImageSource Glyph="{StaticResource RefreshGlyph}"
 								 Size="Large"
-								 FontFamily="{StaticResource IconFont}"/>
+								 FontFamily="{StaticResource IconFont}"
+								 Color="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
 			</ToolbarItem.IconImageSource>
 		</ToolbarItem>
 	</ContentPage.ToolbarItems>
@@ -46,6 +49,8 @@
 		<ListView.ItemTemplate>
 			<DataTemplate x:DataType="models:Tournament">
 				<TextCell Detail="{Binding State.Name}"
+						  TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
+						  DetailColor="{AppThemeBinding Light={StaticResource DarkGray}, Dark={StaticResource LightGray}}"
 						  Command="{Binding Path=BindingContext.ItemTappedCommand, Source={x:Reference Name=TournamentsList}}"
 						  CommandParameter="{Binding .}">
 					<TextCell.Text>

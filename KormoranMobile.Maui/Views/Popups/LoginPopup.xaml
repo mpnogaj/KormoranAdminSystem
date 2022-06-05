@@ -6,12 +6,29 @@
 			   xmlns:properties="clr-namespace:KormoranMobile.Maui.Properties"
 			   x:Class="KormoranMobile.Maui.Views.Popups.LoginPopup"
 			   x:DataType="viewmodels:LoginPopupViewModel"
-			   Color="{StaticResource DarkDarkGray}"
-			   CanBeDismissedByTappingOutsideOfPopup="False">
+			   CanBeDismissedByTappingOutsideOfPopup="False"
+			   Color="{AppThemeBinding Light={StaticResource LightPopupBackground}, Dark={StaticResource DarkPopupBackground}}">
 
 	<Grid>
-		<StackLayout Spacing="7" Margin="10"
+		<Grid.RowDefinitions>
+			<RowDefinition Height="15"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="15"/>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="15"/>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="15"/>
+		</Grid.ColumnDefinitions>
+
+		<StackLayout Grid.Row="1" Grid.Column="1"
+					 Spacing="7"
 					 VerticalOptions="Center">
+			<Label Text="Zaloguj się"
+				   FontSize="Large"
+				   VerticalOptions="Center" 
+				   HorizontalOptions="Center" />
 			<StackLayout Spacing="2">
 				<Label Text="{x:Static properties:Resources.username}" />
 				<Entry Text="{Binding Login}"
@@ -25,15 +42,15 @@
 					   IsPassword="{OnPlatform Default=True, WinUI=False}"
 					   Placeholder="{x:Static properties:Resources.passwordPlaceholder}" />
 			</StackLayout>
-			<StackLayout Orientation="Horizontal"
-						 HorizontalOptions="Center"
-						 Spacing="15">
-				<Button Text="{x:Static properties:Resources.login}"
-						Command="{Binding LoginCommand}"/>
-				<Button Text="Anuluj"
-						Command="{Binding ClosePopupCommand}"/>
-			</StackLayout>
-			
+		</StackLayout>
+		<StackLayout Grid.Column="1" Grid.Row="2"
+					 Orientation="Horizontal"
+					 HorizontalOptions="End"
+					 Spacing="15">
+			<Button Text="Anuluj"
+					Command="{Binding ClosePopupCommand}"/>
+			<Button Text="{x:Static properties:Resources.login}"
+					Command="{Binding LoginCommand}"/>
 		</StackLayout>
 	</Grid>
 </toolkit:Popup>

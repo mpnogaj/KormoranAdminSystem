@@ -8,6 +8,7 @@ using KormoranMobile.Maui.ViewModels.Popups;
 using KormoranMobile.Maui.Views;
 using KormoranMobile.Maui.Views.Popups;
 using KormoranShared.Models;
+using KormoranShared.Models.Requests.Matches;
 using Refit;
 using System.Text.Json;
 
@@ -77,11 +78,14 @@ namespace KormoranMobile.Maui.ViewModels.Pages
 
 			_itemTappedCommand = new AsyncRelayCommand<Match>(async (m) =>
 			{
-				var popup = new EditScoresPopup
+				var popup = new EditScoresPopup(m);
+				var modalRes = await Application.Current.MainPage.ShowPopupAsync(popup);
+				if(modalRes != null)
 				{
-					BindingContext = new EditScoresPopupViewModel(m)
-				};
-				await Application.Current.MainPage.ShowPopupAsync(popup);
+					var res = await _kormoranServer.UpdateScore((UpdateScoreRequestModel)modalRes);
+					await Toast.Make(res.Message).Show();
+					await _refreshMatchesCommand.ExecuteAsync();
+				}
 			}, () => AuthHelper.IsLoggedIn);
 		}
 	}

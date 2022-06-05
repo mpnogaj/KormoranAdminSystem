@@ -11,10 +11,10 @@
 		public int Team2Score { get; set; }
 	}
 
-	public class IncrementScoreRequestModel
+	public class UpdateScoreRequestModel
 	{
 		public int MatchId { get; set; }
-		public int Team { get; set; }
-		public int Value { get; set; }
+		public int Team1Score { get; set; }
+		public int Team2Score { get; set; }
 	}
 }

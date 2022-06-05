@@ -134,24 +134,13 @@ namespace KormoranWeb.Controllers
 		}
 
 		[HttpPost]
-		public async Task<JsonResult> IncrementScore([FromBody] IncrementScoreRequestModel request)
+		public async Task<JsonResult> UpdateScore([FromBody] UpdateScoreRequestModel request)
 		{
 			try
 			{
 				var match = await _db.Matches.FirstOrDefaultAsync(x => x.MatchId == request.MatchId);
-				if (request.Team == 1)
-				{
-					match.Team1Score += request.Value;
-				}
-				else if (request.Team == 2)
-				{
-					match.Team2Score += request.Value;
-				}
-				else
-				{
-					string paramName = $"{nameof(request)}.{nameof(request.Team)}";
-					throw new ArgumentException($"{paramName} should take value 1 or 2!", nameof(request.Team));
-				}
+				match.Team1Score = request.Team1Score;
+				match.Team2Score = request.Team2Score;
 				await _db.SaveChangesAsync();
 				return new JsonResult(new BasicResponse
 				{

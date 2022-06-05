@@ -2,9 +2,10 @@
 <?xaml-comp compile="true" ?>
 <ResourceDictionary 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
 
-    <x:String x:Key="IconFont">KormoranFont</x:String>
+	<x:String x:Key="IconFont">KormoranFont</x:String>
 
 
     <x:String x:Key="SettingsGlyph">&#xe800;</x:String>
@@ -19,7 +20,10 @@
     <Color x:Key="LightGray">#E5E5E1</Color>
     <Color x:Key="MidGray">#969696</Color>
     <Color x:Key="DarkGray">#505050</Color>
-	<Color x:Key="DarkDarkGray">#121212</Color>
+	
+	<Color x:Key="DarkPopupBackground">#121212</Color>
+	<Color x:Key="LightPopupBackground">#d3d3d3</Color>
+	
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
     <SolidColorBrush x:Key="LightBrush" Color="{StaticResource Light}"/>
     <SolidColorBrush x:Key="DarkBrush" Color="{StaticResource Dark}"/>
@@ -457,11 +461,10 @@
         <Setter Property="IconColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
     </Style>
 
-    <Style TargetType="TabbedPage">
-        <Setter Property="BarBackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}" />
-        <Setter Property="BarTextColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
-        <Setter Property="UnselectedTabColor" Value="{AppThemeBinding Light={StaticResource LightGray}, Dark={StaticResource DarkGray}}" />
-        <Setter Property="SelectedTabColor" Value="{AppThemeBinding Light={StaticResource DarkGray}, Dark={StaticResource LightGray}}" />
-    </Style>
-
+	<Style TargetType="TabbedPage">
+		<Setter Property="BarBackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}" />
+		<Setter Property="BarTextColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
+		<Setter Property="UnselectedTabColor" Value="{AppThemeBinding Light={StaticResource LightGray}, Dark={StaticResource DarkGray}}" />
+		<Setter Property="SelectedTabColor" Value="{AppThemeBinding Light={StaticResource DarkGray}, Dark={StaticResource LightGray}}" />
+	</Style>
 </ResourceDictionary>
