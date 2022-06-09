@@ -9,4 +9,10 @@ public partial class TournamentsPage : ContentPage
 		InitializeComponent();
 		this.BindingContext = new TournamentsPageViewModel();
 	}
+
+	protected override void OnAppearing()
+	{
+		base.OnAppearing();
+		((TournamentsPageViewModel)this.BindingContext).OnAppearing();
+	}
 }

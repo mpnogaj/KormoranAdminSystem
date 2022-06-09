@@ -18,7 +18,7 @@ namespace KormoranMobile.Maui.ViewModels.Pages
 {
 	public class TournamentsPageViewModel : ViewModelBase
 	{
-		private IKormoranServer _kormoranServer;
+		private IKormoranServer? _kormoranServer;
 		private ObservableCollection<Tournament> _tournaments;
 		private bool _isRefreshing;
 		private AsyncRelayCommand _showServerPopupCommand;
@@ -44,38 +44,43 @@ namespace KormoranMobile.Maui.ViewModels.Pages
 		public AsyncRelayCommand<Tournament> ItemTappedCommand => _itemTappedCommand;
 		public AsyncRelayCommand RefreshTournamentsListCommand => _refreshTournamentsListCommand;
 
+		public Action OnAppearing => () => RefreshTournamentsList(false);
+
 		public TournamentsPageViewModel()
 		{
+			Debug.WriteLine("ctor");
 			_isRefreshing = false;
 			_tournaments = new();
 
-			_showServerPopupCommand = new(async () =>
-			{
-				var res = await Application.Current.MainPage.ShowPopupAsync(new SettingsPopup());
-				if(res != null)
+			_showServerPopupCommand = new(
+				async () =>
 				{
-					Preferences.Set(ServerHelper.AddressKey, (string)res);
-					await SetupServer();
-				}
-			});
+					var res = await Application.Current.MainPage.ShowPopupAsync(new SettingsPopup());
+					if(res != null)
+					{
+						Preferences.Set(ServerHelper.AddressKey, (string)res);
+						await SetupServer();
+					}
+				});
 
-			_showLoginPageCommand = new(async () =>
-			{
-				await Application.Current.MainPage.ShowPopupAsync(new LoginPopup());
-			}, () => _kormoranServer != null);
+			_showLoginPageCommand = new(
+				async () => await Application.Current.MainPage.ShowPopupAsync(new LoginPopup()), 
+				() => _kormoranServer != null);
 
-			_itemTappedCommand = new(async (tournament) =>
-			{
-				try
+			_itemTappedCommand = new(
+				async (tournament) =>
 				{
-					await Shell.Current.GoToAsync($"{nameof(MatchesPage)}?tournament={tournament}");
-				}
-				catch (Exception ex)
-				{
-					Debug.WriteLine(ex.Message);
-				}
-			});
-			_refreshTournamentsListCommand = new(RefreshTournamentsList,
+					try
+					{
+						await Shell.Current.GoToAsync($"{nameof(MatchesPage)}?tournament={tournament}");
+					}
+					catch (Exception ex)
+					{
+						Debug.WriteLine(ex.Message);
+					}
+				});
+			_refreshTournamentsListCommand = new(
+				async () => await RefreshTournamentsList(true),
 				() => IsRefreshing == false && _kormoranServer != null);
 
 			try
@@ -89,8 +94,9 @@ namespace KormoranMobile.Maui.ViewModels.Pages
 			}
 		}
 
-		private async Task RefreshTournamentsList()
+		private async Task RefreshTournamentsList(bool showProgress)
 		{
+
 			if (_kormoranServer == null || !ServerHelper.AddressSet)
 			{
 				await Toast.Make("Nie ustawiono adresu serwera!").Show();
@@ -98,7 +104,10 @@ namespace KormoranMobile.Maui.ViewModels.Pages
 			}
 			try
 			{
-				IsRefreshing = true;
+				if (showProgress)
+				{
+					IsRefreshing = true;
+				}
 				CollectionResponse<Tournament> response =
 								await _kormoranServer.GetTournaments();
 				if (response.Error)
@@ -116,7 +125,10 @@ namespace KormoranMobile.Maui.ViewModels.Pages
 			}
 			finally
 			{
-				IsRefreshing = false;
+				if (showProgress)
+				{
+                    IsRefreshing = false;
+				}
 			}
 		}
 
