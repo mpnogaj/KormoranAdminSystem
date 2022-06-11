@@ -1,10 +1,4 @@
 ﻿using CommunityToolkit.Maui;
-#if __ANDROID__
-using KormoranMobile.Maui.Platforms.Android.Impl;
-#elif WINDOWS
-using System;
-#endif
-
 namespace KormoranMobile.Maui
 {
 	public static class MauiProgram

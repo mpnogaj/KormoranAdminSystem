@@ -1,11 +1,8 @@
 ﻿using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Maui.Views;
 using KormoranMobile.Maui.Helpers;
 using KormoranMobile.Maui.Services;
 using KormoranMobile.Maui.ViewModels.Abstraction;
 using KormoranMobile.Maui.ViewModels.Commands;
-using KormoranMobile.Maui.ViewModels.Popups;
-using KormoranMobile.Maui.Views;
 using KormoranMobile.Maui.Views.Popups;
 using KormoranShared.Models;
 using KormoranShared.Models.Requests.Matches;
@@ -17,15 +14,9 @@ namespace KormoranMobile.Maui.ViewModels.Pages
 	[QueryProperty(nameof(TournamentReceiver), "tournament")]
 	public class MatchesPageViewModel : ViewModelBase
 	{
-		private readonly IKormoranServer _kormoranServer;
+		public AsyncRelayCommand RefreshMatchesCommand { get; }
 
-		private readonly AsyncRelayCommand _refreshMatchesCommand;
-		public AsyncRelayCommand RefreshMatchesCommand
-			=> _refreshMatchesCommand;
-
-		private readonly AsyncRelayCommand<Match> _itemTappedCommand;
-		public AsyncRelayCommand<Match> ItemTappedCommand
-			=> _itemTappedCommand;
+		public AsyncRelayCommand<Match> ItemTappedCommand { get; }
 
 		public string TournamentReceiver
 		{
@@ -49,13 +40,13 @@ namespace KormoranMobile.Maui.ViewModels.Pages
 
 		public MatchesPageViewModel()
 		{
-			_kormoranServer = RestService.For<IKormoranServer>(ServerHelper.DefaultHttpClient);
-			_refreshMatchesCommand = new AsyncRelayCommand(async () =>
+			var kormoranServer = RestService.For<IKormoranServer>(ServerHelper.DefaultHttpClient);
+			RefreshMatchesCommand = new AsyncRelayCommand(async () =>
 			{
 				try
 				{
 					IsRefreshing = true;
-					var response = await _kormoranServer.GetMatches(Tournament.TournamentId);
+					var response = await kormoranServer.GetMatches(Tournament.TournamentId);
 					if (!response.Error)
 					{
 						Tournament.Matches = response.Collection;
@@ -76,17 +67,17 @@ namespace KormoranMobile.Maui.ViewModels.Pages
 				}
 			}, () => IsRefreshing == false);
 
-			_itemTappedCommand = new AsyncRelayCommand<Match>(async (match) =>
+			ItemTappedCommand = new AsyncRelayCommand<Match>(async (match) =>
 			{
 				var popup = new EditScoresPopup(match!);
 				var modalRes = await PopupHelper.ShowPopupAsync(popup);
 				if(modalRes != null)
 				{
-					var res = await _kormoranServer.UpdateScore((UpdateScoreRequestModel)modalRes);
+					var res = await kormoranServer.UpdateScore((UpdateScoreRequestModel)modalRes);
 					await Toast.Make(res.Message).Show();
-					await _refreshMatchesCommand.ExecuteAsync();
+					await RefreshMatchesCommand.ExecuteAsync();
 				}
-			}, false, (match) => AuthHelper.IsLoggedIn);
+			}, false, (_) => AuthHelper.IsLoggedIn);
 		}
 	}
 }

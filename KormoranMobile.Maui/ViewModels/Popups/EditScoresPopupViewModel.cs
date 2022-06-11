@@ -31,23 +31,21 @@ namespace KormoranMobile.Maui.ViewModels.Popups
 			
 		#endregion
 
-		#region Buttons
-		private readonly RelayCommand _cancelCommand;
-		public RelayCommand CancelCommand => _cancelCommand;
+		#region Commands
 
-		private readonly RelayCommand _saveCommand;
-		public RelayCommand SaveCommand => _saveCommand;
+		public RelayCommand CancelCommand { get; }
+
+		public RelayCommand SaveCommand { get; }
+
 		#endregion
 
-		private readonly Action<UpdateScoreRequestModel?> _closePopup;
 		public EditScoresPopupViewModel(Match match, Action<UpdateScoreRequestModel?> closePopup)
 		{
 			_match = match;
 			_team1Score = match.Team1Score;
 			_team2Score = match.Team2Score;
-			_closePopup = closePopup;
-			_cancelCommand = new RelayCommand(() => _closePopup(null));
-			_saveCommand = new RelayCommand(() => _closePopup(new UpdateScoreRequestModel
+			CancelCommand = new RelayCommand(() => closePopup(null));
+			SaveCommand = new RelayCommand(() => closePopup(new UpdateScoreRequestModel
 			{
 				MatchId = match.MatchId,
 				Team1Score = Team1Score,

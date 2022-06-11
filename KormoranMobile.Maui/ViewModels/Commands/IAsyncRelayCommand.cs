@@ -2,7 +2,7 @@
 
 namespace KormoranMobile.Maui.ViewModels.Commands
 {
-	public interface IAsyncCommand<T> : ICommand
+	public interface IAsyncCommand<in T> : ICommand
 	{
 		Task ExecuteAsync(T? parameter);
 

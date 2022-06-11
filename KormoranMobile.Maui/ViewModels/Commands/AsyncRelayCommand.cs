@@ -11,22 +11,25 @@ namespace KormoranMobile.Maui.ViewModels.Commands
 		private readonly bool _allowNull;
 		private readonly Func<T?, bool>? _canExecute;
 		private readonly IErrorHandler _errorHandler;
-		private bool _isExecuting = false;
+		private bool _isExecuting;
 
-		public AsyncRelayCommand(Func<T?, 
-								 Task> execute,
-								 bool allowNull)
-			: this(execute, allowNull, null) { }
+		public AsyncRelayCommand(Func<T?, Task> execute, bool allowNull = false) : this(execute, allowNull, null)
+		{
+		}
 
 		public AsyncRelayCommand(Func<T?, Task> execute,
-								 bool allowNull, 
-								 Func<T?, bool>? canExecute)
-			: this(execute, allowNull, canExecute, new LogErrorHandler()) { }
+			bool allowNull,
+			Func<T?, bool>? canExecute) : this(execute,
+			allowNull,
+			canExecute,
+			new LogErrorHandler())
+		{
+		}
 
-		public AsyncRelayCommand(Func<T?, Task> execute, 
-								 bool allowNull, 
-								 Func<T?, bool>? canExecute, 
-								 IErrorHandler errorHandler)
+		public AsyncRelayCommand(Func<T?, Task> execute,
+			bool allowNull,
+			Func<T?, bool>? canExecute,
+			IErrorHandler errorHandler)
 		{
 			_execute = execute;
 			_allowNull = allowNull;
@@ -54,13 +57,14 @@ namespace KormoranMobile.Maui.ViewModels.Commands
 					_isExecuting = false;
 				}
 			}
+
 			RaiseCanExecuteChanged();
 		}
 
 		#region ICommand implementation
 
 		bool ICommand.CanExecute(object? parameter) =>
-			TypeHelper.CheckType(parameter, typeof(T), _allowNull) && 
+			TypeHelper.CheckType(parameter, typeof(T), _allowNull) &&
 			CanExecute(parameter == null ? default : (T)parameter);
 
 		void ICommand.Execute(object? parameter)
@@ -69,6 +73,7 @@ namespace KormoranMobile.Maui.ViewModels.Commands
 			{
 				throw new InvalidOperationException();
 			}
+
 			ExecuteAsync(parameter == null ? default : (T)parameter).FireAndForgetAsync(_errorHandler);
 		}
 
@@ -82,11 +87,12 @@ namespace KormoranMobile.Maui.ViewModels.Commands
 		private readonly Func<Task> _execute;
 		private readonly Func<bool>? _canExecute;
 		private readonly IErrorHandler _errorHandler;
-		private bool _isExecuting = false;
+		private bool _isExecuting;
 
-		public AsyncRelayCommand(Func<Task> execute) : this(execute, null) { }
-
-		public AsyncRelayCommand(Func<Task> execute, Func<bool>? canExecute) : this(execute, canExecute, new LogErrorHandler()) { }
+		public AsyncRelayCommand(Func<Task> execute, Func<bool>? canExecute = null)
+			: this(execute, canExecute, new LogErrorHandler())
+		{
+		}
 
 		public AsyncRelayCommand(Func<Task> execute, Func<bool>? canExecute, IErrorHandler errorHandler)
 		{
@@ -119,6 +125,7 @@ namespace KormoranMobile.Maui.ViewModels.Commands
 					_isExecuting = false;
 				}
 			}
+
 			RaiseCanExecuteChanged();
 		}
 

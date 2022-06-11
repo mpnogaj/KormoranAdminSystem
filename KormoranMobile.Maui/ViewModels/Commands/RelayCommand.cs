@@ -16,14 +16,8 @@ namespace KormoranMobile.Maui.ViewModels.Commands
 		#endregion Fields
 
 		#region Constructors
-
-		public RelayCommand(Action<T?> execute, 
-							bool allowNull)
-			: this(execute, allowNull, null) { }
-
-		public RelayCommand(Action<T?> execute, 
-							bool allowNull, 
-							Func<T?, bool>? canExecute)
+		
+		public RelayCommand(Action<T?> execute, bool allowNull = false, Func<T?, bool>? canExecute = null)
 		{
 			_execute = execute;
 			_allowNull = allowNull;
@@ -69,10 +63,8 @@ namespace KormoranMobile.Maui.ViewModels.Commands
 		#endregion Fields
 
 		#region Constructors
-
-		public RelayCommand(Action execute) : this(execute, null) { }
-
-		public RelayCommand(Action execute, Func<bool>? canExecute)
+		
+		public RelayCommand(Action execute, Func<bool>? canExecute = null)
 		{
 			_execute = execute;
 			_canExecute = canExecute;

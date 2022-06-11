@@ -162,4 +162,13 @@
   <data name="Points" xml:space="preserve">
     <value>Punkty</value>
   </data>
+  <data name="ServerAddressNotSetError" xml:space="preserve">
+    <value>Nie ustawiono adresu serwera!</value>
+  </data>
+  <data name="ServerAddressIncorrect" xml:space="preserve">
+    <value>Ustawiony adres jest nie poprawny!</value>
+  </data>
+  <data name="LoginSuccessful" xml:space="preserve">
+    <value>Zalogowano pomyślnie</value>
+  </data>
 </root>

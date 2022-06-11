@@ -1,11 +1,6 @@
 ﻿using KormoranMobile.Maui.Helpers;
 using KormoranMobile.Maui.ViewModels.Abstraction;
 using KormoranMobile.Maui.ViewModels.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KormoranMobile.Maui.ViewModels.Popups
 {
@@ -20,11 +15,11 @@ namespace KormoranMobile.Maui.ViewModels.Popups
 		}
 		#endregion
 		#region Commands
-		private readonly RelayCommand _cancelCommand;
-		public RelayCommand CancelCommand => _cancelCommand;
 
-		private readonly RelayCommand _saveCommand;
-		public RelayCommand SaveCommand => _saveCommand;
+		public RelayCommand CancelCommand { get; }
+
+		public RelayCommand SaveCommand { get; }
+
 		#endregion
 
 		public Action<string?>? ClosePopup { private get; set; }
@@ -32,11 +27,11 @@ namespace KormoranMobile.Maui.ViewModels.Popups
 		public SettingsPopupViewModel()
 		{
 			_serverAddress = Preferences.Get(ServerHelper.AddressKey, string.Empty);
-			_saveCommand = new RelayCommand(() =>
+			SaveCommand = new RelayCommand(() =>
 			{
 				ClosePopup!(ServerAddress);
 			});
-			_cancelCommand = new RelayCommand(() =>
+			CancelCommand = new RelayCommand(() =>
 			{
 				ClosePopup!(null);
 			});

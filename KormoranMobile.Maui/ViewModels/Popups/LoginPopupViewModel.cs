@@ -1,19 +1,17 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using KormoranMobile.Maui.Helpers;
+using KormoranMobile.Maui.Properties;
 using KormoranMobile.Maui.Services;
 using KormoranMobile.Maui.ViewModels.Abstraction;
 using KormoranMobile.Maui.ViewModels.Commands;
 using KormoranShared.Models.Requests;
 using Refit;
-using System.Diagnostics;
 
 namespace KormoranMobile.Maui.ViewModels.Popups
 {
 	internal class LoginPopupViewModel : ViewModelBase
 	{
-		private readonly IKormoranServer _kormoranServer;
-
 		#region MVVM Props
 		private string _login = string.Empty;
 		public string Login
@@ -39,23 +37,23 @@ namespace KormoranMobile.Maui.ViewModels.Popups
 		#endregion
 
 		#region Commands
-		private readonly AsyncRelayCommand _loginCommand;
-		private readonly AsyncRelayCommand _goBackCommand;
-		private readonly RelayCommand _closePopupCommand;
-		public AsyncRelayCommand LoginCommand => _loginCommand;
-		public AsyncRelayCommand GoBackCommand => _goBackCommand;
-		public RelayCommand ClosePopupCommand => _closePopupCommand;
+
+		public AsyncRelayCommand LoginCommand { get; }
+
+		public AsyncRelayCommand GoBackCommand { get; }
+
+		public RelayCommand ClosePopupCommand { get; }
+
 		#endregion
 
 		public Action? ClosePopup { private get; set; }
 
 		public LoginPopupViewModel()
 		{
-			Debug.WriteLine("LoginPageCtor");
-			_kormoranServer = RestService.For<IKormoranServer>(ServerHelper.DefaultHttpClient);
-			_loginCommand = new AsyncRelayCommand(async () =>
+			var kormoranServer = RestService.For<IKormoranServer>(ServerHelper.DefaultHttpClient);
+			LoginCommand = new AsyncRelayCommand(async () =>
 			{
-				var res = await _kormoranServer.Authenticate(new AuthenticateRequest
+				var res = await kormoranServer.Authenticate(new AuthenticateRequest
 				{
 					Username = Login,
 					Password = Password
@@ -66,13 +64,13 @@ namespace KormoranMobile.Maui.ViewModels.Popups
 				}
 				else
 				{
-					await Toast.Make("Zalogowano pomyślnie", ToastDuration.Long).Show();
+					await Toast.Make(Resources.LoginSuccessful, ToastDuration.Long).Show();
 					AuthHelper.Token = res.Token;
 					ClosePopup!();
 				}
 			}, () => !(string.IsNullOrWhiteSpace(Login) || string.IsNullOrWhiteSpace(Password)));
-			_closePopupCommand = new RelayCommand(() => ClosePopup!());
-			_goBackCommand = new AsyncRelayCommand(async () => await Shell.Current.GoToAsync(".."));
+			ClosePopupCommand = new RelayCommand(() => ClosePopup!());
+			GoBackCommand = new AsyncRelayCommand(async () => await Shell.Current.GoToAsync(".."));
 		}
 	}
 }
