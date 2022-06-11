@@ -3,6 +3,7 @@
 			   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 			   xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
 			   xmlns:viewmodels="clr-namespace:KormoranMobile.Maui.ViewModels.Popups"
+			   xmlns:properties="clr-namespace:KormoranMobile.Maui.Properties"
 			   x:Class="KormoranMobile.Maui.Views.Popups.SettingsPopup"
 			   x:DataType="viewmodels:SettingsPopupViewModel"
 			   CanBeDismissedByTappingOutsideOfPopup="False"
@@ -24,14 +25,14 @@
 					 Spacing="7"
 					 VerticalOptions="Center"
 					 Orientation="Vertical">
-			<Label Text="Ustawienia"
+			<Label Text="{x:Static properties:Resources.Settings}"
 				   FontSize="Large"
 				   VerticalOptions="Center" 
 				   HorizontalOptions="Center" />
 			<StackLayout Spacing="2">
-				<Label Text="Adres serwera" />
+				<Label Text="{x:Static properties:Resources.ServerAddress}" />
 				<Entry Text="{Binding ServerAddress}"
-					   Placeholder="192.168.88.123" />
+					   Placeholder="{x:Static properties:Resources.ServerAddressPlaceholder}" />
 			</StackLayout>
 		</StackLayout>
 
@@ -40,9 +41,9 @@
 					 Orientation="Horizontal"
 					 HorizontalOptions="End" 
 					 VerticalOptions="Center">
-			<Button Text="Anuluj"
+			<Button Text="{x:Static properties:Resources.Cancel}"
 					Command="{Binding CancelCommand}" />
-			<Button Text="Zapisz" 
+			<Button Text="{x:Static properties:Resources.Save}" 
 					Command="{Binding SaveCommand}" />
 		</StackLayout>
 

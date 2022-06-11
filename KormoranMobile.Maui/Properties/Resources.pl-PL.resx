@@ -117,25 +117,49 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="username" xml:space="preserve">
+  <data name="Username" xml:space="preserve">
     <value>Nazwa użytkownika</value>
   </data>
-  <data name="password" xml:space="preserve">
+  <data name="Password" xml:space="preserve">
     <value>Hasło</value>
   </data>
-  <data name="tournaments" xml:space="preserve">
+  <data name="Tournaments" xml:space="preserve">
     <value>Turnieje</value>
   </data>
-  <data name="settings" xml:space="preserve">
+  <data name="Settings" xml:space="preserve">
     <value>Ustawienia</value>
   </data>
-  <data name="login" xml:space="preserve">
+  <data name="Login" xml:space="preserve">
     <value>Zaloguj się</value>
   </data>
-  <data name="loginPlaceholder" xml:space="preserve">
+  <data name="LoginPlaceholder" xml:space="preserve">
     <value>mnogaj</value>
   </data>
-  <data name="passwordPlaceholder" xml:space="preserve">
+  <data name="PasswordPlaceholder" xml:space="preserve">
     <value>admin123</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Odśwież</value>
+  </data>
+  <data name="Matches" xml:space="preserve">
+    <value>Mecze</value>
+  </data>
+  <data name="ServerAddress" xml:space="preserve">
+    <value>Adres serwera</value>
+  </data>
+  <data name="ServerAddressPlaceholder" xml:space="preserve">
+    <value>192.168.88.123</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Zapisz</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Anuluj</value>
+  </data>
+  <data name="EditOutcome" xml:space="preserve">
+    <value>Edytuj wynik</value>
+  </data>
+  <data name="Points" xml:space="preserve">
+    <value>Punkty</value>
   </data>
 </root>

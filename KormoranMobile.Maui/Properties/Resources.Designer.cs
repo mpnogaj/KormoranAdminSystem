@@ -61,65 +61,137 @@ namespace KormoranMobile.Maui.Properties {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Cancel.
+        /// </summary>
+        public static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Edit outcome.
+        /// </summary>
+        public static string EditOutcome {
+            get {
+                return ResourceManager.GetString("EditOutcome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Login.
         /// </summary>
-        public static string login {
+        public static string Login {
             get {
-                return ResourceManager.GetString("login", resourceCulture);
+                return ResourceManager.GetString("Login", resourceCulture);
             }
         }
         
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu mnogaj.
         /// </summary>
-        public static string loginPlaceholder {
+        public static string LoginPlaceholder {
             get {
-                return ResourceManager.GetString("loginPlaceholder", resourceCulture);
+                return ResourceManager.GetString("LoginPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Matches.
+        /// </summary>
+        public static string Matches {
+            get {
+                return ResourceManager.GetString("Matches", resourceCulture);
             }
         }
         
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Password.
         /// </summary>
-        public static string password {
+        public static string Password {
             get {
-                return ResourceManager.GetString("password", resourceCulture);
+                return ResourceManager.GetString("Password", resourceCulture);
             }
         }
         
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu admin123.
         /// </summary>
-        public static string passwordPlaceholder {
+        public static string PasswordPlaceholder {
             get {
-                return ResourceManager.GetString("passwordPlaceholder", resourceCulture);
+                return ResourceManager.GetString("PasswordPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Points.
+        /// </summary>
+        public static string Points {
+            get {
+                return ResourceManager.GetString("Points", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Refresh.
+        /// </summary>
+        public static string Refresh {
+            get {
+                return ResourceManager.GetString("Refresh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Save.
+        /// </summary>
+        public static string Save {
+            get {
+                return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Server address.
+        /// </summary>
+        public static string ServerAddress {
+            get {
+                return ResourceManager.GetString("ServerAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu 192.168.88.123.
+        /// </summary>
+        public static string ServerAddressPlaceholder {
+            get {
+                return ResourceManager.GetString("ServerAddressPlaceholder", resourceCulture);
             }
         }
         
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Settings.
         /// </summary>
-        public static string settings {
+        public static string Settings {
             get {
-                return ResourceManager.GetString("settings", resourceCulture);
+                return ResourceManager.GetString("Settings", resourceCulture);
             }
         }
         
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Tournaments.
         /// </summary>
-        public static string tournaments {
+        public static string Tournaments {
             get {
-                return ResourceManager.GetString("tournaments", resourceCulture);
+                return ResourceManager.GetString("Tournaments", resourceCulture);
             }
         }
         
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Username.
         /// </summary>
-        public static string username {
+        public static string Username {
             get {
-                return ResourceManager.GetString("username", resourceCulture);
+                return ResourceManager.GetString("Username", resourceCulture);
             }
         }
     }

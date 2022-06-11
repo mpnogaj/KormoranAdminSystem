@@ -30,17 +30,17 @@
 				   VerticalOptions="Center" 
 				   HorizontalOptions="Center" />
 			<StackLayout Spacing="2">
-				<Label Text="{x:Static properties:Resources.username}" />
+				<Label Text="{x:Static properties:Resources.Username}" />
 				<Entry Text="{Binding Login}"
-					   Placeholder="{x:Static properties:Resources.loginPlaceholder}" />
+					   Placeholder="{x:Static properties:Resources.LoginPlaceholder}" />
 			</StackLayout>
 
 			<StackLayout Spacing="2">
-				<Label Text="{x:Static properties:Resources.password}" />
+				<Label Text="{x:Static properties:Resources.Password}" />
 				<!--IsPassword is false on windows due to bug-->
 				<Entry Text="{Binding Password}"
-					   IsPassword="{OnPlatform Default=True, WinUI=False}"
-					   Placeholder="{x:Static properties:Resources.passwordPlaceholder}" />
+					   IsPassword="{OnPlatform Default=True, WinUI=True}"
+					   Placeholder="{x:Static properties:Resources.PasswordPlaceholder}" />
 			</StackLayout>
 		</StackLayout>
 		<StackLayout Grid.Column="1" Grid.Row="2"
@@ -49,7 +49,7 @@
 					 Spacing="15">
 			<Button Text="Anuluj"
 					Command="{Binding ClosePopupCommand}"/>
-			<Button Text="{x:Static properties:Resources.login}"
+			<Button Text="{x:Static properties:Resources.Login}"
 					Command="{Binding LoginCommand}"/>
 		</StackLayout>
 	</Grid>

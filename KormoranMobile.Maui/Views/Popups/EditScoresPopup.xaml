@@ -24,7 +24,7 @@
 		<StackLayout Grid.Row="1" Grid.Column="1"
 					 Spacing="7"
 					 VerticalOptions="Center">
-			<Label Text="Edytuj wynik"
+			<Label Text="{x:Static properties:Resources.EditOutcome}"
 				   FontSize="Large"
 				   HorizontalOptions="Center" />
 			<Label FontSize="Medium"
@@ -37,12 +37,26 @@
 				</Label.Text>
 			</Label>
 			<StackLayout Spacing="2">
-				<Label Text="{Binding Match.Team1.Name, StringFormat='{}Punkty {0}'}" />
+				<Label>
+					<Label.Text>
+						<MultiBinding StringFormat="{}{0} {1}">
+							<Binding Source="{x:Static properties:Resources.Points}"/>
+							<Binding Path="Match.Team1.Name"/>
+						</MultiBinding>
+					</Label.Text>
+				</Label>
 				<Entry Text="{Binding Team1Score}" />
 			</StackLayout>
 
 			<StackLayout Spacing="2">
-				<Label Text="{Binding Match.Team2.Name, StringFormat='{}Punkty {0}'}" />
+				<Label>
+					<Label.Text>
+						<MultiBinding StringFormat="{}{0} {1}">
+							<Binding Source="{x:Static properties:Resources.Points}"/>
+							<Binding Path="Match.Team2.Name"/>
+						</MultiBinding>
+					</Label.Text>
+				</Label>
 				<Entry Text="{Binding Team2Score}" />
 			</StackLayout>
 		</StackLayout>
@@ -50,9 +64,9 @@
 					 Orientation="Horizontal"
 					 HorizontalOptions="End"
 					 Spacing="15">
-			<Button Text="Anuluj"
+			<Button Text="{x:Static properties:Resources.Cancel}"
 					Command="{Binding CancelCommand}"/>
-			<Button Text="Zapisz"
+			<Button Text="{x:Static properties:Resources.Save}"
 					Command="{Binding SaveCommand}"/>
 		</StackLayout>
 	</Grid>

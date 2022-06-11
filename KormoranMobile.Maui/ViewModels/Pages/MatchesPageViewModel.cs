@@ -36,7 +36,7 @@ namespace KormoranMobile.Maui.ViewModels.Pages
 		private Tournament? _tournament;
 		public Tournament Tournament
 		{
-			get => _tournament ?? throw new NullReferenceException();
+			get => _tournament ?? new Tournament();
 			set => SetProperty(ref _tournament, value);
 		}
 

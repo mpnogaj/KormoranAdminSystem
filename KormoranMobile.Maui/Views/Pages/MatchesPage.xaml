@@ -3,10 +3,13 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 			 xmlns:viewmodels="clr-namespace:KormoranMobile.Maui.ViewModels.Pages"
 			 xmlns:models="clr-namespace:KormoranShared.Models"
+			 xmlns:properties="clr-namespace:KormoranMobile.Maui.Properties"
 			 x:Class="KormoranMobile.Maui.Views.Pages.MatchesPage"
 			 x:DataType="viewmodels:MatchesPageViewModel">
+	
 	<ContentPage.Title>
-		<MultiBinding StringFormat="{}Mecze: {0} | {1} | {2}">
+		<MultiBinding StringFormat="{}{0}: {1} | {2} | {3}">
+			<Binding Source="{x:Static properties:Resources.Matches}"/>
 			<Binding Path="Tournament.Name"/>
 			<Binding Path="Tournament.Discipline.Name"/>
 			<Binding Path="Tournament.State.Name"/>
@@ -14,7 +17,7 @@
 	</ContentPage.Title>
 	<ContentPage.ToolbarItems>
 		<ToolbarItem Command="{Binding RefreshMatchesCommand}"
-					 Text="Odśwież">
+					 Text="{x:Static properties:Resources.Refresh}">
 			<ToolbarItem.IconImageSource>
 				<FontImageSource Glyph="{StaticResource RefreshGlyph}"
 								 Size="Large"
@@ -46,4 +49,5 @@
 			</DataTemplate>
 		</ListView.ItemTemplate>
 	</ListView>
+	
 </ContentPage>
