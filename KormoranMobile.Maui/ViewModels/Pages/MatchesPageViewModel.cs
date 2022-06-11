@@ -76,9 +76,9 @@ namespace KormoranMobile.Maui.ViewModels.Pages
 				}
 			}, () => IsRefreshing == false);
 
-			_itemTappedCommand = new AsyncRelayCommand<Match>(async (m) =>
+			_itemTappedCommand = new AsyncRelayCommand<Match>(async (match) =>
 			{
-				var popup = new EditScoresPopup(m);
+				var popup = new EditScoresPopup(match!);
 				var modalRes = await PopupHelper.ShowPopupAsync(popup);
 				if(modalRes != null)
 				{
@@ -86,7 +86,7 @@ namespace KormoranMobile.Maui.ViewModels.Pages
 					await Toast.Make(res.Message).Show();
 					await _refreshMatchesCommand.ExecuteAsync();
 				}
-			}, () => AuthHelper.IsLoggedIn);
+			}, false, (match) => AuthHelper.IsLoggedIn);
 		}
 	}
 }

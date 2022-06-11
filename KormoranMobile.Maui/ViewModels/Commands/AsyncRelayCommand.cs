@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using KormoranMobile.Maui.Helpers;
+using System.Windows.Input;
 
 namespace KormoranMobile.Maui.ViewModels.Commands
 {
@@ -6,60 +7,69 @@ namespace KormoranMobile.Maui.ViewModels.Commands
 	{
 		public event EventHandler? CanExecuteChanged;
 
-		private readonly Func<T, Task> _execute;
-		private readonly Func<bool> _canExecute;
+		private readonly Func<T?, Task> _execute;
+		private readonly bool _allowNull;
+		private readonly Func<T?, bool>? _canExecute;
+		private readonly IErrorHandler _errorHandler;
 		private bool _isExecuting = false;
 
-		public AsyncRelayCommand(Func<T, Task> execute) : this(execute, () => true) { }
+		public AsyncRelayCommand(Func<T?, 
+								 Task> execute,
+								 bool allowNull)
+			: this(execute, allowNull, null) { }
 
-		public AsyncRelayCommand(Func<T, Task> execute, Func<bool> canExecute)
+		public AsyncRelayCommand(Func<T?, Task> execute,
+								 bool allowNull, 
+								 Func<T?, bool>? canExecute)
+			: this(execute, allowNull, canExecute, new LogErrorHandler()) { }
+
+		public AsyncRelayCommand(Func<T?, Task> execute, 
+								 bool allowNull, 
+								 Func<T?, bool>? canExecute, 
+								 IErrorHandler errorHandler)
 		{
 			_execute = execute;
+			_allowNull = allowNull;
 			_canExecute = canExecute;
+			_errorHandler = errorHandler;
 		}
 
-		public void RaiseCanExecuteChanged()
-		{
+		public void RaiseCanExecuteChanged() =>
 			CanExecuteChanged?.Invoke(this, EventArgs.Empty);
-		}
 
-		public bool CanExecute(T parameter)
+		public bool CanExecute(T? parameter) =>
+			!_isExecuting && (_canExecute?.Invoke(parameter) ?? true);
+
+		public async Task ExecuteAsync(T? parameter)
 		{
-			if (_isExecuting)
+			if (CanExecute(parameter))
 			{
-				return false;
+				try
+				{
+					_isExecuting = true;
+					await _execute(parameter);
+				}
+				finally
+				{
+					_isExecuting = false;
+				}
 			}
-			if (_canExecute == null)
-			{
-				return true;
-			}
-
-			return _canExecute();
-		}
-
-		public async Task ExecuteAsync(T parameter)
-		{
-			if (!_isExecuting)
-			{
-				_isExecuting = true;
-				await _execute(parameter);
-				_isExecuting = false;
-				RaiseCanExecuteChanged();
-			}
+			RaiseCanExecuteChanged();
 		}
 
 		#region ICommand implementation
 
-		bool ICommand.CanExecute(object? parameter)
-		{
-			if (parameter == null || parameter.GetType() != typeof(T)) return false;
-			return CanExecute((T)parameter);
-		}
+		bool ICommand.CanExecute(object? parameter) =>
+			TypeHelper.CheckType(parameter, typeof(T), _allowNull) && 
+			CanExecute(parameter == null ? default : (T)parameter);
 
 		void ICommand.Execute(object? parameter)
 		{
-			if (parameter == null || parameter.GetType() != typeof(T)) return;
-			_ = ExecuteAsync((T)parameter);
+			if (!TypeHelper.CheckType(parameter, typeof(T), _allowNull))
+			{
+				throw new InvalidOperationException();
+			}
+			ExecuteAsync(parameter == null ? default : (T)parameter).FireAndForgetAsync(_errorHandler);
 		}
 
 		#endregion ICommand implementation
@@ -70,17 +80,19 @@ namespace KormoranMobile.Maui.ViewModels.Commands
 		public event EventHandler? CanExecuteChanged;
 
 		private readonly Func<Task> _execute;
-		private readonly Func<bool> _canExecute;
+		private readonly Func<bool>? _canExecute;
+		private readonly IErrorHandler _errorHandler;
 		private bool _isExecuting = false;
 
-		public AsyncRelayCommand(Func<Task> execute) : this(execute, () => true)
-		{
-		}
+		public AsyncRelayCommand(Func<Task> execute) : this(execute, null) { }
 
-		public AsyncRelayCommand(Func<Task> execute, Func<bool> canExecute)
+		public AsyncRelayCommand(Func<Task> execute, Func<bool>? canExecute) : this(execute, canExecute, new LogErrorHandler()) { }
+
+		public AsyncRelayCommand(Func<Task> execute, Func<bool>? canExecute, IErrorHandler errorHandler)
 		{
 			_execute = execute;
 			_canExecute = canExecute;
+			_errorHandler = errorHandler;
 		}
 
 		public void RaiseCanExecuteChanged()
@@ -90,27 +102,24 @@ namespace KormoranMobile.Maui.ViewModels.Commands
 
 		public bool CanExecute()
 		{
-			if (_isExecuting)
-			{
-				return false;
-			}
-			if (_canExecute == null)
-			{
-				return true;
-			}
-
-			return _canExecute();
+			return !_isExecuting && (_canExecute?.Invoke() ?? true);
 		}
 
 		public async Task ExecuteAsync()
 		{
-			if (!_isExecuting)
+			if (CanExecute())
 			{
-				_isExecuting = true;
-				await _execute();
-				_isExecuting = false;
-				RaiseCanExecuteChanged();
+				try
+				{
+					_isExecuting = true;
+					await _execute();
+				}
+				finally
+				{
+					_isExecuting = false;
+				}
 			}
+			RaiseCanExecuteChanged();
 		}
 
 		#region ICommand implementation
@@ -122,7 +131,7 @@ namespace KormoranMobile.Maui.ViewModels.Commands
 
 		void ICommand.Execute(object? parameter)
 		{
-			_ = ExecuteAsync();
+			ExecuteAsync().FireAndForgetAsync(_errorHandler);
 		}
 
 		#endregion ICommand implementation

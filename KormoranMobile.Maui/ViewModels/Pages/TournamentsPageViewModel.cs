@@ -21,11 +21,10 @@ namespace KormoranMobile.Maui.ViewModels.Pages
 		private IKormoranServer? _kormoranServer;
 		private ObservableCollection<Tournament> _tournaments;
 		private bool _isRefreshing;
-		private AsyncRelayCommand _showServerPopupCommand;
-		private AsyncRelayCommand _showLoginPageCommand;
-		private AsyncRelayCommand<Tournament> _itemTappedCommand;
-		private AsyncRelayCommand _refreshTournamentsListCommand;
-
+		private readonly AsyncRelayCommand _showServerPopupCommand;
+		private readonly AsyncRelayCommand _showLoginPageCommand;
+		private readonly AsyncRelayCommand<Tournament> _itemTappedCommand;
+		private readonly AsyncRelayCommand _refreshTournamentsListCommand;
 
 		public bool IsRefreshing
 		{
@@ -48,7 +47,6 @@ namespace KormoranMobile.Maui.ViewModels.Pages
 
 		public TournamentsPageViewModel()
 		{
-			Debug.WriteLine("ctor");
 			_isRefreshing = false;
 			_tournaments = new();
 
@@ -72,13 +70,13 @@ namespace KormoranMobile.Maui.ViewModels.Pages
 				{
 					try
 					{
-						await Shell.Current.GoToAsync($"{nameof(MatchesPage)}?tournament={tournament}");
+						await Shell.Current.GoToAsync($"{nameof(MatchesPage)}?tournament={tournament!}");
 					}
 					catch (Exception ex)
 					{
 						Debug.WriteLine(ex.Message);
 					}
-				});
+				}, false);
 			_refreshTournamentsListCommand = new(
 				async () => await RefreshTournamentsList(true),
 				() => IsRefreshing == false && _kormoranServer != null);
