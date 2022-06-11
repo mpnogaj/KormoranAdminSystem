@@ -5,10 +5,14 @@ namespace KormoranMobile.Maui.ViewModels.Abstraction
 {
 	public abstract class ViewModelBase : INotifyPropertyChanged
 	{
-		public event PropertyChangedEventHandler PropertyChanged;
+		public event PropertyChangedEventHandler? PropertyChanged;
 
-		public void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		public void OnPropertyChanged([CallerMemberName] string? propertyName = null)
 		{
+			if(propertyName == null)
+			{
+				throw new ArgumentNullException(nameof(propertyName));
+			}
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 

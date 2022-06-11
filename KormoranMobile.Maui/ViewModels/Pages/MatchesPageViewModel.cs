@@ -33,10 +33,10 @@ namespace KormoranMobile.Maui.ViewModels.Pages
 				JsonSerializer.Deserialize<Tournament>(value) ?? throw new Exception("Tournament cannot be null!");
 		}
 
-		private Tournament _tournament;
+		private Tournament? _tournament;
 		public Tournament Tournament
 		{
-			get => _tournament;
+			get => _tournament ?? throw new NullReferenceException();
 			set => SetProperty(ref _tournament, value);
 		}
 
@@ -79,7 +79,7 @@ namespace KormoranMobile.Maui.ViewModels.Pages
 			_itemTappedCommand = new AsyncRelayCommand<Match>(async (m) =>
 			{
 				var popup = new EditScoresPopup(m);
-				var modalRes = await Application.Current.MainPage.ShowPopupAsync(popup);
+				var modalRes = await PopupHelper.ShowPopupAsync(popup);
 				if(modalRes != null)
 				{
 					var res = await _kormoranServer.UpdateScore((UpdateScoreRequestModel)modalRes);

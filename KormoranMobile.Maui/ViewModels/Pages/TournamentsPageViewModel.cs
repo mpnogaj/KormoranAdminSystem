@@ -44,7 +44,7 @@ namespace KormoranMobile.Maui.ViewModels.Pages
 		public AsyncRelayCommand<Tournament> ItemTappedCommand => _itemTappedCommand;
 		public AsyncRelayCommand RefreshTournamentsListCommand => _refreshTournamentsListCommand;
 
-		public Action OnAppearing => () => RefreshTournamentsList(false);
+		public Action OnAppearing => () => RefreshTournamentsList(false).FireAndForgetAsync(new LogErrorHandler());
 
 		public TournamentsPageViewModel()
 		{
@@ -55,7 +55,7 @@ namespace KormoranMobile.Maui.ViewModels.Pages
 			_showServerPopupCommand = new(
 				async () =>
 				{
-					var res = await Application.Current.MainPage.ShowPopupAsync(new SettingsPopup());
+					var res = await PopupHelper.ShowPopupAsync(new SettingsPopup());
 					if(res != null)
 					{
 						Preferences.Set(ServerHelper.AddressKey, (string)res);
@@ -64,7 +64,7 @@ namespace KormoranMobile.Maui.ViewModels.Pages
 				});
 
 			_showLoginPageCommand = new(
-				async () => await Application.Current.MainPage.ShowPopupAsync(new LoginPopup()), 
+				async () => await PopupHelper.ShowPopupAsync(new LoginPopup()), 
 				() => _kormoranServer != null);
 
 			_itemTappedCommand = new(

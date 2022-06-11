@@ -6,7 +6,7 @@ namespace KormoranMobile.Maui.ViewModels.Commands
 	{
 		#region Fields
 
-		public event EventHandler CanExecuteChanged;
+		public event EventHandler? CanExecuteChanged;
 
 		private readonly Action<T> _execute;
 		private readonly Func<bool> _canExecute;
@@ -44,7 +44,7 @@ namespace KormoranMobile.Maui.ViewModels.Commands
 		///<returns>
 		///true if this command can be executed; otherwise, false.
 		///</returns>
-		public bool CanExecute(object parameter)
+		public bool CanExecute(object? parameter)
 		{
 			return _canExecute();
 		}
@@ -53,7 +53,7 @@ namespace KormoranMobile.Maui.ViewModels.Commands
 		///Defines the method to be called when the command is invoked.
 		///</summary>
 		///<param name="parameter">Data used by the command./>.</param>
-		public void Execute(object parameter)
+		public void Execute(object? parameter)
 		{
 			if (parameter == null)
 				throw new InvalidOperationException();
@@ -73,7 +73,7 @@ namespace KormoranMobile.Maui.ViewModels.Commands
 	{
 		#region Fields
 
-		public event EventHandler CanExecuteChanged;
+		public event EventHandler? CanExecuteChanged;
 
 		private readonly Action _execute;
 		private readonly Func<bool> _canExecute;
@@ -111,7 +111,7 @@ namespace KormoranMobile.Maui.ViewModels.Commands
 		///<returns>
 		///true if this command can be executed; otherwise, false.
 		///</returns>
-		public bool CanExecute(object parameter)
+		public bool CanExecute(object? parameter)
 		{
 			return _canExecute == null || _canExecute();
 		}
@@ -120,7 +120,7 @@ namespace KormoranMobile.Maui.ViewModels.Commands
 		///Defines the method to be called when the command is invoked.
 		///</summary>
 		///<param name="parameter">Data used by the command. If the command does not require data to be passed, this object can be set to <see langword="null" />.</param>
-		public void Execute(object parameter)
+		public void Execute(object? parameter)
 		{
 			_execute();
 			RaiseCanExecuteChanged();

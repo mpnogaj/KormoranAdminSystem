@@ -4,7 +4,7 @@ namespace KormoranMobile.Maui.ViewModels.Commands
 {
 	public class AsyncRelayCommand<T> : IAsyncCommand<T>
 	{
-		public event EventHandler CanExecuteChanged;
+		public event EventHandler? CanExecuteChanged;
 
 		private readonly Func<T, Task> _execute;
 		private readonly Func<bool> _canExecute;
@@ -50,13 +50,13 @@ namespace KormoranMobile.Maui.ViewModels.Commands
 
 		#region ICommand implementation
 
-		bool ICommand.CanExecute(object parameter)
+		bool ICommand.CanExecute(object? parameter)
 		{
 			if (parameter == null || parameter.GetType() != typeof(T)) return false;
 			return CanExecute((T)parameter);
 		}
 
-		void ICommand.Execute(object parameter)
+		void ICommand.Execute(object? parameter)
 		{
 			if (parameter == null || parameter.GetType() != typeof(T)) return;
 			_ = ExecuteAsync((T)parameter);
@@ -67,7 +67,7 @@ namespace KormoranMobile.Maui.ViewModels.Commands
 
 	public class AsyncRelayCommand : IAsyncCommand
 	{
-		public event EventHandler CanExecuteChanged;
+		public event EventHandler? CanExecuteChanged;
 
 		private readonly Func<Task> _execute;
 		private readonly Func<bool> _canExecute;
@@ -115,12 +115,12 @@ namespace KormoranMobile.Maui.ViewModels.Commands
 
 		#region ICommand implementation
 
-		bool ICommand.CanExecute(object parameter)
+		bool ICommand.CanExecute(object? parameter)
 		{
 			return CanExecute();
 		}
 
-		void ICommand.Execute(object parameter)
+		void ICommand.Execute(object? parameter)
 		{
 			_ = ExecuteAsync();
 		}
