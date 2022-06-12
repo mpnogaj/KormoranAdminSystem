@@ -2,7 +2,7 @@ import React from "react";
 import ILog from "../Models/ILog";
 
 interface IProps {
-    item: ILog
+	item: ILog
 }
 
 class LogRow extends React.Component<IProps>{
