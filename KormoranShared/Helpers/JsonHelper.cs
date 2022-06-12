@@ -6,19 +6,19 @@ namespace KormoranShared.Helpers
 {
 	public static class JsonHelper
 	{
-		private readonly static JsonSerializerOptions options = new()
+		private static readonly JsonSerializerOptions Options = new()
 		{
 			Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
 		};
 
 		public static string Serialize(this object obj)
 		{
-			return JsonSerializer.Serialize(obj, options: options);
+			return JsonSerializer.Serialize(obj, options: Options);
 		}
 
 		public static T? Deserialize<T>(this string json)
 		{
-			return JsonSerializer.Deserialize<T>(json, options: options);
+			return JsonSerializer.Deserialize<T>(json, options: Options);
 		}
 	}
 }

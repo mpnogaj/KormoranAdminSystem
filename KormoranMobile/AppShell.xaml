@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	   xmlns:local="clr-namespace:KormoranMobile"
+	   xmlns:pages="clr-namespace:KormoranMobile.Views.Pages"
+	   x:Class="KormoranMobile.AppShell"
+	   x:DataType="{x:Null}"
+	   Shell.FlyoutBehavior="Disabled">
+
+	<ShellContent Route="TournamentsPage"
+				  ContentTemplate="{DataTemplate pages:TournamentsPage}"/>
+
+</Shell>

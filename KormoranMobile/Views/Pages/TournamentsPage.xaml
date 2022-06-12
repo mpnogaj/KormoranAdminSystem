@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 xmlns:viewmodels="clr-namespace:KormoranMobile.ViewModels.Pages"
+			 xmlns:models="clr-namespace:KormoranShared.Models"
+			 xmlns:properties="clr-namespace:KormoranMobile.Properties"
+			 xmlns:maui="clr-namespace:Microsoft.Maui.Controls"
+			 x:Class="KormoranMobile.Views.Pages.TournamentsPage"
+			 x:DataType="viewmodels:TournamentsPageViewModel"
+			 Title="{x:Static properties:Resources.Tournaments}">
+
+	<ContentPage.ToolbarItems>
+		<ToolbarItem Command="{Binding ShowServerPopupCommand}"
+					 Text="{x:Static properties:Resources.Settings}">
+			<ToolbarItem.IconImageSource>
+				<FontImageSource Glyph="{StaticResource SettingsGlyph}"
+								 Size="Large"
+								 FontFamily="{StaticResource IconFont}"
+								 Color="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+			</ToolbarItem.IconImageSource>
+		</ToolbarItem>
+		<ToolbarItem Command="{Binding ShowLoginPageCommand}"
+					 Text="{x:Static properties:Resources.Login}">
+			<ToolbarItem.IconImageSource>
+				<FontImageSource Glyph="{StaticResource LoginGlyph}"
+								 Size="Large"
+								 FontFamily="{StaticResource IconFont}"
+								 Color="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+			</ToolbarItem.IconImageSource>
+		</ToolbarItem>
+
+		<ToolbarItem Command="{Binding RefreshTournamentsListCommand}"
+					 Text="{x:Static properties:Resources.Refresh}">
+			<ToolbarItem.IconImageSource>
+				<FontImageSource Glyph="{StaticResource RefreshGlyph}"
+								 Size="Large"
+								 FontFamily="{StaticResource IconFont}"
+								 Color="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+			</ToolbarItem.IconImageSource>
+		</ToolbarItem>
+	</ContentPage.ToolbarItems>
+
+	<ListView x:Name="TournamentsList"
+			  ItemsSource="{Binding Tournaments}"
+			  CachingStrategy="RecycleElement"
+			  IsPullToRefreshEnabled="True"
+			  RefreshCommand="{Binding RefreshTournamentsListCommand}"
+			  IsRefreshing="{Binding IsRefreshing, Mode=TwoWay}">
+		<ListView.ItemTemplate>
+			<DataTemplate x:DataType="models:Tournament">
+				<TextCell Detail="{Binding State.Name}"
+						  TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
+						  DetailColor="{AppThemeBinding Light={StaticResource DarkGray}, Dark={StaticResource LightGray}}"
+						  Command="{Binding Path=BindingContext.ItemTappedCommand, Source={x:Reference Name=TournamentsList}}"
+						  CommandParameter="{Binding .}">
+					<TextCell.Text>
+						<MultiBinding StringFormat="{}{0} | {1}">
+							<Binding Path="Name"/>
+							<Binding Path="Discipline.Name"/>
+						</MultiBinding>
+					</TextCell.Text>
+				</TextCell>
+			</DataTemplate>
+		</ListView.ItemTemplate>
+	</ListView>
+</ContentPage>

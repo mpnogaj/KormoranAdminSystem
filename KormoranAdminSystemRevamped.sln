@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KormoranWeb", "KormoranWeb\
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "KormoranShared", "KormoranShared\KormoranShared.shproj", "{0445529A-4C2D-4247-BB02-68871A5A15E6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KormoranMobile.Maui", "KormoranMobile.Maui\KormoranMobile.Maui.csproj", "{0F038756-8262-433F-9E63-807F5835E6F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KormoranMobile", "KormoranMobile.Maui\KormoranMobile.csproj", "{0F038756-8262-433F-9E63-807F5835E6F9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
