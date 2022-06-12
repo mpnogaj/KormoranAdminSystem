@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 xmlns:viewmodels="clr-namespace:KormoranMobile.ViewModels.Pages"
+			 xmlns:models="clr-namespace:KormoranShared.Models"
+			 xmlns:properties="clr-namespace:KormoranMobile.Properties"
+			 x:Class="KormoranMobile.Views.Pages.MatchesPage"
+			 x:DataType="viewmodels:MatchesPageViewModel">
+	
+	<ContentPage.Title>
+		<MultiBinding StringFormat="{}{0}: {1} | {2} | {3}">
+			<Binding Source="{x:Static properties:Resources.Matches}"/>
+			<Binding Path="Tournament.Name"/>
+			<Binding Path="Tournament.Discipline.Name"/>
+			<Binding Path="Tournament.State.Name"/>
+		</MultiBinding>
+	</ContentPage.Title>
+	<ContentPage.ToolbarItems>
+		<ToolbarItem Command="{Binding RefreshMatchesCommand}"
+					 Text="{x:Static properties:Resources.Refresh}">
+			<ToolbarItem.IconImageSource>
+				<FontImageSource Glyph="{StaticResource RefreshGlyph}"
+								 Size="Large"
+								 FontFamily="{StaticResource IconFont}"/>
+			</ToolbarItem.IconImageSource>
+		</ToolbarItem>
+	</ContentPage.ToolbarItems>
+
+	<ListView x:Name="MatchesList" 
+			  ItemsSource="{Binding Tournament.Matches}"
+			  CachingStrategy="RecycleElement"
+			  IsPullToRefreshEnabled="True"
+			  IsRefreshing="{Binding IsRefreshing}"
+			  RefreshCommand="{Binding RefreshMatchesCommand}">
+		<ListView.ItemTemplate>
+			<DataTemplate x:DataType="models:Match">
+				<TextCell Detail="{Binding State.Name}"
+						  Command="{Binding Path=BindingContext.ItemTappedCommand, Source={x:Reference Name=MatchesList}}"
+						  CommandParameter="{Binding .}">
+					<TextCell.Text>
+						<MultiBinding StringFormat="{}{0} - {1} | {2}:{3}">
+							<Binding Path="Team1.Name"/>
+							<Binding Path="Team2.Name"/>
+							<Binding Path="Team1Score"/>
+							<Binding Path="Team2Score"/>
+						</MultiBinding>
+					</TextCell.Text>
+				</TextCell>
+			</DataTemplate>
+		</ListView.ItemTemplate>
+	</ListView>
+	
+</ContentPage>
