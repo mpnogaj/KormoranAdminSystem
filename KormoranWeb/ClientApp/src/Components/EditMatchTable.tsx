@@ -64,7 +64,7 @@ class EditMatchTable extends React.Component<IProps>{
 						this.props.updateMatches(newData);
 					}}>Dodaj nowy</Button>
 					<Button className="ms-3"  onClick={(): void => {
-						const res = confirm("Czy napewno chcesz to zrobić? Usunie to wszystkie akutalne mecze!");
+						const res = window.confirm("Czy napewno chcesz to zrobić? Usunie to wszystkie akutalne mecze!");
 						if(!res) return;
 						const newData: Array<IMatch> = [];
 						for (let i = 0; i < this.props.teams.length; i++) {

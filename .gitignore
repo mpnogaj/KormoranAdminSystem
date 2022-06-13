@@ -17,6 +17,7 @@
 mono_crash.*
 
 # Build results
+build/
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
@@ -366,5 +367,4 @@ KormoranAdminSystemRevamped/appsettings.json
 .idea/
 .vscode/
 KormoranAdminSystemRevamped/ClientApp/package-lock.json
-KormoranWeb/Properties/launchSettings.json
 KormoranWeb/appsettings.json

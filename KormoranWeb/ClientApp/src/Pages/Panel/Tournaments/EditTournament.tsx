@@ -9,7 +9,7 @@ import { binsearch } from "../../../Helpers/Essentials";
 import { IBasicResponse, ICollectionResponse, ISingleItemResponse } from "../../../Models/IResponses";
 import { Params } from "react-router";
 import { GET_DISCIPLINES, GET_STATES, GET_TOURNAMENTS, UPDATE_TOURNAMENT } from "../../../Helpers/Endpoints";
-import { withParams } from "../../../Helpers/HOC";
+import { WithParams } from "../../../Helpers/HOC";
 import EditMatchTable from "../../../Components/EditMatchTable";
 import { IUpdateMatchBasicRequest, IUpdateTournamentRequest } from "../../../Models/IRequests";
 
@@ -388,4 +388,4 @@ class EditTournament extends React.Component<ICompProps, ICompState>{
 	}
 }
 
-export default withParams(EditTournament);
+export default WithParams(EditTournament);

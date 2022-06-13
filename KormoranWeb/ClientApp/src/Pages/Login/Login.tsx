@@ -3,7 +3,7 @@ import { Button, Col, Container, FormControl, FormFloating, Row } from "react-bo
 import axios from "axios";
 import "./Login.css";
 import { ILoginResponse } from "../../Models/IResponses";
-import { IWithNavigaton, withNavigation } from "../../Helpers/HOC";
+import { IWithNavigaton, WithNavigation } from "../../Helpers/HOC";
 
 interface IState {
 	username: string,
@@ -107,4 +107,4 @@ class Login extends React.Component<IWithNavigaton, IState>{
 		);
 	}
 }
-export default withNavigation(Login);
+export default WithNavigation(Login);

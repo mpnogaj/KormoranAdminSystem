@@ -1,76 +1,33 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 	
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<LangVersion>latest</LangVersion>
+		<TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+		<TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+		<IsPackable>false</IsPackable>
+		<SpaRoot>ClientApp\</SpaRoot>
+		<DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+		<SpaProxyServerUrl>https://localhost:44484</SpaProxyServerUrl>
+		<SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
+		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
 	
-	<ItemGroup>
-		<None Remove="ClientApp\src\Models\Responses\IBasicResponse.ts" />
-		<None Remove="ClientApp\src\Models\Responses\ICollectionResponse.ts" />
-	</ItemGroup>
-	
-	<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-		<TypeScriptRemoveComments>false</TypeScriptRemoveComments>
-		<TypeScriptSourceMap>true</TypeScriptSourceMap>
-        <TypeScriptToolsVersion>4.7</TypeScriptToolsVersion>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
-		<TypeScriptRemoveComments>true</TypeScriptRemoveComments>
-		<TypeScriptSourceMap>false</TypeScriptSourceMap>
-        <TypeScriptToolsVersion>4.7</TypeScriptToolsVersion>
-	</PropertyGroup>
-
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.5" />
-		<PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="3.1.25" />
-		<PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.5" />
+		<PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="6.0.5" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.5" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.5">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="6.19.0" />
-		<PackageReference Include="Microsoft.TypeScript.Compiler" Version="3.1.5">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.7.3">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
 		<PackageReference Include="MySql.EntityFrameworkCore" Version="6.0.1" />
 		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.1" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.19.0" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<TypeScriptCompile Include="ClientApp\src\Components\LogRow.tsx" />
-		<TypeScriptCompile Include="ClientApp\src\Components\LogsTable.tsx" />
-		<TypeScriptCompile Include="ClientApp\src\Components\MatchRow.tsx" />
-		<TypeScriptCompile Include="ClientApp\src\Components\MatchesTable.tsx" />
-		<TypeScriptCompile Include="ClientApp\src\Components\ProtectedRoute.tsx" />
-		<TypeScriptCompile Include="ClientApp\src\Components\TournamentRow.tsx" />
-		<TypeScriptCompile Include="ClientApp\src\Components\TournamentsTable.tsx" />
-		<TypeScriptCompile Include="ClientApp\src\Helpers\Authenticator.ts" />
-		<TypeScriptCompile Include="ClientApp\src\Helpers\Essentials.ts" />
-		<TypeScriptCompile Include="ClientApp\src\Models\IDiscipline.ts" />
-		<TypeScriptCompile Include="ClientApp\src\Models\ILog.ts" />
-		<TypeScriptCompile Include="ClientApp\src\Models\IMatch.ts" />
-		<TypeScriptCompile Include="ClientApp\src\Models\IState.ts" />
-		<TypeScriptCompile Include="ClientApp\src\Models\ITeam.ts" />
-		<TypeScriptCompile Include="ClientApp\src\Models\ITournament.ts" />
-		<TypeScriptCompile Include="ClientApp\src\Models\Responses\IBasicResponse.ts" />
-		<TypeScriptCompile Include="ClientApp\src\Models\Responses\ICollectionResponse.ts" />
-		<TypeScriptCompile Include="ClientApp\src\Models\Responses\ILoginResponse.ts" />
-		<TypeScriptCompile Include="ClientApp\src\Pages\Panel\Logs\Logs.tsx" />
-		<TypeScriptCompile Include="ClientApp\src\Pages\Panel\Overview\Overview.tsx" />
-		<TypeScriptCompile Include="ClientApp\src\Pages\Panel\Panel.tsx" />
-		<TypeScriptCompile Include="ClientApp\src\Pages\Panel\Tournaments\Tournaments.tsx" />
-		<TypeScriptCompile Include="ClientApp\src\Pages\Panel\Users\Users.tsx" />
-	</ItemGroup>
-	
 	<ItemGroup>
 		<Compile Update="Properties\Resources.Designer.cs">
 			<DesignTime>True</DesignTime>
@@ -92,4 +49,36 @@
 
 	<Import Project="..\KormoranShared\KormoranShared.projitems" Label="Shared" />
 
+    <ItemGroup>
+        <!-- Don't publish the SPA source files, but do show them in the project files list -->
+        <Content Remove="$(SpaRoot)**" />
+        <None Remove="$(SpaRoot)**" />
+        <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+    </ItemGroup>
+
+    <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
+        <!-- Ensure Node.js is installed -->
+        <Exec Command="node --version" ContinueOnError="true">
+            <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+        </Exec>
+        <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+        <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+        <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+    </Target>
+
+    <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+        <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+        <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" />
+
+        <!-- Include the newly-built files in the publish output -->
+        <ItemGroup>
+            <DistFiles Include="$(SpaRoot)build\**" />
+            <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+                <RelativePath>wwwroot\%(RecursiveDir)%(FileName)%(Extension)</RelativePath>
+                <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+                <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+            </ResolvedFileToPublish>
+        </ItemGroup>
+    </Target>
 </Project>
