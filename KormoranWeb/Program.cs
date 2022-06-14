@@ -72,7 +72,7 @@ namespace KormoranWeb
 			app.UseAuthentication();
 			app.UseAuthorization();
 
-			app.UseHttpsRedirection();
+			//app.UseHttpsRedirection();
 			app.UseStaticFiles();
 			
 

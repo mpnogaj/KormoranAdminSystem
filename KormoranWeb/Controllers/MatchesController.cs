@@ -5,10 +5,6 @@ using KormoranWeb.Contexts;
 using KormoranWeb.Properties;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace KormoranWeb.Controllers
 {
@@ -17,10 +13,12 @@ namespace KormoranWeb.Controllers
 	public class MatchesController : ControllerBase
 	{
 		private readonly KormoranContext _db;
+		private readonly IConfiguration _configuration;
 
-		public MatchesController(KormoranContext db)
+		public MatchesController(KormoranContext db, IConfiguration configuration)
 		{
 			_db = db;
+			_configuration = configuration;
 		}
 
 		[HttpGet]
@@ -139,6 +137,15 @@ namespace KormoranWeb.Controllers
 			try
 			{
 				var match = await _db.Matches.FirstOrDefaultAsync(x => x.MatchId == request.MatchId);
+				if (match == null)
+				{
+					return new JsonResult(new BasicResponse
+					{
+						Error = true,
+						Message = $"Nie znaleziono meczu"
+					});
+				}
+				match.StateId = Convert.ToInt32(_configuration["StateIDs:Finished"]);
 				match.Team1Score = request.Team1Score;
 				match.Team2Score = request.Team2Score;
 				await _db.SaveChangesAsync();
