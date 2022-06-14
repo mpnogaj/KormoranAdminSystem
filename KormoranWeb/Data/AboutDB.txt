@@ -1,0 +1,1 @@
+﻿Run command Update-Database in package manager console to create database

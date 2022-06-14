@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
+#nullable disable
+
 namespace KormoranWeb.Migrations
 {
     [DbContext(typeof(KormoranContext))]
@@ -13,20 +15,18 @@ namespace KormoranWeb.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 64)
-                .HasAnnotation("ProductVersion", "5.0.12");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.5");
 
             modelBuilder.Entity("KormoranShared.Models.Discipline", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int(11)")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("discipline_id");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("longtext")
+                        .HasColumnType("TEXT")
                         .HasColumnName("name");
 
                     b.HasKey("Id");
@@ -38,25 +38,25 @@ namespace KormoranWeb.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("id");
 
                     b.Property<string>("Action")
                         .IsRequired()
-                        .HasColumnType("longtext")
+                        .HasColumnType("TEXT")
                         .HasColumnName("action");
 
                     b.Property<string>("Author")
                         .IsRequired()
-                        .HasColumnType("longtext")
+                        .HasColumnType("TEXT")
                         .HasColumnName("author");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("date");
 
                     b.Property<int>("Level")
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("level");
 
                     b.HasKey("Id");
@@ -68,31 +68,31 @@ namespace KormoranWeb.Migrations
                 {
                     b.Property<int>("MatchId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int(11)")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("match_id");
 
                     b.Property<int>("StateId")
-                        .HasColumnType("int(11)")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("state_id");
 
                     b.Property<int>("Team1Id")
-                        .HasColumnType("int(11)")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("team_1_id");
 
                     b.Property<int>("Team1Score")
-                        .HasColumnType("int(11)")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("team_1_score");
 
                     b.Property<int>("Team2Id")
-                        .HasColumnType("int(11)")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("team_2_id");
 
                     b.Property<int>("Team2Score")
-                        .HasColumnType("int(11)")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("team_2_score");
 
                     b.Property<int>("TournamentId")
-                        .HasColumnType("int(11)")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("tournament_id");
 
                     b.HasKey("MatchId");
@@ -112,12 +112,12 @@ namespace KormoranWeb.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int(11)")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("state_id");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("longtext")
+                        .HasColumnType("TEXT")
                         .HasColumnName("name");
 
                     b.HasKey("Id");
@@ -129,16 +129,16 @@ namespace KormoranWeb.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int(11)")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("team_id");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("longtext")
+                        .HasColumnType("TEXT")
                         .HasColumnName("name");
 
                     b.Property<int>("TournamentId")
-                        .HasColumnType("int(11)")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("tournament_id");
 
                     b.HasKey("Id");
@@ -152,20 +152,20 @@ namespace KormoranWeb.Migrations
                 {
                     b.Property<int>("TournamentId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int(11)")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("tournament_id");
 
                     b.Property<int>("DisciplineId")
-                        .HasColumnType("int(11)")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("discipline_id");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("longtext")
+                        .HasColumnType("TEXT")
                         .HasColumnName("name");
 
                     b.Property<int>("StateId")
-                        .HasColumnType("int(11)")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("state_id");
 
                     b.HasKey("TournamentId");
@@ -181,26 +181,26 @@ namespace KormoranWeb.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int(11)")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("user_id");
 
                     b.Property<string>("Fullname")
                         .IsRequired()
-                        .HasColumnType("longtext")
+                        .HasColumnType("TEXT")
                         .HasColumnName("fullname");
 
                     b.Property<bool>("IsAdmin")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("is_admin");
 
                     b.Property<string>("Login")
                         .IsRequired()
-                        .HasColumnType("longtext")
+                        .HasColumnType("TEXT")
                         .HasColumnName("user");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("longtext")
+                        .HasColumnType("TEXT")
                         .HasColumnName("pass");
 
                     b.HasKey("Id");

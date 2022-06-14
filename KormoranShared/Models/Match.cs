@@ -1,6 +1,7 @@
 using KormoranShared.Helpers;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace KormoranShared.Models
@@ -9,7 +10,7 @@ namespace KormoranShared.Models
 	public class Match
 	{
 		[Key]
-		[Column("match_id", TypeName = "int(11)")]
+		[Column("match_id")]
 		public int MatchId { get; set; }
 
 		[ForeignKey("Tournament")]
@@ -17,7 +18,8 @@ namespace KormoranShared.Models
 		public int TournamentId { get; set; }
 
 		[JsonIgnore]
-		public virtual Tournament Tournament { get; set; }
+		[NotNull]
+		public virtual Tournament? Tournament { get; set; }
 
 		[ForeignKey("State")]
 		[Column("state_id")]
@@ -54,10 +56,10 @@ namespace KormoranShared.Models
 			}
 		}
 
-		[Column("team_1_score", TypeName = "int(11)")]
+		[Column("team_1_score")]
 		public int Team1Score { get; set; }
 
-		[Column("team_2_score", TypeName = "int(11)")]
+		[Column("team_2_score")]
 		public int Team2Score { get; set; }
 
 		public override string ToString()

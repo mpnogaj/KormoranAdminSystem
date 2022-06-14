@@ -11,14 +11,12 @@ namespace KormoranWeb
 {
 	public static class Program
 	{
-		private static void ConfigurateServices(IServiceCollection services, IConfiguration configuration)
+		private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
 		{
 			services.AddControllersWithViews();
 			services.AddDbContext<KormoranContext>(options =>
 			{
-				options.UseMySql(
-					configuration.GetConnectionString("DefaultConnection"),
-					new MySqlServerVersion(new Version(8, 0, 27)));
+				options.UseSqlite(configuration.GetConnectionString("DefaultConnection"));
 			});
 
 			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -39,7 +37,7 @@ namespace KormoranWeb
 
 					options.Events = new JwtBearerEvents
 					{
-						OnMessageReceived = (MessageReceivedContext context) =>
+						OnMessageReceived = context =>
 						{
 							if (context.Request.Cookies.ContainsKey("Authorization"))
 							{
@@ -57,7 +55,7 @@ namespace KormoranWeb
 			});
 		}
 
-		private static void ConfigurateApp(WebApplication app, IHostEnvironment env)
+		private static void ConfigureApp(WebApplication app, IHostEnvironment env)
 		{
 			if (env.IsDevelopment())
 			{
@@ -88,9 +86,9 @@ namespace KormoranWeb
 		public static void Main(string[] args)
 		{
 			var builder = WebApplication.CreateBuilder(args);
-			ConfigurateServices(builder.Services, builder.Configuration);
+			ConfigureServices(builder.Services, builder.Configuration);
 			var app = builder.Build();
-			ConfigurateApp(app, app.Environment);
+			ConfigureApp(app, app.Environment);
 			app.Run();
 		}
 	}

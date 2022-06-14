@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace KormoranShared.Models
 {
@@ -7,12 +8,13 @@ namespace KormoranShared.Models
 	public class Discipline
 	{
 		[Key]
-		[Column("discipline_id", TypeName = "int(11)")]
+		[Column("discipline_id")]
 		public int Id { get; set; }
 
 		[Required]
 		[Column("name")]
-		public string Name { get; set; }
+		[NotNull]
+		public string? Name { get; set; }
 
 		public override string ToString()
 		{

@@ -7,7 +7,7 @@ namespace KormoranShared.Models
 	public class Team
 	{
 		[Key]
-		[Column("team_id", TypeName = "int(11)")]
+		[Column("team_id")]
 		public int Id { get; set; }
 
 		[Required]

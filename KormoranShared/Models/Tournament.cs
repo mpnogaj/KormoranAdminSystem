@@ -10,7 +10,7 @@ namespace KormoranShared.Models
 	public class Tournament
 	{
 		[Key]
-		[Column("tournament_id", TypeName = "int(11)")]
+		[Column("tournament_id")]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int TournamentId { get; set; }
 

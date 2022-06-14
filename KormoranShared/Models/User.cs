@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace KormoranShared.Models
@@ -8,12 +9,13 @@ namespace KormoranShared.Models
 	public class User
 	{
 		[Key]
-		[Column("user_id", TypeName = "int(11)")]
+		[Column("user_id")]
 		public int Id { get; set; }
 
 		[Required]
 		[Column("user")]
-		public string Login { get; set; }
+		[NotNull]
+		public string? Login { get; set; }
 
 		[Required]
 		[Column("pass")]
