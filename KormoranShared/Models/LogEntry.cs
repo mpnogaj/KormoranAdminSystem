@@ -1,6 +1,9 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
+using System.Net;
+using KormoranShared.Helpers;
+using KormoranWeb.Helpers;
 
 namespace KormoranShared.Models
 {
@@ -15,17 +18,35 @@ namespace KormoranShared.Models
 		public int Level { get; set; }
 
 		[Column("date")]
-		public DateTime Date { get; set; }
+		[NotNull]
+		public string Date { get; set; }
 
 		[Column("author")]
+		[NotNull]
 		public string Author { get; set; }
 
 		[Column("action")]
+		[NotNull]
 		public string Action { get; set; }
 
-		public LogEntry(DateTime date, string author, string action)
+		//Default ctor for EF
+#pragma warning disable CS8618
+		public LogEntry()
 		{
-			Date = date;
+			
+		}
+#pragma warning restore CS8618
+
+		public LogEntry(string author, string action)
+		{
+			Date = DateTime.Now.Serialize();
+			Author = author;
+			Action = action;
+		}
+
+		public LogEntry(string author, string action, DateTime date)
+		{
+			Date = date.Serialize();
 			Author = author;
 			Action = action;
 		}

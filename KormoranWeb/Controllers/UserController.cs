@@ -5,16 +5,13 @@ using KormoranWeb.Contexts;
 using KormoranWeb.Helpers;
 using KormoranWeb.Properties;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
+using ILogger = KormoranWeb.Services.ILogger;
 
 namespace KormoranWeb.Controllers;
 
@@ -25,13 +22,15 @@ public class UserController : ControllerBase
 {
 	private readonly KormoranContext _kormoranContext;
 	private readonly IConfiguration _configuration;
+	private readonly ILogger _logger;
 
-	private const string AUTH_COOKIE = "Authorization";
+	private const string AuthCookie = "Authorization";
 
-	public UserController(KormoranContext kormoranContext, IConfiguration configuration)
+	public UserController(KormoranContext kormoranContext, IConfiguration configuration, ILogger logger)
 	{
 		_kormoranContext = kormoranContext;
 		_configuration = configuration;
+		_logger = logger;
 	}
 
 	public IActionResult Ping()
@@ -44,37 +43,39 @@ public class UserController : ControllerBase
 	public async Task<JsonResult> Login(AuthenticateRequest user, bool useCookie = false)
 	{
 		var u = await Authenticate(user);
-		if (u != null)
+		if (u == null)
 		{
-			var token = Generate(u);
-			if (useCookie)
+			return new JsonResult(new AuthenticateResponse
 			{
-				Response.Cookies.Append(AUTH_COOKIE, token, new CookieOptions
-				{
-					HttpOnly = true
-				});
-				return new JsonResult(new BasicResponse
-				{
-					Error = false,
-					Message = Resources.operationSuccessfull
-				});
-			}
-			else
-			{
-				return new JsonResult(new AuthenticateResponse
-				{
-					Error = false,
-					Message = Resources.operationSuccessfull,
-					Token = Generate(u)
-				});
-			}
+				Error = true,
+				Message = "Bledny login lub haslo",
+				Token = string.Empty
+			});
 		}
-		return new JsonResult(new AuthenticateResponse
+		var token = Generate(u);
+
+		await _logger.LogNormal(new LogEntry(u.Fullname, "Zalogowal sie"));
+
+		if (!useCookie)
 		{
-			Error = true,
-			Message = "Bledny login lub haslo",
-			Token = string.Empty
+			return new JsonResult(new AuthenticateResponse
+			{
+				Error = false,
+				Message = Resources.operationSuccessfull,
+				Token = Generate(u)
+			});
+		}
+
+		Response.Cookies.Append(AuthCookie, token, new CookieOptions
+		{
+			HttpOnly = true
 		});
+		return new JsonResult(new BasicResponse
+		{
+			Error = false,
+			Message = Resources.operationSuccessfull
+		});
+
 	}
 
 	[HttpGet]
@@ -194,11 +195,12 @@ public class UserController : ControllerBase
 	}
 
 	[HttpPost]
-	public JsonResult Logout()
+	public async Task<JsonResult> Logout()
 	{
 		try
 		{
-			Response.Cookies.Delete(AUTH_COOKIE);
+			await _logger.LogNormal(new LogEntry(HttpContext.User.Identity.Name, "Wylogował się"));
+			Response.Cookies.Delete(AuthCookie);
 			return new JsonResult(new BasicResponse
 			{
 				Error = false,
@@ -232,7 +234,6 @@ public class UserController : ControllerBase
 			claims,
 			expires: DateTime.Now.AddDays(1),
 			signingCredentials: cred);
-
 		return new JwtSecurityTokenHandler().WriteToken(token);
 	}
 

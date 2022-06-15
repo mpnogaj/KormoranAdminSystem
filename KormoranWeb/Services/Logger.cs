@@ -1,14 +1,13 @@
 using KormoranShared.Models;
 using KormoranWeb.Contexts;
-using System.Threading.Tasks;
 
 namespace KormoranWeb.Services
 {
 	public interface ILogger
 	{
-		public Task LogNormal(LogEntry log);
-
 		public Task LogMinor(LogEntry log);
+
+		public Task LogNormal(LogEntry log);
 
 		public Task LogMajor(LogEntry log);
 	}
@@ -21,14 +20,14 @@ namespace KormoranWeb.Services
 		{
 			_db = db;
 		}
-
-		public async Task LogNormal(LogEntry log)
+		
+		public async Task LogMinor(LogEntry log)
 		{
 			log.Level = 1;
 			await AddEntryToDb(log);
 		}
 
-		public async Task LogMinor(LogEntry log)
+		public async Task LogNormal(LogEntry log)
 		{
 			log.Level = 2;
 			await AddEntryToDb(log);

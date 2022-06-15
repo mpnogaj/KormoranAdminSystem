@@ -15,6 +15,7 @@ import ProtectedRoute from "./Components/ProtectedRoute";
 import Tournaments from "./Pages/Panel/Tournaments/Tournaments";
 import Overview from "./Pages/Panel/Overview/Overview";
 import Users from "./Pages/Panel/Users/Users";
+import Logs from "./Pages/Panel/Logs/Logs";
 import EditTournament from "./Pages/Panel/Tournaments/EditTournament";
 import axios from "axios";
 
@@ -32,6 +33,7 @@ render(
 				<Route path="EditTournament/:id" element={<Panel content={<EditTournament />} />} />
 				<Route path="Overview" element={<Panel content={<Overview />} />} />
 				<Route path="Users" element={<Panel content={<Users />} />} />
+				<Route path="Logs" element={<Panel content={<Logs />} />} />
 			</Route>
 		</Routes>
 	</BrowserRouter>,

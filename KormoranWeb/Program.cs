@@ -1,11 +1,12 @@
 using KormoranWeb.Contexts;
-using KormoranWeb.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using KormoranWeb.Services;
+using ILogger = KormoranWeb.Services.ILogger;
 
 namespace KormoranWeb
 {
@@ -48,7 +49,7 @@ namespace KormoranWeb
 					};
 				});
 
-			services.AddScoped<Services.ILogger, Logger>();
+			services.AddScoped<ILogger, Logger>();
 			services.AddControllersWithViews().AddJsonOptions(options =>
 			{
 				options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);

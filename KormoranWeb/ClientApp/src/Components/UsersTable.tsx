@@ -30,7 +30,7 @@ class UsersTable extends React.Component<Empty, IState> {
 				this.setState({ users: response.collection, isLoading: false });
 			});
 		this.state = {
-			isLoading: false,
+			isLoading: true,
 			isAdmin: false,
 			user: DEFAULT_ADD_EDIT_USER,
 			saveEnabled: false,
@@ -102,7 +102,9 @@ class UsersTable extends React.Component<Empty, IState> {
 						{
 							this.state.isLoading
 								?
-								<tr>Ładowanie</tr>
+								<tr>
+									<td style={{ textAlign: "center" }} colSpan={5}>Ładowanie</td>
+								</tr>
 								:
 								this.state.users.map(u => {
 									return (

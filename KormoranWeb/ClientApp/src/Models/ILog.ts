@@ -1,7 +1,7 @@
 interface ILog {
     id: number,
     level: number,
-    date: Date,
+    date: string,
     author: string,
     action: string;
 }
