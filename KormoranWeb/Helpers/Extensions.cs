@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace KormoranWeb.Helpers
@@ -25,5 +26,18 @@ namespace KormoranWeb.Helpers
 			//15.06.2022 21:08:39
 			return $"{d:dd.MM.yyyy} {d:HH:mm:ss}";
 		}
+
+		public static string GetFullName(this ClaimsPrincipal user)
+		{
+			return (user.Identity == null || user.Identity.Name == null) 
+				? "Anonymous" 
+				: user.Identity.Name;
+		}
+
+		public static bool IsLoggedIn(this ClaimsPrincipal user)
+		{
+			return !(user.Identity == null || user.Identity.Name == null);
+		}
+
 	}
 }

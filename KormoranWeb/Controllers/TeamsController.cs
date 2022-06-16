@@ -1,11 +1,12 @@
 ﻿using KormoranShared.Models;
 using KormoranShared.Models.Responses;
 using KormoranWeb.Contexts;
+using KormoranWeb.Helpers;
 using KormoranWeb.Properties;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Threading.Tasks;
+using ILogger = KormoranWeb.Services.ILogger;
 
 namespace KormoranWeb.Controllers
 {
@@ -13,11 +14,13 @@ namespace KormoranWeb.Controllers
 	[ApiController]
 	public class TeamsController : ControllerBase
 	{
-		private KormoranContext _db;
+		private readonly KormoranContext _db;
+		private readonly ILogger _logger;
 
-		public TeamsController(KormoranContext db)
+		public TeamsController(KormoranContext db, ILogger logger)
 		{
 			_db = db;
+			_logger = logger;
 		}
 
 		[HttpGet]
@@ -81,6 +84,7 @@ namespace KormoranWeb.Controllers
 		}
 
 		[HttpPost]
+		[Authorize]
 		public async Task<JsonResult> UpdateTeams([FromBody] Team team)
 		{
 			try
@@ -88,11 +92,17 @@ namespace KormoranWeb.Controllers
 				if (team.Id == 0)
 				{
 					await _db.Teams.AddAsync(team);
+					await _logger.LogMajor(new LogEntry(User.GetFullName(), $"Dodał drużynę: {team.Name}"));
 				}
 				else
 				{
 					var t = await _db.Teams.FirstOrDefaultAsync(x => x.Id == team.Id);
-					if (t != null) t.Name = team.Name;
+					if (t != null)
+					{
+						t.Name = team.Name;
+						_db.Teams.Update(t);
+						await _logger.LogNormal(new LogEntry(User.GetFullName(), $"Edytował drużynę: {team.Name}, {team.Id}"));
+					}
 				}
 				await _db.SaveChangesAsync();
 				return new JsonResult(new SingleItemResponse<int>
@@ -113,6 +123,7 @@ namespace KormoranWeb.Controllers
 		}
 
 		[HttpDelete]
+		[Authorize]
 		public async Task<JsonResult> DeleteTeam(int teamId)
 		{
 			try
@@ -122,6 +133,7 @@ namespace KormoranWeb.Controllers
 				{
 					_db.Teams.Remove(res);
 					await _db.SaveChangesAsync();
+					await _logger.LogMajor(new LogEntry(User.GetFullName(), $"Usunął drużynę: {res.Name}"));
 				}
 				return new JsonResult(new BasicResponse
 				{

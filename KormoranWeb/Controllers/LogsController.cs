@@ -1,8 +1,9 @@
 using KormoranShared.Models;
 using KormoranShared.Models.Responses;
 using KormoranWeb.Contexts;
+using KormoranWeb.Properties;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 
 namespace KormoranWeb.Controllers
 {
@@ -18,14 +19,15 @@ namespace KormoranWeb.Controllers
 		}
 
 		[HttpGet]
-		public JsonResult GetLogs([FromQuery(Name = "sessionId")] string sessionId)
+		[Authorize]
+		public JsonResult GetLogs()
 		{
 			try
 			{
 				return new JsonResult(new CollectionResponse<LogEntry>
 				{
 					Error = false,
-					Message = "Operacja zakończona sukcesem",
+					Message = Resources.operationSuccessfull,
 					Collection = _dbContext.Logs.ToList()
 				});
 			}
@@ -34,7 +36,7 @@ namespace KormoranWeb.Controllers
 				return new JsonResult(new CollectionResponse<LogEntry>
 				{
 					Error = true,
-					Message = "Błąd po stronie serwera. Powiadom administratora",
+					Message = Resources.serverError,
 					Collection = null
 				});
 			}

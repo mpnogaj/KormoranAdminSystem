@@ -2,13 +2,12 @@
 using KormoranShared.Models.Requests.Tournaments;
 using KormoranShared.Models.Responses;
 using KormoranWeb.Contexts;
+using KormoranWeb.Helpers;
 using KormoranWeb.Properties;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using ILogger = KormoranWeb.Services.ILogger;
 
 namespace KormoranWeb.Controllers
 {
@@ -17,10 +16,12 @@ namespace KormoranWeb.Controllers
 	public class TournamentsController : ControllerBase
 	{
 		private readonly KormoranContext _db;
+		private readonly ILogger _logger;
 
-		public TournamentsController(KormoranContext dp)
+		public TournamentsController(KormoranContext dp, ILogger logger)
 		{
 			_db = dp;
+			_logger = logger;
 		}
 
 		[HttpGet]
@@ -75,6 +76,7 @@ namespace KormoranWeb.Controllers
 		}
 
 		[HttpPost]
+		[Authorize]
 		public async Task<JsonResult> DeleteTournament([FromQuery] int tournamentId)
 		{
 			try
@@ -90,6 +92,7 @@ namespace KormoranWeb.Controllers
 				}
 				_db.Tournaments.Remove(toDelete);
 				await _db.SaveChangesAsync();
+				await _logger.LogMajor(new LogEntry(User.GetFullName(), $"Usunął turniej: {toDelete.Name}"));
 				return new JsonResult(new BasicResponse
 				{
 					Error = false,
@@ -122,6 +125,8 @@ namespace KormoranWeb.Controllers
 						DisciplineId = request.NewDisciplineId,
 						StateId = request.NewStateId
 					});
+
+					await _logger.LogMajor(new LogEntry(User.GetFullName(), $"Dodał nowy turniej: {request.NewName}"));
 				}
 				else
 				{
@@ -129,6 +134,8 @@ namespace KormoranWeb.Controllers
 					tournament.StateId = request.NewStateId;
 					tournament.DisciplineId = request.NewDisciplineId;
 					_db.Tournaments.Update(tournament);
+
+					await _logger.LogNormal(new LogEntry(User.GetFullName(), $"Zaktualizował turniej: {tournament.Name}, {tournament.TournamentId}"));
 				}
 				await _db.SaveChangesAsync();
 
@@ -164,39 +171,19 @@ namespace KormoranWeb.Controllers
 				var currMatches = _db.Matches
 					.Where(x => x.TournamentId == request.TournamentId);
 				_db.Matches.RemoveRange(currMatches);
-
-				var matchesToAdd = new List<Match>();
-				var matchesToUpdate = new List<Match>();
 				foreach (var matchData in request.Matches)
 				{
-					if (matchData.MatchId >= 100000)
+					var newMatch = new Match
 					{
-						var newMatch = new Match
-						{
-							TournamentId = matchData.TournamentId,
-							MatchId = 0,
-							StateId = matchData.StateId,
-							Team1Id = matchData.Team1,
-							Team2Id = matchData.Team2,
-							Team1Score = matchData.Team1Score,
-							Team2Score = matchData.Team2Score
-						};
-						_db.Add(newMatch);
-						await _db.SaveChangesAsync();
-					}
-					else
-					{
-						var match = await _db.Matches.FirstOrDefaultAsync(x => x.MatchId == matchData.MatchId);
-						var newState = await _db.States.FirstOrDefaultAsync(x => x.Id == matchData.StateId);
-						match.StateId = matchData.StateId;
-						match.State = newState;
-						match.Team1Id = matchData.Team1;
-						match.Team2Id = matchData.Team2;
-						match.Team1Score = matchData.Team1Score;
-						match.Team2Score = matchData.Team2Score;
-						_db.Matches.Update(match);
-						await _db.SaveChangesAsync();
-					}
+						TournamentId = matchData.TournamentId,
+						MatchId = matchData.MatchId >= 100000 ? 0 : matchData.MatchId,
+						StateId = matchData.StateId,
+						Team1Id = matchData.Team1,
+						Team2Id = matchData.Team2,
+						Team1Score = matchData.Team1Score,
+						Team2Score = matchData.Team2Score
+					};
+					_db.Add(newMatch);
 				}
 				var tournament = await _db.Tournaments
 					.FirstOrDefaultAsync(x => x.TournamentId == request.TournamentId);
@@ -207,6 +194,9 @@ namespace KormoranWeb.Controllers
 
 				_db.Tournaments.Update(tournament);
 				await _db.SaveChangesAsync();
+
+
+				await _logger.LogNormal(new LogEntry(User.GetFullName(), $"Zaktualizował turniej: {tournament.Name}, {tournament.TournamentId}"));
 
 				return new JsonResult(new BasicResponse
 				{

@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using KormoranShared.Helpers;
-using KormoranWeb.Helpers;
 
 namespace KormoranShared.Models
 {

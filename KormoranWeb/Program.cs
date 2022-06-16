@@ -44,6 +44,10 @@ namespace KormoranWeb
 							{
 								context.Token = context.Request.Cookies["Authorization"];
 							}
+							else if(context.Request.Headers.ContainsKey("Authorization"))
+							{
+								context.Token = context.Request.Headers["Authorization"];
+							}
 							return Task.CompletedTask;
 						}
 					};

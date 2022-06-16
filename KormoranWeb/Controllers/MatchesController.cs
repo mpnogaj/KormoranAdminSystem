@@ -2,9 +2,12 @@
 using KormoranShared.Models.Requests.Matches;
 using KormoranShared.Models.Responses;
 using KormoranWeb.Contexts;
+using KormoranWeb.Helpers;
 using KormoranWeb.Properties;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ILogger = KormoranWeb.Services.ILogger;
 
 namespace KormoranWeb.Controllers
 {
@@ -14,11 +17,13 @@ namespace KormoranWeb.Controllers
 	{
 		private readonly KormoranContext _db;
 		private readonly IConfiguration _configuration;
+		private readonly ILogger _logger;
 
-		public MatchesController(KormoranContext db, IConfiguration configuration)
+		public MatchesController(KormoranContext db, IConfiguration configuration, ILogger logger)
 		{
 			_db = db;
 			_configuration = configuration;
+			_logger = logger;
 		}
 
 		[HttpGet]
@@ -86,12 +91,15 @@ namespace KormoranWeb.Controllers
 		}
 
 		[HttpPost]
+		[Authorize]
 		public async Task<JsonResult> UpdateMatch([FromBody] Match match)
 		{
 			try
 			{
 				_db.Matches.Update(match);
 				await _db.SaveChangesAsync();
+
+				await _logger.LogNormal(new LogEntry(User.GetFullName(), $"Zaktualizował mecz: {match.MatchId}"));
 				return new JsonResult(new BasicResponse
 				{
 					Error = false,
@@ -109,12 +117,15 @@ namespace KormoranWeb.Controllers
 		}
 
 		[HttpPost]
+		[Authorize]
 		public async Task<JsonResult> UpdateMatches([FromBody] List<Match> matches)
 		{
 			try
 			{
 				_db.Matches.UpdateRange(matches);
 				await _db.SaveChangesAsync();
+
+				await _logger.LogNormal(new LogEntry(User.GetFullName(), $"Zaktualizował {matches.Count} meczy"));
 				return new JsonResult(new BasicResponse
 				{
 					Error = false,
@@ -132,6 +143,7 @@ namespace KormoranWeb.Controllers
 		}
 
 		[HttpPost]
+		[Authorize]
 		public async Task<JsonResult> UpdateScore([FromBody] UpdateScoreRequestModel request)
 		{
 			try
@@ -148,7 +160,9 @@ namespace KormoranWeb.Controllers
 				match.StateId = Convert.ToInt32(_configuration["StateIDs:Finished"]);
 				match.Team1Score = request.Team1Score;
 				match.Team2Score = request.Team2Score;
+				_db.Matches.Update(match);
 				await _db.SaveChangesAsync();
+				await _logger.LogMajor(new LogEntry(User.GetFullName(), $"Zaktualizował wynik meczu: {match.MatchId} | {match.Team1Score}:{match.Team2Score}"));
 				return new JsonResult(new BasicResponse
 				{
 					Error = false,

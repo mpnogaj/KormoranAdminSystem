@@ -33,6 +33,7 @@ public class UserController : ControllerBase
 		_logger = logger;
 	}
 
+	[HttpGet]
 	public IActionResult Ping()
 	{
 		return Ok("Ping");
@@ -136,6 +137,7 @@ public class UserController : ControllerBase
 		}
 		_kormoranContext.Users.Remove(user);
 		await _kormoranContext.SaveChangesAsync();
+		await _logger.LogMajor(new LogEntry(User.GetFullName(), $"Usunął użytkownika: {user.Login}"));
 		return new JsonResult(new BasicResponse
 		{
 			Error = false,
@@ -157,6 +159,7 @@ public class UserController : ControllerBase
 		if (model.Id == 0)
 		{
 			_kormoranContext.Users.Add(newUser);
+			await _logger.LogMajor(new LogEntry(User.GetFullName(), $"Dodał użytkownika: {newUser.Login}"));
 		}
 		else
 		{
@@ -172,7 +175,8 @@ public class UserController : ControllerBase
 			}
 			//copy over new password if needed
 			newUser.PasswordHash = model.Password == string.Empty ? oldUser.PasswordHash : newUser.PasswordHash;
-			_kormoranContext.Update(newUser);
+			_kormoranContext.Users.Update(newUser);
+			await _logger.LogNormal(new LogEntry(User.GetFullName(), $"Edytował użytkownika: {newUser.Login}"));
 		}
 		await _kormoranContext.SaveChangesAsync();
 		return new JsonResult(new SingleItemResponse<int>
@@ -190,7 +194,7 @@ public class UserController : ControllerBase
 		{
 			Error = false,
 			Message = Resources.operationSuccessfull,
-			Data = HttpContext.User.Identity.Name
+			Data = User.GetFullName()
 		});
 	}
 
@@ -199,7 +203,7 @@ public class UserController : ControllerBase
 	{
 		try
 		{
-			await _logger.LogNormal(new LogEntry(HttpContext.User.Identity.Name, "Wylogował się"));
+			await _logger.LogMinor(new LogEntry(User.GetFullName(), "Wylogował się"));
 			Response.Cookies.Delete(AuthCookie);
 			return new JsonResult(new BasicResponse
 			{

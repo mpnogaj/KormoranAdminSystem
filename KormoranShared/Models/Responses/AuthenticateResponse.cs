@@ -2,6 +2,6 @@
 {
 	public class AuthenticateResponse : BasicResponse
 	{
-		public string Token { get; set; }
+		public string Token { get; set; } = string.Empty;
 	}
 }
