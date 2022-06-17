@@ -22,7 +22,9 @@
 
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="$targetentrypoint$">
-      <uap:VisualElements />
+      <uap:VisualElements  DisplayName="Kormoran Mobile" Description="App used to set matches outcomes for tournament management team">
+        <uap:DefaultTile/>
+      </uap:VisualElements >
     </Application>
   </Applications>
 
