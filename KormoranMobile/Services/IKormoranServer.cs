@@ -29,7 +29,9 @@ namespace KormoranMobile.Services
 		public Task<CollectionResponse<Match>> GetMatches([Query] int tournamentId);
 
 		[Post("/matches/UpdateScore")]
-		public Task<BasicResponse> UpdateScore([Body] UpdateScoreRequestModel updateScoreRequestModel);
+		public Task<BasicResponse> UpdateScore([Header(header: "Authorization")] string token,
+			[Body] UpdateScoreRequestModel updateScoreRequestModel);
+
 		#endregion
 	}
 }

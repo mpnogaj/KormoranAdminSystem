@@ -34,6 +34,8 @@ public class UserController : ControllerBase
 	}
 
 	[HttpGet]
+	//Important
+	//Used in front to check if user is logged in (xd?)
 	public IActionResult Ping()
 	{
 		return Ok("Ping");

@@ -9,13 +9,13 @@
     <Import_RootNamespace>KormoranShared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\JsonHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Discipline.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\LeaderboardEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\LogEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Match.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\AuthenticateRequest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\AuthRequiredRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\MatchesRequests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\TournamentsRequests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Requests\UsersRequests.cs" />

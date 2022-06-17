@@ -1,8 +1,7 @@
+using KormoranShared.Helpers;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
-using System.Net;
-using KormoranShared.Helpers;
 
 namespace KormoranShared.Models
 {
@@ -32,20 +31,20 @@ namespace KormoranShared.Models
 #pragma warning disable CS8618
 		public LogEntry()
 		{
-			
+
 		}
 #pragma warning restore CS8618
 
 		public LogEntry(string author, string action)
 		{
-			Date = DateTime.Now.Serialize();
+			Date = DateTime.Now.SerializeDate();
 			Author = author;
 			Action = action;
 		}
 
 		public LogEntry(string author, string action, DateTime date)
 		{
-			Date = date.Serialize();
+			Date = date.SerializeDate();
 			Author = author;
 			Action = action;
 		}

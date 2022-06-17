@@ -24,7 +24,7 @@ class ProtectedRoute extends React.Component<Empty, IState>{
 
 	authenticate = async (): Promise<void> => {
 		try {
-			const res = await axios.post("/api/User/Ping");
+			const res = await axios.get("/api/User/Ping");
 			if (res.status == 200) {
 				this.setState({ isLoading: false, isAuthenticated: true });
 			} else {

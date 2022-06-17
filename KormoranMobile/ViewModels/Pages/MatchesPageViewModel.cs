@@ -49,7 +49,7 @@ namespace KormoranMobile.ViewModels.Pages
 					var response = await kormoranServer.GetMatches(Tournament.TournamentId);
 					if (!response.Error)
 					{
-						Tournament.Matches = response.Collection;
+						Tournament.Matches = response.Collection!;
 						OnPropertyChanged(nameof(Tournament));
 					}
 					else
@@ -67,13 +67,13 @@ namespace KormoranMobile.ViewModels.Pages
 				}
 			}, () => IsRefreshing == false);
 
-			ItemTappedCommand = new AsyncRelayCommand<Match>(async (Match? match) =>
+			ItemTappedCommand = new AsyncRelayCommand<Match>(async (match) =>
 			{
 				var popup = new EditScoresPopup(match!);
 				var modalRes = await PopupHelper.ShowPopupAsync(popup);
 				if (modalRes != null)
 				{
-					var res = await kormoranServer.UpdateScore((UpdateScoreRequestModel)modalRes);
+					var res = await kormoranServer.UpdateScore(AuthHelper.Token ?? string.Empty, (UpdateScoreRequestModel)modalRes);
 					await Toast.Make(res.Message).Show();
 					await RefreshMatchesCommand.ExecuteAsync();
 				}

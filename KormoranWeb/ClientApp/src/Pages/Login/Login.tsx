@@ -27,7 +27,7 @@ class Login extends React.Component<IWithNavigaton, IState>{
 		this.setState({ buttonEnabled: false });
 		e.preventDefault();
 		if (this.state.password === "" || this.state.username === "") {
-			alert("Podaj login i hasło!");
+			window.alert("Podaj login i hasło!");
 			return false;
 		}
 		try {
