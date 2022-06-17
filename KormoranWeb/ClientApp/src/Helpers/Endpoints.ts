@@ -15,3 +15,6 @@ export const ADD_EDIT_USER = "/api/user/AddEditUser";
 export const DELETE_USER = "/api/user/DeleteUser";
 
 export const VALIDATE = "/api/Session/Validate";
+
+export const GET_FULL_NAME = "/api/user/GetFullName";
+export const LOG_OUT = "/api/user/Logout";

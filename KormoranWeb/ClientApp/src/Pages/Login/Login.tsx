@@ -2,8 +2,10 @@ import React, { FormEvent } from "react";
 import { Button, Col, Container, FormControl, FormFloating, Row } from "react-bootstrap";
 import axios from "axios";
 import "./Login.css";
-import { ILoginResponse } from "../../Models/IResponses";
+import { IBasicResponse, ISingleItemResponse } from "../../Models/IResponses";
 import { IWithNavigaton, WithNavigation } from "../../Helpers/HOC";
+import { GET_FULL_NAME } from "../../Helpers/Endpoints";
+import CookieManager from "../../Helpers/CookieManager";
 
 interface IState {
 	username: string,
@@ -31,7 +33,7 @@ class Login extends React.Component<IWithNavigaton, IState>{
 			return false;
 		}
 		try {
-			const response = await axios.post<ILoginResponse>("/api/User/Login?useCookie=true", {
+			const response = await axios.post<IBasicResponse>("/api/User/Login?useCookie=true", {
 				Username: this.state.username,
 				Password: this.state.password
 			});
@@ -40,7 +42,6 @@ class Login extends React.Component<IWithNavigaton, IState>{
 				if (data.error) {
 					this.setState({ errorText: data.message });
 				} else {
-					sessionStorage.setItem("sessionId", data.sessionId);
 					return true;
 				}
 				this.setState({ buttonEnabled: true });
@@ -67,8 +68,10 @@ class Login extends React.Component<IWithNavigaton, IState>{
 				</div>
 				<Row className="justify-content-sm-center">
 					<form onSubmit={(e): void => {
-						this.loginHandler(e).then((correct: boolean) => {
+						this.loginHandler(e).then(async (correct: boolean) => {
 							if (correct) {
+								const fullName = (await axios.get<ISingleItemResponse<string>>(GET_FULL_NAME)).data.data;
+								CookieManager.setCookie("fullname", fullName);
 								this.props.navigation("/Panel");
 							}
 						});
