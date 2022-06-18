@@ -1,5 +1,6 @@
 ﻿using KormoranMobile.Helpers;
 using System.Windows.Input;
+using KormoranMobile.Helpers.ErrorHandlers;
 
 namespace KormoranMobile.ViewModels.Commands
 {
@@ -22,7 +23,12 @@ namespace KormoranMobile.ViewModels.Commands
 			Func<T?, bool>? canExecute) : this(execute,
 			allowNull,
 			canExecute,
-			new LogErrorHandler())
+#if DEBUG
+			new LogErrorHandler()
+#else
+			new ToastErrorHandler()
+#endif
+			)
 		{
 		}
 
@@ -90,7 +96,13 @@ namespace KormoranMobile.ViewModels.Commands
 		private bool _isExecuting;
 
 		public AsyncRelayCommand(Func<Task> execute, Func<bool>? canExecute = null)
-			: this(execute, canExecute, new LogErrorHandler())
+			: this(execute, canExecute, 
+#if DEBUG
+			new LogErrorHandler()
+#else
+			new ToastErrorHandler()
+#endif
+			)
 		{
 		}
 

@@ -1,4 +1,5 @@
-﻿namespace KormoranMobile.Helpers
+﻿using KormoranMobile.Helpers.ErrorHandlers;
+namespace KormoranMobile.Helpers
 {
 	public static class TaskHelper
 	{
@@ -10,9 +11,11 @@
 			}
 			catch (Exception ex)
 			{
-				errorHandler?.Handle(ex);
+				if (errorHandler != null)
+				{
+					await errorHandler.HandleAsync($"{ex.Message} - {ex.Source}");
+				}
 			}
 		}
-
 	}
 }

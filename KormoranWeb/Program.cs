@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using KormoranWeb.Contexts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -91,6 +92,7 @@ namespace KormoranWeb
 		public static void Main(string[] args)
 		{
 			var builder = WebApplication.CreateBuilder(args);
+			Console.WriteLine(builder.Configuration.GetConnectionString("DefaultConnection"));
 			ConfigureServices(builder.Services, builder.Configuration);
 			var app = builder.Build();
 			ConfigureApp(app, app.Environment);

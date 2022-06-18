@@ -12,6 +12,7 @@ using KormoranShared.Models.Responses;
 using Refit;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using KormoranMobile.Helpers.ErrorHandlers;
 
 namespace KormoranMobile.ViewModels.Pages
 {
@@ -41,7 +42,13 @@ namespace KormoranMobile.ViewModels.Pages
 
 		public AsyncRelayCommand RefreshTournamentsListCommand { get; }
 
-		public Action OnAppearing => () => RefreshTournamentsList(false).FireAndForgetAsync(new LogErrorHandler());
+		public Action OnAppearing => () => RefreshTournamentsList(false).FireAndForgetAsync(
+#if DEBUG
+			new LogErrorHandler()
+#else
+			new ToastErrorHandler()
+#endif
+			);
 
 		public TournamentsPageViewModel()
 		{
