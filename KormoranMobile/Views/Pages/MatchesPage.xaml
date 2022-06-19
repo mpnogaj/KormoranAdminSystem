@@ -21,7 +21,8 @@
 			<ToolbarItem.IconImageSource>
 				<FontImageSource Glyph="{StaticResource RefreshGlyph}"
 								 Size="Large"
-								 FontFamily="{StaticResource IconFont}"/>
+								 FontFamily="{StaticResource IconFont}"
+								 Color="{StaticResource White}"/>
 			</ToolbarItem.IconImageSource>
 		</ToolbarItem>
 	</ContentPage.ToolbarItems>
@@ -35,6 +36,8 @@
 		<ListView.ItemTemplate>
 			<DataTemplate x:DataType="models:Match">
 				<TextCell Detail="{Binding State.Name}"
+						  TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
+						  DetailColor="{AppThemeBinding Light={StaticResource DarkGray}, Dark={StaticResource LightGray}}"
 						  Command="{Binding Path=BindingContext.ItemTappedCommand, Source={x:Reference Name=MatchesList}}"
 						  CommandParameter="{Binding .}">
 					<TextCell.Text>

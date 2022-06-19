@@ -16,7 +16,7 @@
 				<FontImageSource Glyph="{StaticResource SettingsGlyph}"
 								 Size="Large"
 								 FontFamily="{StaticResource IconFont}"
-								 Color="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+								 Color="{StaticResource White}"/>
 			</ToolbarItem.IconImageSource>
 		</ToolbarItem>
 		<ToolbarItem Command="{Binding ShowLoginPageCommand}"
@@ -25,7 +25,7 @@
 				<FontImageSource Glyph="{StaticResource LoginGlyph}"
 								 Size="Large"
 								 FontFamily="{StaticResource IconFont}"
-								 Color="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+								 Color="{StaticResource White}"/>
 			</ToolbarItem.IconImageSource>
 		</ToolbarItem>
 
@@ -35,7 +35,7 @@
 				<FontImageSource Glyph="{StaticResource RefreshGlyph}"
 								 Size="Large"
 								 FontFamily="{StaticResource IconFont}"
-								 Color="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+								 Color="{StaticResource White}"/>
 			</ToolbarItem.IconImageSource>
 		</ToolbarItem>
 	</ContentPage.ToolbarItems>

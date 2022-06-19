@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui;
+using KormoranMobile.Helpers;
 
 namespace KormoranMobile
 {
@@ -16,6 +17,12 @@ namespace KormoranMobile
 					fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 					fonts.AddFont("kormoran.ttf", "KormoranFont");
 				});
+
+			if(!ServerHelper.AddressSet)
+			{
+				Preferences.Set(ServerHelper.AddressKey, "kormoran.azurewebsites.net");
+			}
+
 			return builder.Build();
 		}
 	}

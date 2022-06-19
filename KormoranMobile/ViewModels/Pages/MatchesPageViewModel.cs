@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 using KormoranMobile.Helpers;
 using KormoranMobile.Services;
 using KormoranMobile.ViewModels.Abstraction;
@@ -69,15 +70,22 @@ namespace KormoranMobile.ViewModels.Pages
 
 			ItemTappedCommand = new AsyncRelayCommand<Match>(async (match) =>
 			{
-				var popup = new EditScoresPopup(match!);
-				var modalRes = await PopupHelper.ShowPopupAsync(popup);
-				if (modalRes != null)
+				if (!AuthHelper.IsLoggedIn)
 				{
-					var res = await kormoranServer.UpdateScore(AuthHelper.Token ?? string.Empty, (UpdateScoreRequestModel)modalRes);
-					await Toast.Make(res.Message).Show();
-					await RefreshMatchesCommand.ExecuteAsync();
+					await Toast.Make("Musisz być zalogowany aby edytować wyniki", ToastDuration.Long).Show();
 				}
-			}, false, (_) => AuthHelper.IsLoggedIn);
+				else
+				{
+					var popup = new EditScoresPopup(match!);
+					var modalRes = await PopupHelper.ShowPopupAsync(popup);
+					if (modalRes != null)
+					{
+						var res = await kormoranServer.UpdateScore(AuthHelper.Token ?? string.Empty, (UpdateScoreRequestModel)modalRes);
+						await Toast.Make(res.Message).Show();
+						await RefreshMatchesCommand.ExecuteAsync();
+					}
+				}
+			}, false);
 		}
 	}
 }

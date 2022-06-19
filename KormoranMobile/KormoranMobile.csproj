@@ -10,7 +10,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 
 		<!-- Display name -->
-		<ApplicationTitle>KormoranMobile.Maui</ApplicationTitle>
+		<ApplicationTitle>Kormoran Mobile</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId>com.mpnogaj.kormoranmobile.maui</ApplicationId>
